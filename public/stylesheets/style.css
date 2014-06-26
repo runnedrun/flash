@@ -6,3 +6,15 @@ body {
 a {
   color: #00B7FF;
 }
+
+#content{
+	padding-top:100px;
+	position:relative;
+}
+
+#mainNote{
+	padding:50px;
+	margin-left:auto;
+	margin-right:auto;
+	max-width:960px;
+}

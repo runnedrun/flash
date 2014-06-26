@@ -5,6 +5,7 @@
 var express = require('express')
     , user = require('./routes/user')
     , notes = require('./routes/notes')
+    , flash = require('./routes/flash')
     , http = require('http')
     , path = require('path')
     , db      = require('./models');
@@ -47,6 +48,7 @@ app.locals({
 //    res.send("", 200);
 //});
 
+app.get('/', flash.index);
 app.get('/notes', notes.new);
 app.post('/user/sign_in', user.signIn);
 
