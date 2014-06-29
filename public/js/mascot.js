@@ -5,6 +5,7 @@
 function Mascot(){
 	mascotDiv = $("#mascot");
 	messageDiv = $("#message");
+	stephenDiv = $("#stephen");
 
   // Register for Events
   $(document).on('notes.note', function(){
@@ -18,6 +19,7 @@ function Mascot(){
   })
   $(document).on('notes.finished', function(){
   	messageDiv.html('Congrats! How did you do? I have no idea!')
+  	stephenDiv.addClass("flipped");
     mascotDiv.show();
   });
 }
