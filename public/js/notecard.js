@@ -68,9 +68,10 @@ function Notecard(){
   }
 
   self.evaluate = function(){
-    return underlineDiv.val().toLowerCase() == missing_word.toLowerCase();
+    // TODO expand q range
+    return underlineDiv.val().toLowerCase() == missing_word.toLowerCase() ? 1 : 0;
   }
-
+  
   self.init();
 }
 

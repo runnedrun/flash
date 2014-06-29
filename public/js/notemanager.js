@@ -31,7 +31,12 @@ var API = {
     );
   },
 
+  sendResult : function(id, q){
+
+  },
+
   saveNote : function(){
+
   },
 
   refreshNote : function(id){
@@ -46,8 +51,8 @@ function NoteManager() {
   self.notes = {};  // Today's notes
   self.order = [];  // Notes in order (random)
   self.progress = 0;
-  var failedNotes = [];  // To be randomized and reviewed at end of session
-  var currentNote = {};  
+  self.failedNotes = [];  // To be randomized and reviewed at end of session
+  self.currentNote = {};  
 
   self.state = "welcome";
 
@@ -62,19 +67,15 @@ function NoteManager() {
       }
       else if (self.state == "note"){
         newState = "result";
-        res = notecard.evaluate();
-        data['res'] = res;
+        q = notecard.evaluate();
+        data['q'] = q;
         data['index'] = self.progress;
         self.progress++;
+        self.handleResult(q);
       }
       else if(self.state == "result"){
-        if (self.order.length){
-          self.nextNote();
-          newState = "note";
-        }
-        else{
-          newState = "finished";
-        }
+        var next = self.nextNote();
+        newState = next ? "note" : "finished";
       }
     if (newState){
       self.state = newState;
@@ -82,6 +83,14 @@ function NoteManager() {
     }
     }
   });
+
+  self.handleResult = function(q){
+    var id = self.currentNote.id;
+    API.sendResult(id, q);
+    if (q<1){
+      self.failedNotes.push(id);
+    }
+  }
 
   self.getNotes = function(){
   	API.getNotes( function(data){
@@ -96,13 +105,21 @@ function NoteManager() {
   };
 
   self.updateCurrentNote = function(id){
-    currentNote = self.notes[id];
-    $(document).trigger({'type' : 'notes.new_current_note', 'note': currentNote});
+    self.currentNote = self.notes[id];
+    $(document).trigger({'type' : 'notes.new_current_note', 'note': self.currentNote});
   }
 
-  self.nextNote = function(){ 
+  self.nextNote = function(){
+    if (self.order.length == 0){
+      self.failedNotes = randomize(self.failedNotes);
+      self.order = self.order.concat(self.failedNotes);
+      self.failedNotes = [];
+    }
     var noteID = self.order.pop();
-    self.updateCurrentNote(noteID);
+    if (noteID){
+      self.updateCurrentNote(noteID);
+    }
+    return noteID;
   };
 
 };

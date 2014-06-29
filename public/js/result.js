@@ -17,8 +17,8 @@ function Result(notecard){
     resultDiv.hide();
   })
   $(document).on('notes.result', function(e){
-  	var res = e.res ? "Nice!" : "Oops";
-  	resultDiv.html(res);
+  	var q = e.q > 0 ? "Nice!" : "Oops";
+  	resultDiv.html(q);
     resultDiv.show();
   })
   $(document).on('notes.welcome', function(){
