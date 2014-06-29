@@ -8,9 +8,13 @@
 //
 //    Disseminate note information/updates to UI elements, via events
 
+
 $( function(){
   notemanager = new NoteManager;
   notecard = Notecard();
+  mascot = Mascot();
+  result = Result();
+  noteinfo = NoteInfo();
 
   notemanager.getNotes();
 })
@@ -43,6 +47,32 @@ function NoteManager() {
   var failedNotes = [];  // To be randomized and reviewed at end of session
   var currentNote = {};  
 
+  self.state = "welcome";
+
+  $(document).on('keypress', function(e){
+    var code = e.keyCode || e.which;
+    var newState = "";
+    if(code == 13) {        // 13 = Enter key
+      if (self.state == "welcome"){
+        newState = "note"; 
+      }
+      else if (self.state == "note"){
+        newState = "result";
+      }
+      else if(self.state == "result"){
+        if (order.length){
+          self.nextNote();
+          newState = "note";
+        }
+        else{
+          newState = "finished";
+        }
+      }
+    self.state = newState;
+    $(document).trigger({'type' : 'notes.' + newState})
+    }
+  });
+
   self.getNotes = function(){
   	API.getNotes( function(data){
       for (var i=0; i<data.notes.length; i++){
@@ -60,13 +90,8 @@ function NoteManager() {
   }
 
   self.nextNote = function(){ 
-    if (order.length){
-      var noteID = order.pop();
-      self.updateCurrentNote(noteID);
-    }
-    else{
-      $(document).trigger({'type' : 'notes.finished'})
-    }
+    var noteID = order.pop();
+    self.updateCurrentNote(noteID);
   };
 
 

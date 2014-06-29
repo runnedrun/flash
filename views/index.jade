@@ -1,10 +1,19 @@
 extends layout
 
 block content
-  h2  Flash 
   #content
-    #mainNote.well
-      #highlighted
-      #hint
-      #note_link
-      input#next_note(type='submit')
+    h2  Flash 
+    #flashcard.well
+      div.row#mascot
+        img#stephen(src="img/stephen.png")
+        #message  Welcome bro
+      hr
+      div.row#note
+        div.col-md-9#highlighted
+          span#pre_underline
+          input#underline(type='text', contenteditable='true')
+          span#post_underline
+        div.col-md-9#result ReZULT
+        div.col-md-3#note_info
+          #hint.glyphicon.glyphicon-question-sign
+          a#note_link.glyphicon.glyphicon-info-sign(href='#')
