@@ -11,10 +11,11 @@
 
 $( function(){
   notemanager = new NoteManager;
-  notecard = Notecard();
-  mascot = Mascot();
-  result = Result();
-  noteinfo = NoteInfo();
+  notecard = new Notecard();
+  mascot = new Mascot();
+  result = new Result(notecard);
+  noteinfo = new NoteInfo();
+  scorecard = new Scorecard();
 
   notemanager.getNotes();
 })
@@ -42,25 +43,32 @@ var API = {
 function NoteManager() {
   var self = this;
 
-  var notes = {};  // Today's notes
-  var order = [];  // Notes in order (random)
+  self.notes = {};  // Today's notes
+  self.order = [];  // Notes in order (random)
+  self.progress = 0;
   var failedNotes = [];  // To be randomized and reviewed at end of session
   var currentNote = {};  
 
   self.state = "welcome";
 
+  //  Advance the state
   $(document).on('keypress', function(e){
     var code = e.keyCode || e.which;
     var newState = "";
+    var data = {};
     if(code == 13) {        // 13 = Enter key
       if (self.state == "welcome"){
         newState = "note"; 
       }
       else if (self.state == "note"){
         newState = "result";
+        res = notecard.evaluate();
+        data['res'] = res;
+        data['index'] = self.progress;
+        self.progress++;
       }
       else if(self.state == "result"){
-        if (order.length){
+        if (self.order.length){
           self.nextNote();
           newState = "note";
         }
@@ -68,46 +76,48 @@ function NoteManager() {
           newState = "finished";
         }
       }
-    self.state = newState;
-    $(document).trigger({'type' : 'notes.' + newState})
+    if (newState){
+      self.state = newState;
+      $(document).trigger($.extend({'type' : 'notes.' + newState}, data));
+    }
     }
   });
 
   self.getNotes = function(){
   	API.getNotes( function(data){
       for (var i=0; i<data.notes.length; i++){
-        notes[data.notes[i].id] = data.notes[i];
-        order.push(data.notes[i].id);
+        self.notes[data.notes[i].id] = new Note(data.notes[i]);
+        self.order.push(data.notes[i].id);
       }
-      order = randomize(order);
+      self.order = randomize(self.order);
+      $(document).trigger({'type' : 'notes.received', 'notes': data.notes});
       self.nextNote();
     })
   };
 
   self.updateCurrentNote = function(id){
-    currentNote = notes[id];
+    currentNote = self.notes[id];
     $(document).trigger({'type' : 'notes.new_current_note', 'note': currentNote});
   }
 
   self.nextNote = function(){ 
-    var noteID = order.pop();
+    var noteID = self.order.pop();
     self.updateCurrentNote(noteID);
   };
-
 
 };
 
 
 
-function Note(){
-
-  var id;
-  var highlight;
-  var hint;
-  var pageURL;
-  var EF;
-  var firstShow;
-  var nextShow;
+function Note(properties){
+  var self = this;
+  self.id = properties.id;
+  self.highlight = properties.highlight;
+  self.hint = properties.hint;
+  self.pageUrl = properties.pageUrl;
+  self.EF = properties.EF;
+  self.firstShow = properties.firstShow;
+  self.nextShow = properties.nextShow;
 
   // The following are functions for updating data, not the DOM
   // They are likely to be used in V2, when we allow editing of notes

@@ -29,6 +29,7 @@ function Notecard(){
   }
 
   var currentNote = {};
+  var missing_word = null;
 
   // dynamic content
   var preUnderlineDiv = $('#pre_underline');
@@ -52,17 +53,22 @@ function Notecard(){
   });
   $(document).on('notes.new_current_note', function(e){
     currentNote = e.note;
-    updateHighlight(e.note.highlight);
+    self.updateHighlight(e.note.highlight);
   });
 
   self.updateHighlight = function(text){
     if (text){
       text = removeWord(text);
+      missing_word = text[1]
   	  preUnderlineDiv.html(text[0]);
       underlineDiv.val("");
       underlineDiv.attr("size", text[1].length )
       postUnderlineDiv.html(text[2]);
     }
+  }
+
+  self.evaluate = function(){
+    return underlineDiv.val().toLowerCase() == missing_word.toLowerCase();
   }
 
   self.init();
@@ -78,8 +84,10 @@ removeWord = function(text, depth, easy_indices){
   var underlined_index = Math.floor(Math.random() * words.length);
   var underlined_word = words[underlined_index];
   if (easy_words.indexOf(underlined_word) == -1 || depth >= words.length){
-    words[underlined_index] = "_".repeat(underlined_word.length);
-    return [words.slice(0,underlined_index).join(" "), words[underlined_index], words.slice(underlined_index + 1).join(" ")];
+    var pre_underline = words.slice(0, underlined_index).join(" ");
+    var underline = words[underlined_index];
+    var post_underline = words.slice(underlined_index + 1).join(" ");
+    return [pre_underline, underline, post_underline];
   }
   else{
     if (easy_indices.indexOf(underlined_index) == -1){

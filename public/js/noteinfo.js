@@ -16,10 +16,12 @@ function NoteInfo(){
 
   // Register for Events
   $(document).on('notes.note', function(){
+  	self.hideHint();
     noteInfoDiv.show();
   })
   $(document).on('notes.result', function(){
     noteInfoDiv.show();
+    self.showHint();
   })
   $(document).on('notes.welcome', function(){
     noteInfoDiv.hide();
@@ -29,7 +31,8 @@ function NoteInfo(){
   });
   $(document).on('notes.new_current_note', function(e){
     currentNote = e.note;
-    updateHighlight(e.note.highlight);
+    updateHint(e.note.hint);
+    updateLink(e.note.pageUrl);
   });
 
   $("#hint").on('click', function(e){

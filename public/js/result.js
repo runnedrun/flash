@@ -3,9 +3,8 @@
 // Object that shows immediate feedback on a notecard
 
 
-function Result(){
+function Result(notecard){
   var self = this;
-
   var current_note = {};
   resultDiv = $("#result");
 
@@ -13,12 +12,13 @@ function Result(){
     resultDiv.hide();
   }
 
-
   // Register for Events
   $(document).on('notes.note', function(){
     resultDiv.hide();
   })
-  $(document).on('notes.result', function(){
+  $(document).on('notes.result', function(e){
+  	var res = e.res ? "Nice!" : "Oops";
+  	resultDiv.html(res);
     resultDiv.show();
   })
   $(document).on('notes.welcome', function(){
