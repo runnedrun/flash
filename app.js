@@ -5,9 +5,10 @@
 var express = require('express')
     , user = require('./routes/user')
     , notes = require('./routes/notes')
+    , flash = require('./routes/flash')
     , http = require('http')
     , path = require('path')
-    , db   = require('./models');
+//    , db   = require('./models');
 
 
 var app = express();
@@ -48,13 +49,13 @@ app.locals({
 //    res.send("", 200);
 //});
 
-
 function requireAuthentication() {
 
 }
 
 app.all("/notes/*", requireAuthentication)
 
+app.get('/', flash.index);
 app.get('/notes', notes.new);
 app.post('/user/sign_in', user.signIn);
 
@@ -62,15 +63,15 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
-db
-    .sequelize
-    .sync({ force: true })
-    .complete(function(err) {
-        if (err) {
-            throw err[0]
-        } else {
+//db
+//    .sequelize
+//    .sync({ force: true })
+//    .complete(function(err) {
+//        if (err) {
+//            throw err[0]
+//        } else {
             http.createServer(app).listen(app.get('port'), function(){
                 console.log('Express server listening on port ' + app.get('port'))
             })
-        }
-    })
+//        }
+//    })
