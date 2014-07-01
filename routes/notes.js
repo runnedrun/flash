@@ -1,3 +1,5 @@
+var db = require('../models')
+
 var fakeNote = {
     highlight: "Europe's most interesting new king",
     id: "442223402",

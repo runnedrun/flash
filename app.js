@@ -7,7 +7,7 @@ var express = require('express')
     , notes = require('./routes/notes')
     , http = require('http')
     , path = require('path')
-    , db      = require('./models');
+    , db   = require('./models');
 
 
 var app = express();
@@ -17,6 +17,7 @@ app.configure(function(){
     app.set('views', __dirname + '/views');
     app.set('view engine', 'jade');
     app.use(express.cookieParser());
+    express.session({secret: '1234567890QWERTY'})
     app.use(express.favicon());
     app.use(express.logger('dev'));
     app.use(express.bodyParser());
@@ -46,6 +47,13 @@ app.locals({
 //    res.header("Access-Control-Allow-Headers", "ACCEPT, WT_AUTH_TOKEN, CONTENT-TYPE");
 //    res.send("", 200);
 //});
+
+
+function requireAuthentication() {
+
+}
+
+app.all("/notes/*", requireAuthentication)
 
 app.get('/notes', notes.new);
 app.post('/user/sign_in', user.signIn);

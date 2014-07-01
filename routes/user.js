@@ -1,3 +1,5 @@
+var db = require('../models')
+
 var fakeUser = {
     userName: "porky",
     points: 1232
