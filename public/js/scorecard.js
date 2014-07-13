@@ -9,7 +9,7 @@ function Scorecard(){
 
   var currentNote = {};
   var scorecardDiv = $("#scorecard");
-  var scoreElement = '<a href="#" class="glyphicon glyphicon-leaf gray"></a>';
+  var scoreElement = '<a href="#" class="score glyphicon glyphicon-leaf gray"></a>';
   self.scores = [];
 
   self.init = function(total_notes){

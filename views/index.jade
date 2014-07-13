@@ -1,19 +1,31 @@
 extends layout
 
 block content
-  #content
-    h2  Flash 
-    #flashcard.well
-      div.row#note
-        div.col-md-9#mascot
-          img#stephen(src="img/stephen.png")
-          #message  Welcome bro! I'm Stephen. Hit enter to get started!
-        div.col-md-9#highlighted
+  img(src='img/lost.jpg')#background
+  img(src='img/fade.png')#tunnel_vision
+
+  nav.navbar.navbar-default(role='navigation')
+      .navbar-header.pull-right
+          a.navbar-brand(href='#') FlashBack
+        div
+          ul.nav.navbar-nav
+            li.active
+              #scorecard
+
+  #content.container
+    #flashcard
+      div.row#note If the blackness of the bg_image is fixed, the text can always be where I want in. In the transparent part.
+        div.col-md-8#login
+          div#login_message.gray What's my name...
+          input#login_input(type="text")
+        div.col-md-8#mascot
+          #message
+        div.col-md-8#highlighted
           span#pre_underline
-          input#underline(type='text', contenteditable='true')
+          input#underline(type="text")
           span#post_underline
-        div.col-md-9#result ReZULT
-        div.col-md-3#note_info
-          #hint.glyphicon.glyphicon-question-sign
+        div.col-md-8#result
+        div.col-md-3#note_info.pull-right
           a#note_link.glyphicon.glyphicon-info-sign(href='#')
-    #scorecard
+          #hint_icon.glyphicon.glyphicon-question-sign
+          #hint

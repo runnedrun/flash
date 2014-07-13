@@ -10,14 +10,15 @@
 
 
 $( function(){
+  $('#background').hide();
   notemanager = new NoteManager;
   notecard = new Notecard();
   mascot = new Mascot();
   result = new Result(notecard);
   noteinfo = new NoteInfo();
   scorecard = new Scorecard();
-
-  notemanager.getNotes();
+  login = new Login();
+  $(document).trigger({"type":"notes.login"});
 })
 
 var API = {
@@ -53,36 +54,45 @@ function NoteManager() {
   self.progress = 0;
   self.failedNotes = [];  // To be randomized and reviewed at end of session
   self.currentNote = {};  
+  self.messages = ["I've got to remember..."];
 
-  self.state = "welcome";
+  self.state = "login";
 
   //  Advance the state
-  $(document).on('keypress', function(e){
-    var code = e.keyCode || e.which;
+  self.advanceState = function(){
+
+    // Bypass state transition
+    if (self.messages.length){
+      $(document).trigger({'type' : 'notes.message', 'message': self.messages.pop()});
+      return;
+    }
+
     var newState = "";
     var data = {};
-    if(code == 13) {        // 13 = Enter key
-      if (self.state == "welcome"){
-        newState = "note"; 
-      }
-      else if (self.state == "note"){
-        newState = "result";
-        q = notecard.evaluate();
-        data['q'] = q;
-        data['index'] = self.progress;
-        self.progress++;
-        self.handleResult(q);
-      }
-      else if(self.state == "result"){
-        var next = self.nextNote();
-        newState = next ? "note" : "finished";
-      }
+    if (self.state == "login"){
+      newState = "note";
+    }
+    else if (self.state == "messages"){
+      newState = "note"; 
+    }
+    else if (self.state == "note"){
+      newState = "result";
+      q = notecard.evaluate();
+      data['q'] = q;
+      data['index'] = self.progress;
+      data['note'] = self.currentNote;
+      self.progress++;
+      self.handleResult(q);
+    }
+    else if(self.state == "result"){
+      var next = self.nextNote();
+      newState = next ? "note" : "finished";
+    }
     if (newState){
       self.state = newState;
       $(document).trigger($.extend({'type' : 'notes.' + newState}, data));
     }
-    }
-  });
+  }
 
   self.handleResult = function(q){
     var id = self.currentNote.id;
@@ -90,6 +100,13 @@ function NoteManager() {
     if (q<1){
       self.failedNotes.push(id);
     }
+  }
+
+  self.logInUser = function(username){
+    self.user = username;
+    self.getNotes();
+    $("#background").fadeIn(2000);
+    $(document).trigger({'type': 'user.logged_in', 'user': username});
   }
 
   self.getNotes = function(){

@@ -13,20 +13,24 @@ function Result(notecard){
   }
 
   // Register for Events
-  $(document).on('notes.note', function(){
-    resultDiv.hide();
-  })
   $(document).on('notes.result', function(e){
-  	var q = e.q > 0 ? "Nice!" : "Oops";
-  	resultDiv.html(q);
-    resultDiv.show();
+    $(document).on('keypress', function(e){
+      var code = e.keyCode || e.which;
+      if(code == 13) {        // 13 = Enter key
+        $(document).off('keypress');
+        notemanager.advanceState();
+        fadeOut(resultDiv);
+      }
+    });
+    if (e.q > 0){
+      var result = "Nice!"
+    }
+    else{
+      var result = "Oops. Correct answer: " + e.note.highlight;
+    }
+    resultDiv.html(result);
+    fadeIn(resultDiv)
   })
-  $(document).on('notes.welcome', function(){
-    resultDiv.hide();
-  })
-  $(document).on('notes.finished', function(){
-    resultDiv.hide();
-  });
   $(document).on('notes.new_current_note', function(e){
     currentNote = e.note;
   });

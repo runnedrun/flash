@@ -7,8 +7,10 @@ function NoteInfo(){
 
   self.init = function(){
   	noteInfoDiv.hide();
+    hintDiv.hide();
   }
 
+  var hintIcon = $("#hint_icon");
   var hintDiv = $('#hint');
   var linkDiv = $('#note_link')
   var noteInfoDiv = $('#note_info');
@@ -16,44 +18,40 @@ function NoteInfo(){
 
   // Register for Events
   $(document).on('notes.note', function(){
+    fadeIn(noteInfoDiv);
   	self.hideHint();
-    noteInfoDiv.show();
   })
   $(document).on('notes.result', function(){
-    noteInfoDiv.show();
+    fadeIn(noteInfoDiv);
     self.showHint();
   })
-  $(document).on('notes.welcome', function(){
-    noteInfoDiv.hide();
-  })
   $(document).on('notes.finished', function(){
-    noteInfoDiv.hide();
-  });
+    fadeOut(noteInfoDiv);
+  })
   $(document).on('notes.new_current_note', function(e){
     currentNote = e.note;
     updateHint(e.note.hint);
     updateLink(e.note.pageUrl);
   });
 
-  $("#hint").on('click', function(e){
+  hintIcon.on('click', function(e){
     showHint();
   });
 
   self.hideHint = function(){
-    updateHint("");
-    hintDiv.addClass("glyphicon");
-    hintDiv.addClass("glyphicon-question-sign");
+    fadeIn(hintIcon);
+    fadeOut(hintDiv);
   }
   self.showHint = function(){
-    hintDiv.removeClass("glyphicon");
-    hintDiv.removeClass("glyphicon-question-sign");
+    fadeIn(hintDiv);
+    fadeOut(hintIcon);
     updateHint(currentNote.hint);
   }
   self.updateLink = function(url){
     linkDiv.attr("href", url);
   }
   self.updateHint = function(text){
-    hintDiv.html(text);
+    setTimeout( function(){hintDiv.html(text);}, 450);
   }
 
   self.init();

@@ -10,15 +10,12 @@
 
 /*
 TODO
-Format hint/links better
-check success
-MVP done
-refactor
-
-then:
 add sidebar with all notes
-notes are editable  
+notes are searchable/ditable inline 
 prettify ui
+q is evaluated more than boolean, maybe
+maybe: resultdiv just replaces input with the word in red/green, pre and post just stay there.
+(strikethrough, with correct answer above it? That's hard, but maybe cooler than the wrong answer disappearingn)
 */
 
 function Notecard(){
@@ -40,17 +37,19 @@ function Notecard(){
 
   // Register for Events
   $(document).on('notes.note', function(){
-    noteDiv.show();
+    $(document).on('keypress', function(e){
+      var code = e.keyCode || e.which;
+      if(code == 13) {        // 13 = Enter key
+        $(document).off('keypress');
+        notemanager.advanceState();
+        fadeOut(noteDiv);
+      }
+    });
+
+    fadeIn(noteDiv);
+    setTimeout(function(){underlineDiv.focus();}, 450);
   })
-  $(document).on('notes.result', function(){
-    noteDiv.hide();
-  })
-  $(document).on('notes.welcome', function(){
-    noteDiv.hide();
-  })
-  $(document).on('notes.finished', function(){
-    noteDiv.hide();
-  });
+
   $(document).on('notes.new_current_note', function(e){
     currentNote = e.note;
     self.updateHighlight(e.note.highlight);
@@ -62,7 +61,7 @@ function Notecard(){
       missing_word = text[1]
   	  preUnderlineDiv.html(text[0]);
       underlineDiv.val("");
-      underlineDiv.attr("size", text[1].length )
+      underlineDiv.attr("size", text[1].length - 1)
       postUnderlineDiv.html(text[2]);
     }
   }
@@ -71,7 +70,7 @@ function Notecard(){
     // TODO expand q range
     return underlineDiv.val().toLowerCase() == missing_word.toLowerCase() ? 1 : 0;
   }
-  
+
   self.init();
 }
 
@@ -98,15 +97,3 @@ removeWord = function(text, depth, easy_indices){
     return removeWord(text, depth, easy_indices);
   }
 }
-
-String.prototype.repeat = function(times){
-    var result="";
-    var pattern=this;
-    while (times > 0) {
-        if (times&1)
-            result+=pattern;
-        times>>=1;
-        pattern+=pattern;
-    }
-    return result;
-};
