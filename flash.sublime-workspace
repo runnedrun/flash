@@ -1,0 +1,856 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"phase",
+				"phase_data"
+			],
+			[
+				"phse",
+				"phase_collection"
+			],
+			[
+				"te",
+				"temp_data"
+			],
+			[
+				"sleep",
+				"sleep_cycle"
+			],
+			[
+				"al",
+				"vertical-align"
+			],
+			[
+				"temp",
+				"tempSetter"
+			],
+			[
+				"t",
+				"temperature"
+			],
+			[
+				"de",
+				"desiredTemperature"
+			],
+			[
+				"desre",
+				"desired_temperature"
+			],
+			[
+				"in",
+				"interval"
+			],
+			[
+				"stepTe",
+				"stepTempXTimes"
+			],
+			[
+				"step",
+				"stepAndSetTimeout"
+			],
+			[
+				"tim",
+				"times_stepped"
+			],
+			[
+				"stet",
+				"stepTempXTimes"
+			],
+			[
+				"set",
+				"setToOuputThenWait"
+			],
+			[
+				"font",
+				"font-size"
+			],
+			[
+				"bac",
+				"background-color"
+			],
+			[
+				"border-",
+				"border-radius"
+			],
+			[
+				"marg",
+				"margin-right"
+			],
+			[
+				"m",
+				"margin-bottom"
+			],
+			[
+				"border",
+				"border-bottom"
+			],
+			[
+				"padd",
+				"padding-left"
+			],
+			[
+				"pa",
+				"padding-bottom"
+			],
+			[
+				"tex",
+				"text-align"
+			],
+			[
+				"new",
+				"newIngredient"
+			],
+			[
+				"ing",
+				"ingredient_schema"
+			],
+			[
+				"S",
+				"Semaphore"
+			],
+			[
+				"drv",
+				"drive_type"
+			],
+			[
+				"drive",
+				"drive_type"
+			],
+			[
+				"io",
+				"io_duration"
+			],
+			[
+				"read",
+				"read_time"
+			],
+			[
+				"time",
+				"time_to_io_completion"
+			],
+			[
+				"start_time",
+				"io_start_time"
+			],
+			[
+				"py",
+				"pygame"
+			],
+			[
+				"act",
+				"activity"
+			],
+			[
+				"try",
+				"try	Try/Except/Else/Finally"
+			],
+			[
+				"make_",
+				"make_semaphore"
+			],
+			[
+				"mu",
+				"mutex"
+			],
+			[
+				"n",
+				"n"
+			],
+			[
+				"ha",
+				"hash"
+			],
+			[
+				"ne",
+				"next"
+			],
+			[
+				"hash",
+				"hashable"
+			],
+			[
+				"rectangle",
+				"rectangle"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "views/index.jade",
+			"settings":
+			{
+				"buffer_size": 588,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "extends ../layout\n\nblock content\n	div.sign-in-form\n		form.form-horizontal(role='form', target=\"/users/sign_in\", method=\"POST\")\n			div.form-group\n				label(for='usernameInput').\n					username\n				input#userNameInput.form-control(name=\"username\", type='text', placeholder='Username')",
+			"file": "views/users/sign_in.jade",
+			"file_size": 278,
+			"file_write_time": 1404672484000000,
+			"settings":
+			{
+				"buffer_size": 281,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "views/user/show.jade",
+			"settings":
+			{
+				"buffer_size": 88,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "views/layout.jade",
+			"settings":
+			{
+				"buffer_size": 774,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "views/user/sign_in.jade",
+			"settings":
+			{
+				"buffer_size": 752,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "public/stylesheets/sign-in.css",
+			"settings":
+			{
+				"buffer_size": 47,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "models/user.js",
+			"settings":
+			{
+				"buffer_size": 391,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "routes/user.js",
+			"settings":
+			{
+				"buffer_size": 704,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "node_modules/express/lib/router/route.js",
+			"settings":
+			{
+				"buffer_size": 1328,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"selected_items":
+		[
+			[
+				"package",
+				"Package Control: List Packages"
+			],
+			[
+				"pack",
+				"Package Control: Install Package"
+			],
+			[
+				"package	",
+				"Package Control: Install Package"
+			],
+			[
+				"pac",
+				"Package Control: Install Package"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 125.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/dgaynor/flash/views/user/sign_up.js",
+		"/Users/dgaynor/flash/views/user/test.jade",
+		"/Users/dgaynor/oauth2-extensions/samples/tasks/popup.html",
+		"/Users/dgaynor/oauth2-extensions/samples/tasks/popup.js",
+		"/Users/dgaynor/olinoboat/launch/calibrate.launch",
+		"/Users/dgaynor/olinoboat/scripts/teleop.py",
+		"/Users/dgaynor/olinoboat/scripts/write_calibration.py",
+		"/Users/dgaynor/olinoboat/launch/teleop.launch",
+		"/Users/dgaynor/Desktop/gradin.js",
+		"/Users/dgaynor/olinoboat/launch/blink.launch",
+		"/Users/dgaynor/OLinjs/olinjs.github.com/index.html",
+		"/Users/dgaynor/OLinjs/olinjs.github.com/index.jade",
+		"/Users/dgaynor/OLinjs/olinjs.github.com/class.ics",
+		"/Users/dgaynor/.ssh/known_hosts",
+		"/Users/dgaynor/chili/Node_arduino/temp_recorder/node_modules/timezone-js/src/date.js",
+		"/Users/dgaynor/chili/Node_arduino/temp_recorder/routes/data_display.js",
+		"/Users/dgaynor/chili/Node_arduino/temp_recorder/app.js",
+		"/Users/dgaynor/chili/Node_arduino/temp_recorder/procfile",
+		"/Users/dgaynor/ossim-svn/src/ossim_package_support/cmake/configure.sh",
+		"/Users/dgaynor/ossim-svn/ossim-bashrc",
+		"/Users/dgaynor/Pictures/build day/main_page.html",
+		"/Users/dgaynor/console_wars_course/.gitignore",
+		"/Users/dgaynor/console_wars/views/index.jade",
+		"/Users/dgaynor/console_wars/views/layout.jade",
+		"/Users/dgaynor/slider/public/javascripts/slider.js",
+		"/Users/dgaynor/slider/public/javascripts/jquery.bxslider.js",
+		"/Users/dgaynor/slider/app.js",
+		"/Users/dgaynor/olinjs-3-hw/readme",
+		"/Users/dgaynor/burgers/ingredient_schema.js",
+		"/Users/dgaynor/burgers/schemas/ingredient.js",
+		"/Users/dgaynor/burgers/views/ingredient.jade",
+		"/Users/dgaynor/Library/Application Support/Sublime Text 2/Packages/User/Plain text.sublime-settings",
+		"/Users/dgaynor/burgers/routes/user.js",
+		"/etc/launchd.conf",
+		"/Users/dgaynor/Downloads/server.py",
+		"/Users/dgaynor/Library/Application Support/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
+		"/Users/dgaynor/olinjs.github.com/index.html",
+		"/Users/dgaynor/webtrails/proto1/longpath",
+		"/Users/dgaynor/webtrails/proto1/.rvmrc",
+		"/Users/dgaynor/Library/Application Support/Sublime Text 2/Packages/SideBarEnhancements/messages/11.13.2012.1305.0.txt",
+		"/Users/dgaynor/exam_code.c",
+		"/Users/dgaynor/softsys/softsys_svn/lock/example.c",
+		"/Users/dgaynor/SLAC/oBreakout/GameLoop.py",
+		"/Users/dgaynor/softsys/softsys_svn/lock/example",
+		"/Users/dgaynor/softsys/softsys_svn/lock/mutex_and_cond.c",
+		"/Users/dgaynor/softsys/PhoenixDrive/Tracer.py",
+		"/Users/dgaynor/softsys/softsys_svn/glib/book.txt",
+		"/Users/dgaynor/softsys/softsys_svn/glib/glibhash.c",
+		"/Users/dgaynor/softsys/hash.c",
+		"/Users/dgaynor/softsys/softsys_svn/lock/Makefile",
+		"/Users/dgaynor/softsys/softsys_svn/glib/Makefile",
+		"/Users/dgaynor/softsys/softsys_svn/lock/semaphore.c",
+		"/Users/dgaynor/softsys/softsys_svn/hw07/softsyshw07.pdf",
+		"/Users/dgaynor/SLAC/oBreakout/main.py"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"2",
+			"form",
+			"target",
+			"title",
+			"usernameInput",
+			"body",
+			"\n",
+			"line",
+			"status",
+			"Â",
+			"https://s3.amazonaws.com/TrailsSitesProto/5/334/fbstatic-a.akamaihd.net/rsrc.php/v2/y4/r/-PAXP-deijE.gif",
+			"5%2F324%2Ffbexternal-a.akamaihd.net%2Fsafe_image.php%3Fd%3DAQDQblnpvCgfNzRE%26url%3Dhttp%253A%252F%252Ffb.ecn.api.tiles.virtua.2051%2526z%253D10%26jq%3D100",
+			"https%3A%2F%2Fs3.amazonaws.com%2FTrailsSitesProto%2F5%2F324%2Ffbexternal-a.akamaihd.net%2Fsafe_image.php%3Fd%3DAQDQblnpvCgfNzRE%26url%3Dhttp%253A%252F%252Ffb.ecn.api.tiles.virtua.2051%2526z%253D10%26jq%3D100",
+			"https://fbexternal-a.akamaihd.net/safe_image.php?d=AQDQblnpvCgfNzRE&url=http%3A%2F%2Ffb.ecn.api.tiles.virtualearth.net%2Fapi%2FGetMap.ashx%3Fb%3Dr%252Cmkt.en-US%252Cstl.fb%26key%3DAqSHdMNkhSvgWwMhbqyiqgW1IhMNeV56Gb0WkfgEDm6jSsfX9gDGmlOUEt3i44Jk%26td%3DD1%26c%3D39.150700962286%252C-77.205137284316%26h%3D64%26w%3D64%26ppl%3D37%252C%252C39.1507%252C-77.2051%26z%3D10&jq=100",
+			"client_side_id_1",
+			"hasLeftCol",
+			"<body>",
+			"\";\n",
+			"https",
+			"52993494713-h12m6utvq8g8d8et8n2i68plbrr6cr4d.apps.googleusercontent.com'",
+			"<!",
+			"0",
+			"\"state\": 1",
+			"\"state\"",
+			"state: 1",
+			"setting",
+			"graph_data",
+			"temp_data",
+			"pitted",
+			"nazare",
+			"Mason del",
+			"temp_collection",
+			"push",
+			"\"*\"",
+			"09",
+			"div",
+			";\n",
+			"font",
+			"ingredient",
+			"exports.index = function(req, res){\n  res.render('index', { title: 'Express' });\n};",
+			"    ",
+			"leaf_lookup",
+			"struct",
+			"\n                         ",
+			"40",
+			"            ",
+			"split",
+			"test_tracer = Tracer.Trace()\n",
+			"\"\"\"",
+			"Trace",
+			"\n",
+			"2",
+			"semaphore",
+			"c",
+			"void",
+			"sem",
+			"#",
+			"asdasass",
+			"hash",
+			"hash_string"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"form",
+			"\"state\": 0"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 6,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "views/index.jade",
+					"settings":
+					{
+						"buffer_size": 588,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								459,
+								459
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Jade/Syntaxes/Jade.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "views/users/sign_in.jade",
+					"settings":
+					{
+						"buffer_size": 281,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								281,
+								281
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Jade/Syntaxes/Jade.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "views/user/show.jade",
+					"settings":
+					{
+						"buffer_size": 88,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								78,
+								78
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Jade/Syntaxes/Jade.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "views/layout.jade",
+					"settings":
+					{
+						"buffer_size": 774,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								756,
+								756
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Jade/Syntaxes/Jade.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "views/user/sign_in.jade",
+					"settings":
+					{
+						"buffer_size": 752,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								562,
+								562
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Jade/Syntaxes/Jade.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "public/stylesheets/sign-in.css",
+					"settings":
+					{
+						"buffer_size": 47,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								24,
+								24
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CSS/CSS.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "models/user.js",
+					"settings":
+					{
+						"buffer_size": 391,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								224,
+								224
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "routes/user.js",
+					"settings":
+					{
+						"buffer_size": 704,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								600,
+								600
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "node_modules/express/lib/router/route.js",
+					"settings":
+					{
+						"buffer_size": 1328,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1328,
+								1328
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 441.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 34.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"routes",
+				"node_modules/express/lib/router/route.js"
+			],
+			[
+				"",
+				"models/user.js"
+			],
+			[
+				"user.",
+				"routes/user.js"
+			],
+			[
+				"user.js",
+				"models/user.js"
+			],
+			[
+				"sign-in",
+				"public/stylesheets/sign-in.css"
+			],
+			[
+				"increa",
+				"increase_temp.js"
+			],
+			[
+				"app",
+				"app.js"
+			],
+			[
+				"index",
+				"routes/index.js"
+			],
+			[
+				"inde",
+				"views/index.jade"
+			],
+			[
+				"mutex",
+				"mutex_and_cond.c"
+			],
+			[
+				"mut",
+				"mutex_and_cond.h"
+			],
+			[
+				"sema",
+				"semaphore.h"
+			],
+			[
+				"make",
+				"Makefile"
+			],
+			[
+				"mute",
+				"mutex_and_cond.h"
+			],
+			[
+				"examp",
+				"example.c"
+			],
+			[
+				"m",
+				"Makefile"
+			],
+			[
+				"sme",
+				"semaphore.c"
+			],
+			[
+				"mu",
+				"mutex_and_cond.c"
+			],
+			[
+				"sim",
+				"Simulator.py"
+			],
+			[
+				"vi",
+				"VirtualEnvironment.py"
+			],
+			[
+				"trace",
+				"Tracer.py"
+			],
+			[
+				"tra",
+				"Tracer.py"
+			],
+			[
+				"main",
+				"main.py"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true
+}

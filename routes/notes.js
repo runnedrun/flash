@@ -1,4 +1,5 @@
 var db = require('../models')
+var _ = require('lodash/dist/lodash.underscore');
 
 var fakeNote = {
     highlight: "Europe's most interesting new king came into power in the late 18th century",
@@ -19,27 +20,34 @@ var fakeNote2 = {
     firstShow: "112123123"
 }
 
-exports.new = function(req, res) {
-    var resp;
-//    var filter = req.query.filter;
-//
-//    if (filter == "all") {
-//        resp = {
-//            notes: [
-//                fakeNote,
-//                fakeNote2,
-//                fakeNote,
-//                fakeNote2
-//            ]
-//        };
-//    } else {
-//        resp = {
-//            notes: [
-//                fakeNote,
-//                fakeNote2
-//            ]
-//        };
-//    }
+exports.index = function(req, res) {
+    var resp ;
+    var filter = req.query.filter;
+
+    if (filter == "all") {
+        resp = {
+            notes: [
+                fakeNote,
+                fakeNote2,
+                fakeNote,
+                fakeNote2
+            ]
+        };
+    } else {
+        resp = {
+            notes: [
+                fakeNote,
+                fakeNote2
+            ]
+        };
+    }
 
     res.send(resp, 200)
+}
+
+exports.new = function(req, res) {
+    console.log(req.body)
+    db.Note.create(_.extend(req.body.note, {userId: req.user.id})).then(function(note) {
+        res.send({id: note.id}, 200)
+    })
 }

@@ -1,13 +1,49 @@
 var db = require('../models')
 
-var fakeUser = {
-    userName: "porky",
-    points: 1232
+exports.signInPage = function(req, res) {
+    res.render("user/sign_in")
 }
 
-exports.signIn = function(req, res) {
-    var resp = {
-        user: fakeUser
-    };
-    res.send(resp, 200)
+exports.signInAction = function(req, res) {
+    var usernameToSignIn = req.body.username;
+    
+    db.User.find({where: {username: usernameToSignIn}}).then(function(user) {
+        if (user) {
+            console.log("signing in user: " + usernameToSignIn);
+            req.session.username = usernameToSignIn;
+            res.redirect("/user")
+        } else {
+            if (req.get("Accept") == "application/json") {
+                res.json({err: "user not found"}, 400);
+            } else {
+                res.redirect("/user/sign_in?error=user%20not%20found")
+            }
+        }
+    })
+
+}
+
+exports.signUpAction = function(req, res) {
+    var usernameToSignUp = req.body.username;
+    db.User.find({where: {username: usernameToSignUp}}).then(function(user) {
+        if(user) {
+            res.redirect("/user/sign_in?error=username%20already%20taken")
+        } else {
+            console.log("signing up user: " + usernameToSignUp);
+            db.User.create({username: usernameToSignUp}).then(function(user) {
+                req.session.username = usernameToSignUp;
+                res.redirect("/user")                           
+            }).error(function(){
+                res.render(500)                           
+            })
+        }
+    })
+
+    
+}
+
+exports.show = function(req, res) {
+    var userToShow = req.user
+    console.log("user is", req.user);
+    res.render("user/show", {user: userToShow});
 }

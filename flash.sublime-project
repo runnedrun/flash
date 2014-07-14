@@ -1,0 +1,9 @@
+{
+	"folders":
+	[
+		{
+			"path": "/Users/dgaynor/flash",
+			"folder_exclude_patterns": ["node_modules",".idea"]
+		}
+	]
+}
