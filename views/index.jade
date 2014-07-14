@@ -1,12 +1,14 @@
 extends layout
 
 block content
-  img(src='img/lost.jpg')#background
+  img(src='img/lost.jpg').background#background_lost
+  img(src='img/found.png').background#background_found
   img(src='img/fade.png')#tunnel_vision
 
   nav.navbar.navbar-default(role='navigation')
       .navbar-header.pull-right
-          a.navbar-brand(href='#') FlashBack
+          a.navbar-brand(href='#')
+            img(src="img/flash.png")
         div
           ul.nav.navbar-nav
             li.active
@@ -14,9 +16,9 @@ block content
 
   #content.container
     #flashcard
-      div.row#note If the blackness of the bg_image is fixed, the text can always be where I want in. In the transparent part.
+      div.row#note
         div.col-md-8#login
-          div#login_message.gray What's my name...
+          div#login_message.gray What's my name...?
           input#login_input(type="text")
         div.col-md-8#mascot
           #message
@@ -25,7 +27,7 @@ block content
           input#underline(type="text")
           span#post_underline
         div.col-md-8#result
-        div.col-md-3#note_info.pull-right
+        div.col-md-4#note_info.pull-right
           a#note_link.glyphicon.glyphicon-info-sign(href='#')
           #hint_icon.glyphicon.glyphicon-question-sign
           #hint

@@ -36,15 +36,10 @@ function Notecard(){
   var noteDiv = $('#highlighted');
 
   // Register for Events
-  $(document).on('notes.note', function(){
-    $(document).on('keypress', function(e){
-      var code = e.keyCode || e.which;
-      if(code == 13) {        // 13 = Enter key
-        $(document).off('keypress');
-        notemanager.advanceState();
-        fadeOut(noteDiv);
-      }
-    });
+  $(document).on('state.note', function(){
+    setTimeout(function(){
+      self.activate();
+    }, 820);
 
     fadeIn(noteDiv);
     setTimeout(function(){underlineDiv.focus();}, 450);
@@ -54,6 +49,21 @@ function Notecard(){
     currentNote = e.note;
     self.updateHighlight(e.note.highlight);
   });
+
+  self.activate = function(){
+      $(document).on('keypress', function(e){
+        var code = e.keyCode || e.which;
+        if(code == 13) {        // 13 = Enter key
+          $(document).off('keypress');
+          notecard.progress++;
+          var q = self.evaluate();
+          notemanager.handleResult(q);
+          notemanager.states.push({"state" : "result", "data" : {"q":q}});
+          notemanager.advanceState();
+          fadeOut(noteDiv);
+        }
+      });
+  }
 
   self.updateHighlight = function(text){
     if (text){

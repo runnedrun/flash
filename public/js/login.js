@@ -9,7 +9,7 @@ function Login(){
   loginDiv.hide();
 
   // Register for Events
-  $(document).on('notes.login', function(){
+  $(document).on('state.login', function(){
     $(document).on('keypress', function(e){
       var code = e.keyCode || e.which;
       if(code == 13) {        // 13 = Enter key

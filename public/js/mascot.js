@@ -8,7 +8,7 @@ function Mascot(){
 	var stephenDiv = $("#stephen");
 
   // Register for Events
-  $(document).on('notes.message', function(e){
+  $(document).on('state.message', function(e){
     self.updateMessage(e.message);
     fadeIn(mascotDiv);
     setTimeout(function(){
@@ -17,7 +17,7 @@ function Mascot(){
     }, 2400);
   })
 
-  $(document).on('notes.finished', function(){
+  $(document).on('state.finished', function(){
     $(document).on('keypress', function(e){
       var code = e.keyCode || e.which;
       if(code == 13) {        // 13 = Enter key
@@ -27,9 +27,10 @@ function Mascot(){
       }
     });
 
+    notemanager.finish();
     fadeIn(mascotDiv);
 
-  	messageDiv.html('Congrats! How did you do? I have no idea!')
+  	self.updateMessage("Hola! You're back!")
   	stephenDiv.addClass("flipped");
     fadeIn(mascotDiv);
   });

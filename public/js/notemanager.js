@@ -10,15 +10,16 @@
 
 
 $( function(){
-  $('#background').hide();
+  $('.background').hide();
   notemanager = new NoteManager;
   notecard = new Notecard();
   mascot = new Mascot();
-  result = new Result(notecard);
+  result = new Result();
   noteinfo = new NoteInfo();
   scorecard = new Scorecard();
   login = new Login();
-  $(document).trigger({"type":"notes.login"});
+  
+  notemanager.init();
 })
 
 var API = {
@@ -49,49 +50,24 @@ var API = {
 function NoteManager() {
   var self = this;
 
+
+  self.init = function(){
+    self.advanceState();
+  }
   self.notes = {};  // Today's notes
   self.order = [];  // Notes in order (random)
   self.progress = 0;
   self.failedNotes = [];  // To be randomized and reviewed at end of session
   self.currentNote = {};  
-  self.messages = ["I've got to remember..."];
-
-  self.state = "login";
+  self.states = [{"state" : "login"},
+    {"state":"message", "data" : {"message" : "I've got to remember..."}},
+    {"state" : "note"}];
 
   //  Advance the state
   self.advanceState = function(){
+    var nextState = self.states.shift();
+    $(document).trigger($.extend({'type' : 'state.' + nextState.state}, nextState.data));
 
-    // Bypass state transition
-    if (self.messages.length){
-      $(document).trigger({'type' : 'notes.message', 'message': self.messages.pop()});
-      return;
-    }
-
-    var newState = "";
-    var data = {};
-    if (self.state == "login"){
-      newState = "note";
-    }
-    else if (self.state == "messages"){
-      newState = "note"; 
-    }
-    else if (self.state == "note"){
-      newState = "result";
-      q = notecard.evaluate();
-      data['q'] = q;
-      data['index'] = self.progress;
-      data['note'] = self.currentNote;
-      self.progress++;
-      self.handleResult(q);
-    }
-    else if(self.state == "result"){
-      var next = self.nextNote();
-      newState = next ? "note" : "finished";
-    }
-    if (newState){
-      self.state = newState;
-      $(document).trigger($.extend({'type' : 'notes.' + newState}, data));
-    }
   }
 
   self.handleResult = function(q){
@@ -100,12 +76,14 @@ function NoteManager() {
     if (q<1){
       self.failedNotes.push(id);
     }
+    $(document).trigger($.extend({'type' : 'notes.progress'}, {'q' : q, "index" : self.progress}));
+    return
   }
 
   self.logInUser = function(username){
     self.user = username;
     self.getNotes();
-    $("#background").fadeIn(2000);
+    $("#background_lost").fadeIn(2000);
     $(document).trigger({'type': 'user.logged_in', 'user': username});
   }
 
@@ -127,7 +105,10 @@ function NoteManager() {
   }
 
   self.nextNote = function(){
-    if (self.order.length == 0){
+    if (!self.order.length){
+      if (self.failedNotes.length){
+        self.states.push( {"state" : "message", "data" : {"message" : "Something's still missing..."}})
+      }
       self.failedNotes = randomize(self.failedNotes);
       self.order = self.order.concat(self.failedNotes);
       self.failedNotes = [];
@@ -138,6 +119,12 @@ function NoteManager() {
     }
     return noteID;
   };
+
+  self.finish = function(){
+    $("#tunnel_vision").fadeOut(2000);
+    $("#background_lost").fadeOut(2000);
+    $("#background_found").fadeIn(2000);
+  }
 
 };
 

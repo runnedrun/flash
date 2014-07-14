@@ -17,15 +17,18 @@ function NoteInfo(){
   var currentNote = {}
 
   // Register for Events
-  $(document).on('notes.note', function(){
+  $(document).on('state.note', function(){
     fadeIn(noteInfoDiv);
   	self.hideHint();
   })
-  $(document).on('notes.result', function(){
+  $(document).on('state.result', function(){
     fadeIn(noteInfoDiv);
     self.showHint();
   })
-  $(document).on('notes.finished', function(){
+  $(document).on('state.message', function(){
+    fadeOut(noteInfoDiv);
+  })
+  $(document).on('state.finished', function(){
     fadeOut(noteInfoDiv);
   })
   $(document).on('notes.new_current_note', function(e){

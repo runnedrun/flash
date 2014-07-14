@@ -22,7 +22,7 @@ function Scorecard(){
   }
 
   // Register for Events
-  $(document).on('notes.result', function(e){
+  $(document).on('notes.progress', function(e){
   	var newClass = e.q ? "green" : "red"
     self.scores[e.index].addClass(newClass);
     if (e.q == 0){
