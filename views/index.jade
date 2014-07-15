@@ -1,5 +1,21 @@
 extends layout
 
+block stylesheets
+  link(rel='stylesheet', href='//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css')
+  link(rel='stylesheet', href='/stylesheets/flashcard.css')
+
+block javascripts
+  script(src='//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
+  script(src='/js/util.js')
+  script(src='/js/notemanager.js')
+  script(src='/js/notecard.js')
+  script(src='/js/noteinfo.js')
+  script(src='/js/result.js')
+  script(src='/js/mascot.js')
+  script(src='/js/scorecard.js')
+  script(src='/js/login.js')
+  script(src='/js/flashcard.js')
+
 block content
   img(src='img/lost.jpg').background#background_lost
   img(src='img/found.png').background#background_found

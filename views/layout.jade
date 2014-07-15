@@ -6,19 +6,11 @@ html(lang='en')
     meta(charset='utf-8')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     link(rel='icon', href='static/img/favicon.ico')
-    link(rel='stylesheet', href='//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css')
-    link(rel='stylesheet', href='/stylesheets/style.css')
-    script(src='//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
-    script(src='/js/util.js')
-    script(src='/js/notemanager.js')
-    script(src='/js/notecard.js')
-    script(src='/js/noteinfo.js')
-    script(src='/js/result.js')
-    script(src='/js/mascot.js')
-    script(src='/js/scorecard.js')
-    script(src='/js/login.js')
     link(href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600,300', rel='stylesheet', type='text/css')
 
+    block stylesheets
+
+    block javascripts
 
 body
   block content

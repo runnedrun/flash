@@ -1,0 +1,23 @@
+extends ../layout
+
+block stylesheets
+	link(rel='stylesheet', href='/stylesheets/sign-in.css')
+
+block content
+	div.row.sign-in-form-wrapper
+		h2.text-center.form-title.col-md-4 sign in
+		.col-md-8
+			form(role='form', action="/user/sign_in", method="POST")
+				div.form-group
+					label.control-label(for='usernameInput').
+						username
+					input#userNameInput.form-control(name="username", type='text', placeholder='Username')
+	
+	div.row.sign-in-form-wrapper
+		h2.text-center.form-title.col-md-4 sign up
+		.col-md-8
+			form(role='form', action="/user/sign_up", method="POST")
+				div.form-group
+					label.control-label(for='usernameInput').
+						username
+					input#userNameInput.form-control(name="username", type='text', placeholder='Username')
