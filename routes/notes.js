@@ -46,8 +46,38 @@ exports.index = function(req, res) {
 }
 
 exports.new = function(req, res) {
-    console.log(req.body)
-    db.Note.create(_.extend(req.body.note, {userId: req.user.id})).then(function(note) {
-        res.send({id: note.id}, 200)
+    console.log("body is ", req.body)
+    db.Note.create(_.extend(req.body.note, { UserId: req.user.id })).then(function(note) {
+        res.send({ id: note.id }, 200)
+    })
+}
+
+exports.update = function(req, res) {
+    console.log("body is ", req.body);
+    db.Note.find({where: {id: req.body.id}})
+    .then(function(note) {
+        if(note) {
+            return note.updateAttributes(req.body)
+        } else {
+            res.send(404)
+        }
+    })
+    .then(function(note) {
+        res.send(200)
+    })
+}
+
+exports.delete = function(req, res) {
+    console.log("body is ", req.body);
+    db.Note.find({where: {id: req.body.id}})
+    .then(function(note) {
+        if(note) {
+            return note.destroy()
+        } else {
+            res.send(404)
+        }
+    })
+    .then(function(note) {
+        res.send(200)
     })
 }

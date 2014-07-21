@@ -15,7 +15,7 @@ module.exports = {
                   type: DataTypes.DATE
               },
 
-              userId:  {
+              UserId:  {
                   type: DataTypes.BIGINT,
                   references: "Users",
                   referenceKey: "id",
@@ -25,8 +25,8 @@ module.exports = {
 
               highlight: DataTypes.STRING,
               hint: DataTypes.STRING,
-              scrollX: DataTypes.INTEGER,
-              scrollY: DataTypes.INTEGER,
+              scrollX: DataTypes.DECIMAL,
+              scrollY: DataTypes.DECIMAL,
               clientSideId: DataTypes.STRING,
               nodeIndex: DataTypes.INTEGER,
 
@@ -34,7 +34,7 @@ module.exports = {
               originalUrl: DataTypes.STRING,
               title: DataTypes.STRING,
 
-              easinessFactor: DataTypes.INTEGER,
+              easinessFactor: DataTypes.DECIMAL,
               nextShow: DataTypes.DATE
           }
       ).complete(done);

@@ -5,6 +5,7 @@
 var express = require('express')
     , user = require('./routes/user')
     , notes = require('./routes/notes')
+    , resourceDownloader = require('./routes/resourceDownloader')
     , flash = require('./routes/flash')
     , http = require('http')
     , path = require('path')
@@ -104,10 +105,13 @@ function requireAuthentication(req, res, next) {
 app.get('/', flash.index);
 app.get('/notes', notes.index);
 app.post('/note', notes.new);
+app.post('/note/delete', notes.delete);
+app.post('/note/update', notes.update);
 app.get('/user/sign_in', user.signInPage);
 app.post('/user/sign_in', user.signInAction);
 app.post('/user/sign_up', user.signUpAction);
 app.get('/user', user.show);
+app.post('/resource_downloader', resourceDownloader.download);
 
 app.configure('development', function(){
   app.use(express.errorHandler());
