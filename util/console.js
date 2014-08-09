@@ -16,10 +16,10 @@ context.db          = require('../models');
 context.note        = {}
 context.user        = {}
 
-context.getNote = function(id) {
-    context.db.Note.find({where: {id: id}, include: [ context.db.User ]}).then(function(note) { context.note = note; })
+context.getUser= function(conditions) {
+    context.db.User.find({where: conditions, include: [ context.db.Note ]}).then(function(user) { context.user = user; })
 }
 
-context.getUser = function(id) {
-    context.db.User.find({where: {id: id}, include: [ context.db.Note ]}).then(function(user) { context.user = user; })
+context.getNote = function(conditions) {
+    context.db.Note.find({where: conditions, include: [ context.db.User ]}).then(function(note) { context.note = note; })
 }

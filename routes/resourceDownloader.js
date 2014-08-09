@@ -1,14 +1,14 @@
-AWS = require('aws-sdk');
-//AWS.config.loadFromPath('./aws_config.json');
+var AWS = require('aws-sdk');
+var db = require('../models')
 AWS.config.update({accessKeyId: process.env.AWS_KEY, secretAccessKey: process.env.AWS_SECRET});
-awsBucket = new AWS.S3({params: {Bucket: 'TrailsSitesProto'}});
+awsBucket = new AWS.S3({params: {Bucket: 'FlashArchives'}});
 
 var request = require('request');
 var url = require('url');
 
 function absoluteAwsUrl(path) {
     var encodedPath = path.split("/").map(function(sect){ return encodeURIComponent(sect) }).join("/");
-    return "https://s3.amazonaws.com/TrailsSitesProto/" + encodedPath
+    return "https://s3.amazonaws.com/FlashArchives/" + encodedPath
 }
 
 function generateArchivePath(path, revisionNumber) {
@@ -18,52 +18,49 @@ function generateArchivePath(path, revisionNumber) {
 exports.download = function(req, res){
     console.log("in the resource downloader");
 
-//    var auth_token = req.headers["wt_auth_token"] || req.cookies.wt_auth_token
-//
-//    console.log("auth_token is: " + auth_token);
-//
-//    if (auth_token){
-//        var archiveBase = false;
-//        var archivePath = false;
-//        var resp;
-//
-//        if (req.body.html.awsPath){
-//            // this is a request from the extension, which generates the aws url client side
-//            archiveBase = absoluteAwsUrl(req.body.html.awsPath)
-//            archivePath = generateArchivePath(req.body.html.awsPath, req.body.revision);
-//            resp = { archiveLocation: absoluteAwsUrl(archivePath)};
-//        } else {
-//            // this is a request from the web site, which just uses aws url saved to the site.
-//            resp = {}
-//        }
-//
-//        new Site(req.body.siteID, auth_token, function(site) {
-//            new ResourceHandler(req, site, archivePath, archiveBase);
-//        });
-//
-//        res.setHeader("Access-Control-Allow-Origin", "*");
-//        res.send(resp, 200);
-//    } else {
-//        res.send('not authorized for that operation', 404);
-//    }
+    db.Note.find({ where: { id: req.body.noteId }}).then(function(note) {
+        if (note) {
+            if (note.UserId == req.user.id) {
+                // this is a request from the extension, which generates the aws url client side
+                var archivePath = req.body.html.awsPath
+                var archiveUrl = absoluteAwsUrl(archivePath)
+                var resp = { archiveUrl: archiveUrl};
+
+                new ResourceHandler(req, archivePath, archiveUrl, note);
+
+                res.send(resp, 200);
+            } else {
+                res.json({ errors: [{ message:'not authorized for that operation' }] }, 401);
+            }
+        } else {
+            res.json({ errors: [{ message:'note not found' }] }, 404)
+        }
+    })
     res.send(200);
 };
 
-ResourceHandler = function(req, site, archivePath, archiveBase) {
+ResourceHandler = function(req, archivePath, archiveUrl, note) {
     var resources = req.body.originalToAwsUrlMap || [];
-    var stylesheets= req.body.styleSheets || [];
+    var stylesheets= req.body.processedStylesheets || [];
     var html = req.body.html;
     var isIframe = req.body.isIframe;
+    var site = {
+        savedResources: [],
+        savedStylesheets: [],
+        archiveUrl: archiveUrl
+    }
 
     var callbackTracker = new CallbackTracker(Object.keys(resources).length, Object.keys(stylesheets).length, function() {
         console.log("is iframe?", isIframe, typeof isIframe);
         if (isIframe == "false") {
-            console.log("archive location is: " + site.archiveLocation);
+            console.log("archive location is: " + site.archiveUrl);
             console.log("now updating the site");
-            site.revisionNumbers.push(revisionNumber);
-            if (isBaseRevision == "true") site.baseRevisionNumber = parseInt(revisionNumber);
-            site.updateSiteInDb();
         }
+
+        console.log("saved to ", site.archiveUrl);
+        note.updateAttributes({archiveUrl: site.archiveUrl}).then(function(note) {
+            console.log("note archive url saved")
+        })
     });
 
     console.log('in the resource handler');
@@ -126,19 +123,7 @@ ResourceHandler = function(req, site, archivePath, archiveBase) {
         }
     }
 
-    console.log("archive location is: " + site.archiveLocation);
-
-    if (archiveBase && archivePath){
-        // new site being saved for the first time
-        site.archiveLocation = archiveBase
-    } else {
-        // new note on an existing site
-
-        // remove the bucket from the url, and trim any trailing slashes
-        var trimmedPath =
-            url.parse(site.archiveLocation).pathname.replace(/\/TrailsSitesProto(\/)?/,"").replace(/\/+$/, "");
-        archivePath = trimmedPath + "/" + revisionNumber;
-    }
+    console.log("archive location is: " + site.archiveUrl);
 
     callbackTracker.setSaveHtmlFunction(function(callback) {
         putDataOns3(archivePath, html.html, "text/html", function() {

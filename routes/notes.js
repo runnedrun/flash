@@ -24,14 +24,14 @@ exports.index = function(req, res) {
     var resp ;
     var filter = req.query.filter;
 
+    fakeNnotes: [
+        fakeNote,
+        fakeNote2,
+    ]
+
     if (filter == "all") {
         resp = {
-            notes: [
-                fakeNote,
-                fakeNote2,
-                fakeNote,
-                fakeNote2
-            ]
+
         };
     } else {
         resp = {

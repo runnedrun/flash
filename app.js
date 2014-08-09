@@ -82,7 +82,8 @@ function renderAuthError(req, res){
 function requireAuthentication(req, res, next) {
     if (requiresAuth(req.url)) {
         console.log("auth required");
-        var username = req.session.username;
+        var username = req.session && req.session.username;
+
         console.log("username is " + username)
         if (username) {
              db.User.find({where: {username: username}}).then(function(user) {
