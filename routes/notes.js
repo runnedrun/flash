@@ -22,32 +22,23 @@ var fakeNote2 = {
 
 exports.index = function(req, res) {
     var resp ;
-    var filter = req.query.filter;
+    var limit = req.query.limit;
 
-    fakeNnotes: [
+    var fakeNotes = [
         fakeNote,
-        fakeNote2,
-    ]
+        fakeNote2
+    ];
 
-    if (filter == "all") {
-        resp = {
-
-        };
-    } else {
-        resp = {
-            notes: [
-                fakeNote,
-                fakeNote2
-            ]
-        };
-    }
-
-    res.send(resp, 200)
+    db.Note.findAll({where: {UserId: req.user.id}, limit: limit, order: ['createdAt']}).then(function(notes) {
+        res.send({notes: notes.concat(fakeNotes)}, 200);
+    })
 }
 
 exports.new = function(req, res) {
     console.log("body is ", req.body)
-    db.Note.create(_.extend(req.body.note, { UserId: req.user.id })).then(function(note) {
+    var d = new Date();
+    var currentTime = d.getTime();
+    db.Note.create(_.extend(req.body.note, { nextShow: currentTime, UserId: req.user.id })).then(function(note) {
         res.send({ id: note.id }, 200)
     })
 }

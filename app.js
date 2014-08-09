@@ -10,7 +10,9 @@ var express = require('express')
     , http = require('http')
     , path = require('path')
     , RedisStore = require('connect-redis')(express)
-    , db   = require('./models');
+    , db   = require('./models')
+    , ultraRepl = require('ultra-repl')
+    , replify = require('replify');
 
 
 var app = express();
@@ -37,14 +39,6 @@ app.configure(function(){
     app.use(requireAuthentication);
     app.use(app.router);
     app.use(express.static(path.join(__dirname, 'public')));
-});
-
-app.configure('development', function(){
-    app.use(express.errorHandler());
-});
-
-app.locals({
-    awsBucket: "TrailSitesProto"
 });
 
 //app.get('/', routes.index);
@@ -114,12 +108,25 @@ app.post('/user/sign_up', user.signUpAction);
 app.get('/user', user.show);
 app.post('/resource_downloader', resourceDownloader.download);
 
-app.configure('development', function(){
-  app.use(express.errorHandler());
-});
-
-http.createServer(app).listen(app.get('port'), function(){
+var server = http.createServer(app).listen(app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'))
 })
 
+var errorHandler = express.errorHandler;
 
+errorHandler({
+   handlers: {
+       "500": function (e) { console.log("error", e) }
+    },
+    server: server
+})
+
+app.configure('development', function(){
+    process.on('uncaughtException', function(err) {
+        // handle the error safely
+        console.log(err);
+    });
+
+    app.use(errorHandler);
+    replify({ name: 'flash' }, app, { db: db });
+});

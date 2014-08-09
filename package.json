@@ -13,6 +13,7 @@
     "connect-redis": "1.4.7",
     "lodash": "*",
     "aws-sdk": "*",
-    "request": "*"
+    "request": "*",
+    "replify": "*"
   }
 }
