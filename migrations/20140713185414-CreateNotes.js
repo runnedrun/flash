@@ -35,7 +35,8 @@ module.exports = {
               title: DataTypes.STRING,
 
               easinessFactor: DataTypes.DECIMAL,
-              nextShow: DataTypes.DATE
+              nextShow: DataTypes.DATE,
+              firstShow: DataTypes.DATE
           }
       ).complete(done);
   },

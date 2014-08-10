@@ -43,6 +43,10 @@ exports.new = function(req, res) {
     })
 }
 
+exports.updateEasiness = function(req, res) {
+
+}
+
 exports.update = function(req, res) {
     console.log("body is ", req.body);
     db.Note.find({where: {id: req.body.id}})

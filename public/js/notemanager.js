@@ -63,8 +63,8 @@ function NoteManager() {
     if (q<1){
       self.failedNotes.push(id);
     }
-    $(document).trigger($.extend({'type' : 'notes.progress'}, {'q' : q, "index" : self.progress}));
-    return
+    $(document).trigger($.extend({'type' : 'notes.progress'}, {'q' : q, "index" : self.progress})); // Why extend here?
+    return // ? necessary
   }
 
   self.logInUser = function(username){
@@ -75,7 +75,7 @@ function NoteManager() {
   }
 
   self.getNotes = function(){
-  	API.getNotes( function(data){
+  	API.getNotes(function(data){
       for (var i=0; i<data.notes.length; i++){
         self.notes[data.notes[i].id] = new Note(data.notes[i]);
         self.order.push(data.notes[i].id);

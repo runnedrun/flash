@@ -12,7 +12,8 @@ module.exports = function(sequelize, DataTypes) {
         title: DataTypes.STRING,
 
         easinessFactor: DataTypes.INTEGER,
-        nextShow: DataTypes.DATE
+        nextShow: DataTypes.DATE,
+        firstShow: DataTypes.DATE
     }, {
         classMethods: {
             associate: function(models) {
@@ -20,7 +21,7 @@ module.exports = function(sequelize, DataTypes) {
             },
             setEasinessFactorFromQ: function(q) {
                 this.easinessFactor = q + 1 + 2;
-                this.save().success(function() {})
+                this.save();
             }
         }
     })
