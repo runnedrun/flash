@@ -67,12 +67,7 @@ function NoteManager() {
     return // ? necessary
   }
 
-  self.logInUser = function(username){
-    self.user = username;
-    self.getNotes();
-    $("#background_lost").fadeIn(2000);
-    $(document).trigger({'type': 'user.logged_in', 'user': username});
-  }
+
 
   self.getNotes = function(){
   	API.getNotes(function(data){
