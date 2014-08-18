@@ -7,12 +7,12 @@ LoginView = function() {
 
   $("#background_lost").fadeIn(2000);
 
-  function activate() {
+  function show() {
     submitBinding = KeyBinding.keypress(KeyCode.enter, inputDiv, loginUser);
     setTimeout(function(){inputDiv.focus();}, 450);
   }
 
-  function deactivate() {
+  function hide() {
     submitBinding.unbind();
     ViewUtil.fadeOut(loginDiv);
     $("#background_lost").fadeIn(2000);
@@ -23,6 +23,6 @@ LoginView = function() {
     Fire.request("user.login", {username: username});
   }
 
-  Respond.toCommand("user.login", deactivate);
-  Respond.toCommand("user.display_login", activate);
+  Respond.toCommand("view.login-view.hide", hide);
+  Respond.toCommand("view.login-view.show", show);
 }

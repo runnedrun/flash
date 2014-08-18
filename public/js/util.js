@@ -6,9 +6,39 @@ Util = new function() {
         return arr;
     };
 
-    this.uniqueString = function() {
+    this.random = function(lower, upper) {
+      var diff = upper - lower
+      var randomAdd = Math.floor((Math.random() * diff) + 1);
+      return lower + randomAdd;
+    }
+
+    this.incrementingString = function() {
       counter += 1;
       return String(counter);
+    }
+
+    this.find = function(array, predicateFunc) {
+      var res;
+      $.each(array, function(i, el) {
+        var found = predicateFunc(el);
+        if (found) {
+          res = el;
+          return false
+        }
+      });
+      return res
+    }
+
+    this.findAndDelete = function(array, predicateFunc) {
+      var indexToDelete;
+      $.each(array, function(i, el) {
+        var found = predicateFunc(el);
+        if (found) {
+          indexToDelete = i;
+          return false
+        }
+      });
+      return array.splice(i,1);
     }
 }()
 

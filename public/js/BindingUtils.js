@@ -32,7 +32,7 @@ KeyBinding = new function() {
 
 // a wrapper around an event binding which can manage it's own unbinding
 Binding = function(type, $bindTo, callback) {
-  var namespace = Util.uniqueString();
+  var namespace = Util.incrementingString();
   var eventString = type + "." + namespace;
 
   $bindTo.on(eventString, callback);

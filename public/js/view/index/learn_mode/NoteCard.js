@@ -1,0 +1,61 @@
+//  NoteCard
+//
+//  Object that keeps track of the current note in the UI,
+//  and what the user has done to it.
+
+//  Responsibilities:
+//    Send notecard to notecard view
+//    Fire events upon user interaction with the notecard view
+
+
+/*
+ TODO
+ add sidebar with all notes
+ notes are searchable/ditable inline
+ prettify ui
+ q is evaluated more than boolean, maybe
+ maybe: resultdiv just replaces input with the word in red/green, pre and post just stay there.
+ (strikethrough, with correct answer above it? That's hard, but maybe cooler than the wrong answer disappearingn)
+ */
+
+Notecard = function(){
+  var submitBinding
+
+  // dynamic content
+  var preUnderlineDiv = $('#pre_underline');
+  var underlineDiv = $('#underline');
+  var postUnderlineDiv = $('#post_underline');
+
+  var noteDiv = $('#highlighted');
+
+  function submitNote() {
+    var missingWord = underlineDiv.val();
+    Fire.request("missing.word.submit", { word: missingWord });
+  }
+
+  function showNote(e) {
+    submitBinding = KeyBinding.keypress(KeyCode.enter, document, submitNote);
+    updateNoteText(e.text);
+    ViewUtil.fadeIn(noteDiv);
+    setTimeout(function(){underlineDiv.focus();}, 450);
+  }
+
+  function hideDisplay(e) {
+    submitBinding.unbind();
+    ViewUtil.fadeOut(noteDiv);
+  }
+
+  Respond.toCommand("view.learn.note-card.show", showNote);
+  Respond.toCommand("view.learn.note-card.hide", hideDisplay);
+
+  function updateNoteText(text) {
+    if (text){
+      missingWord = text.missingWord;
+      preUnderlineDiv.html(text.prefix);
+      underlineDiv.val("");
+      underlineDiv.attr("size", text.missingWord.length - 1)
+      postUnderlineDiv.html(text.postfix);
+    }
+  }
+}
+

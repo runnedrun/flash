@@ -1,4 +1,0 @@
-LearnModeState = {
-  login: 0
-
-}

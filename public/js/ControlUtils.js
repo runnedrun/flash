@@ -17,14 +17,17 @@ Respond = new function() {
 
 Fire = new function() {
   this.command = function(commandName, data) {
-    $(document).trigger($.extend({ 'type' : "command." + commandName }, data));
+    var id = Util.incrementingString();
+    $(document).trigger($.extend({ 'type' : "command." + commandName, id: id }, data));
   }
 
   this.event = function(eventName, data) {
-    $(document).trigger($.extend({ 'type' : "event." + eventName }, data));
+    var id = Util.incrementingString();
+    $(document).trigger($.extend({ 'type' : "event." + eventName, id: id }, data));
   }
 
   this.request = function(requestName, data) {
-    $(document).trigger($.extend({ 'type' : "request." + requestName }, data));
+    var id = Util.incrementingString();
+    $(document).trigger($.extend({ 'type' : "request." + requestName, id: id }, data));
   }
 }

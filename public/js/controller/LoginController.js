@@ -1,23 +1,21 @@
 LoginController = new function() {
-  function login(e) {
-    var username = e.username
+  var username;
+
+  function login(usernameToLogin) {
+    username = usernameToLogin;
     Fire.command("manager.notes.refresh");
-    Fire.command("view.user.login", {user: username});
-    // notemanager.advanceState();
+    Fire.command("view.login-view.hide");
+    Fire.command("controller.login.complete");
   }
 
-  function activateViewIfNecessary(e) {
-    var newState = e.newState;
-
-    if (newState == ViewModeState.login) {
-      submitBinding = KeyBinding.keypress(KeyCode.enter, inputDiv, onSubmit);
-      setTimeout(function(){inputDiv.focus();}, 450);
+  function showViewIfNecessary(e) {
+    if (!username) {
+      Fire.command("view.login-view.show");
     } else {
-      submitBinding.unbind();
-      fadeIn(loginDiv);
+      login(username);
     }
   }
 
-  Respond.toCommand('state.change', onStateChange)
-  Respond.toRequest("user.login", login);
-}
+  Respond.toCommand('controller.login.start', showViewIfNecessary)
+  Respond.toRequest("user.login", function(e) { login(e.username) });
+};
