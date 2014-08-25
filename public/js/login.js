@@ -14,8 +14,20 @@ function Login(){
       var code = e.keyCode || e.which;
       if(code == 13) {        // 13 = Enter key
         $(document).off('keypress');
-        var username = inputDiv.html();
-        notemanager.logInUser(username);
+        var user = "Drew"; //inputDiv.html();
+        $.ajax({
+            beforeSend: function(req) {
+                req.setRequestHeader("Accept", "application/json");
+            },
+            data: { username : user },
+            type: 'post',
+            url: '/user/sign_in',
+            success : function(data){
+              console.log(data);
+            }
+        });
+
+        notemanager.logInUser(user);
         notemanager.advanceState();
         fadeOut(loginDiv);
       }
@@ -25,6 +37,4 @@ function Login(){
     setTimeout(function(){inputDiv.focus();}, 450);
   })
 }
-
-
 
