@@ -30,7 +30,7 @@ Notecard = function(){
 
   function submitNote() {
     var missingWord = underlineDiv.val();
-    Fire.request("missing.word.submit", { word: missingWord });
+    Fire.request("missing-word.submit", { word: missingWord });
   }
 
   function showNote(e) {
@@ -45,8 +45,8 @@ Notecard = function(){
     ViewUtil.fadeOut(noteDiv);
   }
 
-  Respond.toCommand("view.learn.note-card.show", showNote);
-  Respond.toCommand("view.learn.note-card.hide", hideDisplay);
+  Respond.toCommand("view.note-card.show", showNote);
+  Respond.toCommand("view.note-card.hide", hideDisplay);
 
   function updateNoteText(text) {
     if (text){

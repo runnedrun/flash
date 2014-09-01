@@ -44,48 +44,42 @@ LearnModeController = function() {
 //    $(document).trigger($.extend({'type' : 'state.' + nextState.state}, nextState.data));
 //  }
 
-  function handleNoteResult(q) {
-    var id = self.currentNote.id;
-    API.sendResult(id, q);
-    if (q<1){
-      self.failedNotes.push(id);
-    }
-    $(document).trigger($.extend({'type' : 'notes.progress'}, {'q' : q, "index" : self.progress})); // Why extend here?
-    return // ? necessary
-  }
+//  function handleNoteResult(q) {
+//    var id = self.currentNote.id;
+//    API.sendResult(id, q);
+//    if (q<1){
+//      self.failedNotes.push(id);
+//    }
+//    $(document).trigger($.extend({'type' : 'notes.progress'}, {'q' : q, "index" : self.progress})); // Why extend here?
+//    return // ? necessary
+//  }
 
   function finish() {
     Fire.command("controller.background.change", { background: BackgroundView.Background.review })
   }
 
-  function updateCurrentNote(id) {
-    self.currentNote = self.notes[id];
-  }
-
-  function nextNote() {
-    if (!self.order.length) {
-      if (self.failedNotes.length) {
-        self.states.push( {"state" : "message", "data" : {"message" : "Something's still missing..."}})
-      }
-      self.failedNotes = randomize(self.failedNotes);
-      self.order = self.order.concat(self.failedNotes);
-      self.failedNotes = [];
-    }
-    var noteID = self.order.pop();
-    if (noteID) {
-      self.updateCurrentNote(noteID);
-    }
-    return noteID;
-  };
-
-  function showNextNoteOrFinish() {
+  function showNextNoteOrMessageOrFinish() {
     if (notesToShow.length > 0) {
       var index = Util.random(0, notesToShow.length - 1);
       var noteToShow = notesToShow[index];
       notesToShow.splice(index, 1);
-      Fire.command("view.note-card.show", { note: noteToShow });
+      Fire.command("controller.notecard.new", { note: noteToShow });
     } else {
+      Fire.command("view.message-view.show", {
+        message: "Finito!"
+      });
+    }
+  }
 
+  // rename this function once we know all that it does
+  function respondToMessageViewComplete()  {
+    if (notesToShow.length > 0) {
+      var index = Util.random(0, notesToShow.length - 1);
+      var noteToShow = notesToShow[index];
+      notesToShow.splice(index, 1);
+      Fire.command("controller.notecard.new", { note: noteToShow });
+    } else {
+      finish();
     }
   }
 
@@ -103,7 +97,7 @@ LearnModeController = function() {
     }
 
     if (currentState == State.waitForNotes) {
-      showNote(newNote);
+      showNextNoteOrMessageOrFinish(newNote);
     }
   }
 
@@ -116,17 +110,17 @@ LearnModeController = function() {
 
 
   Respond.toEvent("note.new", addNote)
-  Respond.toRequest("result.view.complete");
-  Respond.toRequest("message.view.complete");
-  Fire.command("view.note-card.show", {note: {}});
-  Fire.command("view.note-card.hide");
-  Fire.command("view.note.new", {note: {}});
-  Fire.command("view.result-view.show", {resultsMesage: ""});
-  Fire.command("view.note.started", {note: {}});
-  Fire.command("view.message-view.show", {message: "Hola you're back!"})
-  Fire.command("view.note-info.show", {info: "", link: ""})
-
-  Fire.command("view.background-view.show`", { background: BackgroundView.Background.learn, fadeTime: 2000 });
+  Respond.toRequest("result.complete", showNextNoteOrMessageOrFinish);
+  Respond.toRequest("message.view.complete", respondToMessageViewComplete);
+  Respond.toCommand("controller.note.completed", showNextNoteOrMessageOrFinish);
+//  Fire.command("view.note-card.show", {note: {}});
+//  Fire.command("view.note-card.hide");
+//  Fire.command("view.note.new", {note: {}});
+//  Fire.command("view.result-view.show", {resultsMesage: ""});
+//  Fire.command("view.note.started", {note: {}});
+//  Fire.command("view.message-view.show", {message: "Hola you're back!"})
+//  Fire.command("view.note-info.show", {info: "", link: ""})
+//  Fire.command("view.background-view.show`", { background: BackgroundView.Background.learn, fadeTime: 2000 });
 
 //  self.advanceState();
 }

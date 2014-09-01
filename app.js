@@ -102,6 +102,7 @@ app.get('/notes', notes.index);
 app.post('/note', notes.new);
 app.post('/note/delete', notes.delete);
 app.post('/note/update', notes.update);
+app.post('/note/update_easiness', notes.updateEasiness);
 app.get('/user/sign_in', user.signInPage);
 app.post('/user/sign_in', user.signInAction);
 app.post('/user/sign_up', user.signUpAction);

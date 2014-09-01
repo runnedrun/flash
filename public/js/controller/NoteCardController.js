@@ -7,21 +7,25 @@ NoteCardController = function() {
 
   function submitNote(e) {
     var q = evaluate(e.word);
-    Fire.command("controller.challenge.complete", { note: currentNote, q: q });
+    NoteManager.submitEasiness(q, currentNote);
+    Fire.command("view.note-card.hide");
+    Fire.command("controller.results.show", {
+      result: q,
+      note: currentNote
+    });
   }
 
   function createNewNotecard(e) {
     var note = e.note;
     currentNote = note;
     var textToShow = removeWord(note.highlight);
-    Fire.command("view.learn.note.show", {text: textToShow});
+    Fire.command("view.note-card.show", {text: textToShow});
   }
 
-  Respond.toRequest("missing.word.submit", submitNote);
-  Respond.toCommand("controller.notecard.new");
+  Respond.toRequest("missing-word.submit", submitNote);
+  Respond.toCommand("controller.notecard.new", createNewNotecard);
 
   function evaluate(answer){
-    // TODO expand q range
     return answer.toLowerCase() == missingWord.toLowerCase() ? 1 : 0;
   }
 
@@ -29,7 +33,6 @@ NoteCardController = function() {
   var easyWords = ["the", "of", "a", "in"]
   removeWord = function(text, depth, easyIndices){
     //  Remove a random word from text, using easy_words only as a last resort
-    //  TODO: refactor
     depth = depth || 0
     easyIndices = easyIndices || []
     var words = text.split(" ");

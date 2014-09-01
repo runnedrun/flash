@@ -19,6 +19,19 @@ NoteManager = new function() {
           callback(data)
         }
       );
+    },
+
+    submitEasiness: function(q, note, callback) {
+      return $.post(
+        '/notes/update_easiness',
+        {
+          q: q,
+          noteId: note.id
+        },
+        function(data) {
+          callback(data)
+        }
+      );
     }
   };
 
@@ -33,12 +46,21 @@ NoteManager = new function() {
     return { "note.new": events };
   }
 
+  function updateNote(data) {
+    console.log("updating note");
+    Fire.event("note.updated", data.note);
+  }
+
   this.getTodaysNotes = function() {
     var deferred = $.Deferred();
-    return API.getNotes(function(notes) {
+    API.getNotes(function(notes) {
       var events = createNotesAndFireEvents(notes);
       deferred.resolve(events);
     });
-    deferred.promise();
+    return deferred.promise();
+  }
+
+  this.submitEasiness = function(q, note) {
+    API.submitEasiness(q, note, updateNote);
   }
 }();

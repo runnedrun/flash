@@ -4,27 +4,27 @@
 
 Scorecard = function() {
   var scorecardDiv = $("#scorecard");
-  var scoreElement = '<a href="#" class="score glyphicon glyphicon-leaf gray"></a>';
-  var scoreIndicators = {};
+  var indicatorSelector = "score-indicator";
+  var scoreElement = '<a href="#" class= "' + indicatorSelector + 'glyphicon glyphicon-leaf gray"></a>';
 
   function addNewScoreIndicator(e) {
-    var newScoreIndicator = $(scoreElement);
-    scoreIndicators[e.note.id] = newScoreIndicator;
+    var newScoreIndicator = $(scoreElement).addClass(e.id);
     scorecardDiv.append(newScoreIndicator);
   }
 
-  function indicateNoteComplete(e) {
-    var newColor = e.q > 0 ? "green" : "red";
-    var completedNote = e.note;
-    var indicatorToChange = scoreIndicators[completedNote];
+  function updateIndicator(e) {
+    var newColor = e.success ? "green" : "red";
+    var indicatorId = e.id;
+    var preview = e.preview;
+    var indicatorToChange = $("." + indicatorSelector + "." + indicatorId);
 
     indicatorToChange.removeClass("green").removeClass("red");
     indicatorToChange.addClass(newColor);
 
-    var ellipsis = completedNote.highlight > 15 ? "..." : ""
-    indicatorToChange.attr('title', completedNote.highlight.substring(0,15) + ellipsis);
+    var ellipsis = preview > 15 ? "..." : ""
+    indicatorToChange.attr('title', preview(0,15) + ellipsis);
   }
 
-  Respond.toCommand("view.note.new", addNewScoreIndicator);
-  Respond.toCommand("view.note.complete", indicateNoteComplete);
+  Respond.toCommand("view.score-card.new-indicator", addNewScoreIndicator);
+  Respond.toCommand("view.score-card.indicator-update", updateIndicator);
 }
