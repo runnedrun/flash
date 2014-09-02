@@ -12,6 +12,11 @@ ResultController = function() {
     Fire.command("view.result-view.show", {
       result: result
     })
+
+    Fire.command("view.note-info.show", {
+      hint: e.note.hint,
+      link: e.note.archiveUrl
+    });
   }
 
   function onViewFinished(e) {
@@ -21,6 +26,7 @@ ResultController = function() {
     })
 
     Fire.command("view.result-view.hide");
+    Fire.command("view.note-info.hide");
   }
 
   Respond.toCommand("controller.result.show", showResult)

@@ -7,14 +7,17 @@ block stylesheets
 block javascripts
   script(src='//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
   script(src='/js/Util.js')
-  script(src='/js/notemanager.js')
-  script(src='/js/notecard.js')
-  script(src='/js/noteinfo.js')
-  script(src='/js/result.js')
-  script(src='/js/mascot.js')
-  script(src='/js/scorecard.js')
-  script(src='/js/login.js')
-  script(src='/js/flashcard.js')
+  script(src='/js/view/index/learn_mode/MessageView.js')
+  script(src='/js/view/index/learn_mode/ResultView.js')
+  script(src='/js/view/index/learn_mode/NoteInfoView.js')
+  script(src='/js/view/index/learn_mode/ScorecardView.js')
+  script(src='/js/view/index/learn_mode/BackgroundView.js')
+  script(src='/js/controller/index/learn_mode/LearnModeController.js')
+  script(src='/js/controller/index/learn_mode/BackgroundController.js')
+  script(src='/js/controller/index/learn_mode/MessageController.js')
+  script(src='/js/controller/index/learn_mode/NoteCardController.js')
+  script(src='/js/controller/index/learn_mode/ResultController.js')
+  script(src='/js/controller/index/learn_mode/ScoreCardController.js')
 
 block content
   img(src='img/lost.jpg').background#background_lost
@@ -24,7 +27,7 @@ block content
   nav.navbar.navbar-default(role='navigation')
       .navbar-header.pull-right
           a.navbar-brand(href='#')
-            img(src="img/flash.png")
+            img(src='img/flash.png')
         div
           ul.nav.navbar-nav
             li.active
@@ -33,15 +36,15 @@ block content
   #content.container
     #flashcard
       div.row#note
-        div.col-md-8#loading "loading..."
+        div.col-md-8#loading 'loading...'
         div.col-md-8#login
           div#login_message.gray What's my name...?
-          input#login_input(type="text")
+          input#login_input(type='text')
         div.col-md-8#mascot
           #message
         div.col-md-8#highlighted
           span#pre_underline
-          input#underline(type="text")
+          input#underline(type='text')
           span#post_underline
         div.col-md-8#result
         div.col-md-4#note_info.pull-right

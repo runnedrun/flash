@@ -2,7 +2,7 @@
 //
 // Keep track of how we're doing
 
-Scorecard = function() {
+ScorecardView = function() {
   var scorecardDiv = $("#scorecard");
   var indicatorSelector = "score-indicator";
   var scoreElement = '<a href="#" class= "' + indicatorSelector + 'glyphicon glyphicon-leaf gray"></a>';

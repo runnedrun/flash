@@ -17,6 +17,7 @@ Respond = new function() {
 
 Fire = new function() {
   this.command = function(commandName, data) {
+    console.log("firing command");
     var id = Util.incrementingString();
     $(document).trigger($.extend({ 'type' : "command." + commandName, id: id }, data));
   }

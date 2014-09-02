@@ -11,7 +11,11 @@ NoteCardController = function() {
     var textToShow = removeWord(note.highlight);
 
     // text to show: { prefix: , missingWord: , postfix: }
-    Fire.command("view.note-card.show", {textObject: textToShow});
+    Fire.command("view.note-card.show", { textObject: textToShow });
+    Fire.command("view.note-info.show", {
+      hint: e.note.hint,
+      link: e.note.archiveUrl
+    });
   }
 
   function submitNote(e) {
@@ -19,6 +23,7 @@ NoteCardController = function() {
 
     NoteManager.submitEasiness(q, currentNote);
     Fire.command("view.note-card.hide");
+    Fire.command("view.note-info.hide");
     Fire.command("controller.result.show", {
       result: q,
       note: currentNote

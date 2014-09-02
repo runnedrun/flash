@@ -1,12 +1,16 @@
 $( function(){
   $('.background').hide();
-  notemanager = new NoteManager;
-  notecard = new NotecardView();
-  mascot = new MessageView();
-  result = new ResultView();
-  noteinfo = new NoteInfo();
-  scorecard = new Scorecard();
-  login = new Login();
+  new NotecardView();
+  new MessageView();
+  new ResultView();
+  new NoteInfoView();
+  new ScorecardView();
+  new BackgroundView();
 
-  notemanager.init();
+  new LearnModeController();
+  new BackgroundController();
+  new MessageController();
+  new NoteCardController();
+  new ResultController();
+  new ScoreCardController();
 })
