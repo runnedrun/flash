@@ -18,7 +18,7 @@
  (strikethrough, with correct answer above it? That's hard, but maybe cooler than the wrong answer disappearingn)
  */
 
-Notecard = function(){
+NotecardView = function(){
   var submitBinding
 
   // dynamic content
@@ -28,16 +28,16 @@ Notecard = function(){
 
   var noteDiv = $('#highlighted');
 
+  function showNote(e) {
+    submitBinding = KeyBinding.keypress(KeyCode.enter, document, submitNote);
+    updateNoteText(e.textObject);
+    ViewUtil.fadeIn(noteDiv);
+    setTimeout(function(){ underlineDiv.focus();}, 450);
+  }
+
   function submitNote() {
     var missingWord = underlineDiv.val();
     Fire.request("missing-word.submit", { word: missingWord });
-  }
-
-  function showNote(e) {
-    submitBinding = KeyBinding.keypress(KeyCode.enter, document, submitNote);
-    updateNoteText(e.text);
-    ViewUtil.fadeIn(noteDiv);
-    setTimeout(function(){underlineDiv.focus();}, 450);
   }
 
   function hideDisplay(e) {
@@ -49,13 +49,10 @@ Notecard = function(){
   Respond.toCommand("view.note-card.hide", hideDisplay);
 
   function updateNoteText(text) {
-    if (text){
-      missingWord = text.missingWord;
-      preUnderlineDiv.html(text.prefix);
-      underlineDiv.val("");
-      underlineDiv.attr("size", text.missingWord.length - 1)
-      postUnderlineDiv.html(text.postfix);
-    }
+    preUnderlineDiv.html(text.prefix);
+    underlineDiv.val("");
+    underlineDiv.attr("size", text.missingWord.length - 1);
+    postUnderlineDiv.html(text.postfix);
   }
 }
 

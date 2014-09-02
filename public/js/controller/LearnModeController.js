@@ -14,65 +14,14 @@ LearnModeController = function() {
   var progress = 0;
   var failedNotes = [];  // To be randomized and reviewed at end of session
   var currentNote = {};
-//  var states = [
-//    {"state" : State.login, events: [
-//      { name: "controller.login.start" }
-//    ]},
-//    {"state": State.message, events: [
-//      { name: "view.message-view.show", "data" : { message: "I've got to remember..." } }
-//    ]},
-//    {"state" : State.waitForNotes, events: [
-//      {name: "view.loading-screen.show"}
-//    ]}
-//  ];
-
   var currentState;
 
-//  function addState(state, events) {
-//    states.push({ state: state, events: events});
-//  }
-//
-//  function addShowNoteState(note) {
-//    addState(State.shownNote, [
-//      { name: "view.note-card.show"}
-//    ])
-//  }
-
-  //  Advance the state
-//  function advanceState() {
-//    var nextState = states.shift();
-//    $(document).trigger($.extend({'type' : 'state.' + nextState.state}, nextState.data));
-//  }
-
-//  function handleNoteResult(q) {
-//    var id = self.currentNote.id;
-//    API.sendResult(id, q);
-//    if (q<1){
-//      self.failedNotes.push(id);
-//    }
-//    $(document).trigger($.extend({'type' : 'notes.progress'}, {'q' : q, "index" : self.progress})); // Why extend here?
-//    return // ? necessary
-//  }
 
   function finish() {
     Fire.command("controller.background.change", { background: BackgroundView.Background.review })
   }
 
-  function showNextNoteOrMessageOrFinish() {
-    if (notesToShow.length > 0) {
-      var index = Util.random(0, notesToShow.length - 1);
-      var noteToShow = notesToShow[index];
-      notesToShow.splice(index, 1);
-      Fire.command("controller.notecard.new", { note: noteToShow });
-    } else {
-      Fire.command("view.message-view.show", {
-        message: "Finito!"
-      });
-    }
-  }
-
-  // rename this function once we know all that it does
-  function respondToMessageViewComplete()  {
+  function showNextNoteOrFinish() {
     if (notesToShow.length > 0) {
       var index = Util.random(0, notesToShow.length - 1);
       var noteToShow = notesToShow[index];
@@ -83,7 +32,17 @@ LearnModeController = function() {
     }
   }
 
-  function getNotes(id) {
+  // rename this function once we know all that it does
+  function respondToMessageComplete() {
+    if (notesToShow.length > 0) {
+      var index = Util.random(0, notesToShow.length - 1);
+      var noteToShow = notesToShow[index];
+      notesToShow.splice(index, 1);
+      Fire.command("controller.notecard.new", { note: noteToShow });
+    }
+  }
+
+  function getNotes() {
     NoteManager.getTodaysNotes();
   }
 
@@ -91,28 +50,26 @@ LearnModeController = function() {
     var newNote = e.note;
     var filter = e.filter;
 
+    var hasNotes = notes.length > 0;
+
     if (filter === NoteManager.Filter.today) {
       notes[newNote.id] = newNote;
       notesToShow.push(newNote);
     }
 
-    if (currentState == State.waitForNotes) {
-      showNextNoteOrMessageOrFinish(newNote);
+    if (!hasNotes) {
+      showNextNoteOrFinish(newNote);
     }
   }
 
-//  function removeWaitAndAdvanceState(notesToAdd) {
-//    var notesToAdd
-//    if (currentState == State.waitForNotes) {
-//      advanceState();
-//    }
-//  }
 
+  Respond.toCommand("controller.message.complete", respondToMessageComplete);
+  Respond.toEvent("note.new", addNote);
+  Respond.toRequest("result.complete", showNextNoteOrFinish);
+  Respond.toRequest("message.view.complete", respondToMessageComplete);
+  Respond.toCommand("controller.note.completed", showNextNoteOrFinish);
 
-  Respond.toEvent("note.new", addNote)
-  Respond.toRequest("result.complete", showNextNoteOrMessageOrFinish);
-  Respond.toRequest("message.view.complete", respondToMessageViewComplete);
-  Respond.toCommand("controller.note.completed", showNextNoteOrMessageOrFinish);
+  getNotes();
 //  Fire.command("view.note-card.show", {note: {}});
 //  Fire.command("view.note-card.hide");
 //  Fire.command("view.note.new", {note: {}});

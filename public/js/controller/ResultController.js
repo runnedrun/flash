@@ -1,15 +1,15 @@
 // controller for the results view, it stores the current results being viewed, then
 // submits
 
-ResultsController = function() {
+ResultController = function() {
   var currentNote;
   var currentQ;
 
-  function showResults(e) {
-    var currentNote = e.note;
-    var currentQ = e.q;
+  function showResult(e) {
+    currentNote = e.note;
+    currentQ = e.q;
     var result = e.q > 0 ? "good job" : "actual answer is" +  e.note.highlight;
-    Fire.command("view.results-view.show", {
+    Fire.command("view.result-view.show", {
       result: result
     })
   }
@@ -19,8 +19,10 @@ ResultsController = function() {
       note: currentNote,
       q: currentQ
     })
+
+    Fire.command("view.result-view.hide");
   }
 
-  Respond.toCommand("controller.results.show", showResults)
-  Respond.toRequest("results.complete", onViewFinished)
+  Respond.toCommand("controller.result.show", showResult)
+  Respond.toRequest("result.complete", onViewFinished)
 }

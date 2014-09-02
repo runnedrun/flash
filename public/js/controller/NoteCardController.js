@@ -5,25 +5,28 @@ NoteCardController = function() {
   var missingWord;
   var currentNote;
 
+  function createNewNotecard(e) {
+    var note = e.note;
+    currentNote = note;
+    var textToShow = removeWord(note.highlight);
+
+    // text to show: { prefix: , missingWord: , postfix: }
+    Fire.command("view.note-card.show", {textObject: textToShow});
+  }
+
   function submitNote(e) {
     var q = evaluate(e.word);
+
     NoteManager.submitEasiness(q, currentNote);
     Fire.command("view.note-card.hide");
-    Fire.command("controller.results.show", {
+    Fire.command("controller.result.show", {
       result: q,
       note: currentNote
     });
   }
 
-  function createNewNotecard(e) {
-    var note = e.note;
-    currentNote = note;
-    var textToShow = removeWord(note.highlight);
-    Fire.command("view.note-card.show", {text: textToShow});
-  }
-
-  Respond.toRequest("missing-word.submit", submitNote);
   Respond.toCommand("controller.notecard.new", createNewNotecard);
+  Respond.toRequest("missing-word.submit", submitNote);
 
   function evaluate(answer){
     return answer.toLowerCase() == missingWord.toLowerCase() ? 1 : 0;

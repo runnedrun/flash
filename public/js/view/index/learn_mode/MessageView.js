@@ -28,6 +28,6 @@ MessageView = function() {
     messsageViewCompleteBinding.unbind();
   }
 
-  Respond.toCommand("view.show.message");
-  Respond.toCommand("view.hide.message");
+  Respond.toCommand("view.message-view.show", displayMessage);
+  Respond.toCommand("view.message-view.hide", hideMessage);
 }

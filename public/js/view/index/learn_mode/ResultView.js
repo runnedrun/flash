@@ -6,22 +6,22 @@ ResultView = function() {
   var submitBinding;
 
   function resultViewingComplete() {
-    Fire.request("results.complete");
+    Fire.request("result.complete");
   }
 
-  function displayResults(e) {
+  function displayResult(e) {
     resultDiv.html(e.result);
     submitBinding = KeyBinding.keypress(KeyCode.enter, document, resultViewingComplete);
     ViewUtil.fadeIn(resultDiv)
   }
 
-  function hideResults() {
+  function hideResult() {
     submitBinding.unbind();
     ViewUtil.fadeOut(resultDiv);
   }
 
-  Respond.toCommand("view.result-view.show", displayResults);
-  Respond.toCommand("view.result-view.hide", hideResults);
+  Respond.toCommand("view.result-view.show", displayResult);
+  Respond.toCommand("view.result-view.hide", hideResult);
 
   resultDiv.hide();
 }

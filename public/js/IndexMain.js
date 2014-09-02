@@ -1,9 +1,9 @@
 $( function(){
   $('.background').hide();
   notemanager = new NoteManager;
-  notecard = new Notecard();
-  mascot = new Mascot();
-  result = new Result();
+  notecard = new NotecardView();
+  mascot = new MessageView();
+  result = new ResultView();
   noteinfo = new NoteInfo();
   scorecard = new Scorecard();
   login = new Login();
