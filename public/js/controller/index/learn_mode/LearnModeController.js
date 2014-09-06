@@ -49,8 +49,7 @@ LearnModeController = function() {
   function addNote(e) {
     var newNote = e.note;
     var filter = e.filter;
-
-    var hasNotes = notes.length > 0;
+    var hasNotes = Object.keys(notes).length > 0;
 
     if (filter === NoteManager.Filter.today) {
       notes[newNote.id] = newNote;

@@ -11,5 +11,5 @@ BackgroundController = function() {
     }
   }
 
-  Respond.toCommand("controller.background.change")
+  Respond.toCommand("controller.background.change", changeBackground)
 }

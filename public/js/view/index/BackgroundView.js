@@ -4,13 +4,15 @@ BackgroundView = function() {
     review: 1
   }
 
+  var self = this
+
   function show(e) {
     switch(e.background) {
-      case Background.learn:
+      case self.Background.learn:
         $("#tunnel_vision").fadeIn(e.fadeTime);
         $("#background_lost").fadeIn(e.fadeTime);
         break;
-      case Background.review:
+      case self.Background.review:
         $("#background_found").fadeIn(e.fadeTime);
         break;
     }
@@ -18,11 +20,11 @@ BackgroundView = function() {
 
   function hide(e) {
     switch(e.background) {
-      case Background.learn:
+      case self.Background.learn:
         $("#tunnel_vision").fadeOut(e.fadeTime);
         $("#background_lost").fadeOut(e.fadeTime);
         break;
-      case Background.review:
+      case self.Background.review:
         $("#background_found").fadeOut(e.fadeTime);
         break;
     }

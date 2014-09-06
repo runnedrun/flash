@@ -3,17 +3,17 @@ verbose = false;
 
 $( function(){
   $('.background').hide();
-  new NotecardView();
-  new MessageView();
-  new ResultView();
-  new NoteInfoView();
-  new ScorecardView();
-  new BackgroundView();
+  NotecardView = new NotecardView();
+  MessageView = new MessageView();
+  ResultView = new ResultView();
+  NoteInfoView = new NoteInfoView();
+  ScorecardView = new ScorecardView();
+  BackgroundView = new BackgroundView();
 
-  new LearnModeController();
-  new BackgroundController();
-  new MessageController();
-  new NotecardController();
-  new ResultController();
-  new ScoreCardController();
+  LearnModeController = new LearnModeController();
+  BackgroundController = new BackgroundController();
+  MessageController = new MessageController();
+  NotecardController = new NotecardController();
+  ResultController = new ResultController();
+  ScoreCardController = new ScoreCardController();
 })

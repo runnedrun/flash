@@ -10,7 +10,7 @@ ResultController = function() {
     currentQ = e.q;
     var results = e.q > 0 ? "good job" : "actual answer is" +  e.note.highlight;
     Fire.command("view.result-view.show", {
-      results: results  // this can't be called result, its a reserved property
+      results: results  // this can't be called result, its a reserved property in events
     })
 
     Fire.command("view.note-info.show", {
