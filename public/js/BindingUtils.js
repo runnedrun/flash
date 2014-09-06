@@ -35,7 +35,12 @@ Binding = function(type, $bindTo, callback) {
   var namespace = Util.incrementingString();
   var eventString = type + "." + namespace;
 
-  $bindTo.on(eventString, callback);
+  $bindTo.on(eventString, function() {
+    if (debug) {
+      console.log("fired: " + eventString);
+    }
+    callback
+  });
 
   this.unbind = function() {
     $bindTo.off(eventString)

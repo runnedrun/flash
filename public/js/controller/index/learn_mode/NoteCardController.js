@@ -1,7 +1,7 @@
 // this controller will keep state for the note card. It will track what the missing
 // word is, then evaluate q based on the result submitted.
 
-NoteCardController = function() {
+NotecardController = function() {
   var missingWord;
   var currentNote;
 

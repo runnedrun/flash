@@ -1,3 +1,5 @@
+debug = true;
+
 $( function(){
   $('.background').hide();
   new NotecardView();
@@ -10,7 +12,7 @@ $( function(){
   new LearnModeController();
   new BackgroundController();
   new MessageController();
-  new NoteCardController();
+  new NotecardController();
   new ResultController();
   new ScoreCardController();
 })

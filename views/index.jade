@@ -7,23 +7,25 @@ block stylesheets
 block javascripts
   script(src='//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
   script(src='/js/Util.js')
+  script(src='/js/BindingUtils.js') 
+  script(src='/js/ControlUtils.js')
+  script(src='/js/model/Note.js')
+  script(src='/js/data_manager/NoteManager.js')
   script(src='/js/view/index/learn_mode/MessageView.js')
   script(src='/js/view/index/learn_mode/ResultView.js')
   script(src='/js/view/index/learn_mode/NoteInfoView.js')
+  script(src='/js/view/index/learn_mode/NotecardView.js')
   script(src='/js/view/index/learn_mode/ScorecardView.js')
-  script(src='/js/view/index/learn_mode/BackgroundView.js')
+  script(src='/js/view/index/BackgroundView.js')
   script(src='/js/controller/index/learn_mode/LearnModeController.js')
   script(src='/js/controller/index/learn_mode/BackgroundController.js')
   script(src='/js/controller/index/learn_mode/MessageController.js')
-  script(src='/js/controller/index/learn_mode/NoteCardController.js')
+  script(src='/js/controller/index/learn_mode/NotecardController.js')
   script(src='/js/controller/index/learn_mode/ResultController.js')
   script(src='/js/controller/index/learn_mode/ScoreCardController.js')
+  script(src='/js/IndexMain.js')
 
 block content
-  img(src='img/lost.jpg').background#background_lost
-  img(src='img/found.png').background#background_found
-  img(src='img/fade.png')#tunnel_vision
-
   nav.navbar.navbar-default(role='navigation')
       .navbar-header.pull-right
           a.navbar-brand(href='#')
@@ -36,10 +38,7 @@ block content
   #content.container
     #flashcard
       div.row#note
-        div.col-md-8#loading 'loading...'
-        div.col-md-8#login
-          div#login_message.gray What's my name...?
-          input#login_input(type='text')
+        //- div.col-md-8#loading 'loading...'
         div.col-md-8#mascot
           #message
         div.col-md-8#highlighted

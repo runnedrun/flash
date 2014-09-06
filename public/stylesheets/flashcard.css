@@ -1,7 +1,7 @@
 body{
   font: 14px "amnesia", "Lucida Grande", Helvetica, Arial, sans-serif;
   font-family: "Open Sans";
-  background-color:black;
+  /*background-color:black;*/
 }
 .navbar{
   min-height:55px;
@@ -23,7 +23,7 @@ body{
   padding-top:130px;
   max-width:42%;
   font-size:24px;
-  color:black;
+  /*color:black;*/
 }
 #underline{
   background-color:transparent;
