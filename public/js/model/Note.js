@@ -4,7 +4,7 @@ function Note(properties){
   self.highlight = properties.highlight;
   self.hint = properties.hint;
   self.pageUrl = properties.pageUrl;
-  self.EF = properties.EF;
+  self.ef = properties.ef;
   self.firstShow = properties.firstShow;
   self.nextShow = properties.nextShow;
 

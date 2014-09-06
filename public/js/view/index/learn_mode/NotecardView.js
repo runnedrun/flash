@@ -29,7 +29,7 @@ NotecardView = function(){
   var noteDiv = $('#highlighted');
 
   function showNote(e) {
-    submitBinding = KeyBinding.keypress(KeyCode.enter, document, submitNote);
+    submitBinding = KeyBinding.keypress(KeyCode.enter, $(document), submitNote);
     updateNoteText(e.textObject);
     ViewUtil.fadeIn(noteDiv);
     setTimeout(function(){ underlineDiv.focus();}, 450);

@@ -53,8 +53,8 @@ NoteManager = new function() {
 
   this.getTodaysNotes = function() {
     var deferred = $.Deferred();
-    API.getNotes(function(notes) {
-      var events = createNotesAndFireEvents(notes);
+    API.getNotes(function(resp) {
+      var events = createNotesAndFireEvents(resp. notes);
       deferred.resolve(events);
     });
     return deferred.promise();

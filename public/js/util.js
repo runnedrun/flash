@@ -7,8 +7,8 @@ Util = new function() {
     };
 
     this.random = function(lower, upper) {
-      var diff = upper - lower
-      var randomAdd = Math.floor((Math.random() * diff) + 1);
+      var diff = upper - lower;
+      var randomAdd = Math.floor((Math.random() * diff));
       return lower + randomAdd;
     }
 

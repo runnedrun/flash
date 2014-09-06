@@ -19,7 +19,7 @@ MessageView = function() {
       messageDiv.text(message);
     }).fadeIn(500);
 
-    messsageViewCompleteBinding = KeyBinding.keypress(KeyCode.enter, document, messageViewingComplete);
+    messsageViewCompleteBinding = KeyBinding.keypress(KeyCode.enter, $(document), messageViewingComplete);
   }
 
   function hideMessage() {

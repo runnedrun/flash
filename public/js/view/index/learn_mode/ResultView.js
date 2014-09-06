@@ -11,7 +11,7 @@ ResultView = function() {
 
   function displayResult(e) {
     resultDiv.html(e.result);
-    submitBinding = KeyBinding.keypress(KeyCode.enter, document, resultViewingComplete);
+    submitBinding = KeyBinding.keypress(KeyCode.enter, $(document), resultViewingComplete);
     ViewUtil.fadeIn(resultDiv)
   }
 
