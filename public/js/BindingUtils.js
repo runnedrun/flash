@@ -12,15 +12,15 @@ KeyBinding = new function() {
   }
 
   this.keypress = function(keyCode, $bindTo, callback) {
-    bindKeyEvent("keypress", keyCode, $bindTo, callback)
+    return bindKeyEvent("keypress", keyCode, $bindTo, callback)
   };
 
   this.keyup = function(keyCode, $bindTo, callback) {
-    bindKeyEvent("keyup", keyCode, $bindTo, callback)
+    return bindKeyEvent("keyup", keyCode, $bindTo, callback)
   };
 
   this.keydown = function(keyCode, $bindTo, callback) {
-    bindKeyEvent("keydown", keyCode, $bindTo, callback);
+    return bindKeyEvent("keydown", keyCode, $bindTo, callback);
   };
 
   function bindKeyEvent(eventType, keyCode, $bindTo, callback) {

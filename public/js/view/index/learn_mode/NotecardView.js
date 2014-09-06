@@ -19,7 +19,7 @@
  */
 
 NotecardView = function(){
-  var submitBinding
+  var submitBinding;
 
   // dynamic content
   var preUnderlineDiv = $('#pre_underline');

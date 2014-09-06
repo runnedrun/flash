@@ -10,6 +10,7 @@ NotecardController = function() {
     currentNote = note;
     var textToShow = removeWord(note.highlight);
 
+    missingWord = textToShow.missingWord;
     // text to show: { prefix: , missingWord: , postfix: }
     Fire.command("view.note-card.show", { textObject: textToShow });
     Fire.command("view.note-info.show", {
