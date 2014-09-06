@@ -26,7 +26,7 @@ NotecardController = function() {
     Fire.command("view.note-card.hide");
     Fire.command("view.note-info.hide");
     Fire.command("controller.result.show", {
-      result: q,
+      q: q,
       note: currentNote
     });
   }

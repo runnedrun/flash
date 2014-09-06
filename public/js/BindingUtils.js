@@ -36,7 +36,8 @@ Binding = function(type, $bindTo, callback) {
   var eventString = type + "." + namespace;
 
   $bindTo.on(eventString, function(e) {
-    debug && console.log("received: " + type, e);
+    debug && console.log("received: " + type);
+    verbose && console.log(e);
     callback(e)
   });
 

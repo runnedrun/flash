@@ -62,7 +62,6 @@ LearnModeController = function() {
     }
   }
 
-
   Respond.toCommand("controller.message.complete", respondToMessageComplete);
   Respond.toEvent("note.new", addNote);
   Respond.toRequest("result.complete", showNextNoteOrFinish);

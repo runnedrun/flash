@@ -10,7 +10,8 @@ ResultView = function() {
   }
 
   function displayResult(e) {
-    resultDiv.html(e.result);
+    console.log("displaying the resultssss");
+    resultDiv.html(e.results);
     submitBinding = KeyBinding.keypress(KeyCode.enter, $(document), resultViewingComplete);
     ViewUtil.fadeIn(resultDiv)
   }

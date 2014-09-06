@@ -1,4 +1,5 @@
 debug = true;
+verbose = false;
 
 $( function(){
   $('.background').hide();
