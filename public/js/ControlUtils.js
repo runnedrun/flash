@@ -17,18 +17,23 @@ Respond = new function() {
 
 Fire = new function() {
   this.command = function(commandName, data) {
-    console.log("firing command");
     var id = Util.incrementingString();
-    $(document).trigger($.extend({ 'type' : "command." + commandName, id: id }, data));
+    var eventType = "command." + commandName;
+    console.log("firing command: " + eventType, data);
+    $(document).trigger($.extend({ 'type' : eventType, id: id }, data));
   }
 
   this.event = function(eventName, data) {
     var id = Util.incrementingString();
-    $(document).trigger($.extend({ 'type' : "event." + eventName, id: id }, data));
+    var eventType = "event." + eventName;
+    console.log("firing event: " + eventType, data);
+    $(document).trigger($.extend({ 'type' : eventType, id: id }, data));
   }
 
   this.request = function(requestName, data) {
     var id = Util.incrementingString();
-    $(document).trigger($.extend({ 'type' : "request." + requestName, id: id }, data));
+    var eventType = "request." + requestName;
+    console.log("firing request: " + eventType, data);
+    $(document).trigger($.extend({ 'type' : eventType, id: id }, data));
   }
 }

@@ -38,7 +38,7 @@ NoteManager = new function() {
   function createNotesAndFireEvents(notes) {
     var events = $.map(notes, function(note, i) {
       var newNote = new Note(note);
-      var eventData = { note: note, filter: self.Filter.today };
+      var eventData = { note: newNote, filter: self.Filter.today };
       Fire.event("note.new", eventData);
       return eventData;
     });
