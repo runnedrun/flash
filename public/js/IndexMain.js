@@ -1,19 +1,15 @@
 debug = true;
 verbose = false;
 
-$( function(){
+$(function(){
   $('.background').hide();
-  NotecardView = new NotecardView();
-  MessageView = new MessageView();
-  ResultView = new ResultView();
-  NoteInfoView = new NoteInfoView();
-  ScorecardView = new ScorecardView();
   BackgroundView = new BackgroundView();
 
   LearnModeController = new LearnModeController();
   BackgroundController = new BackgroundController();
   MessageController = new MessageController();
-  NotecardController = new NotecardController();
+  NoteCardController = new NoteCardController();
+  NoteInfoController = new NoteInfoController();
   ResultController = new ResultController();
   ScoreCardController = new ScoreCardController();
 })

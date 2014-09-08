@@ -45,6 +45,7 @@ exports.new = function(req, res) {
 
 exports.updateEasiness = function(req, res) {
   console.log("updating easiness to: " + req.body.q)
+  res.send(200);
 }
 
 exports.update = function(req, res) {

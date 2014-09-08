@@ -1,16 +1,13 @@
 ScoreCardController = function() {
+  var self = this;
+  self.scoreCardView = new ScoreCardView(self);
+
   function newIndicator(e) {
-    Fire.command("view.score-card.new-indicator", {
-      id: e.note.id
-    })
+    self.scoreCardView.addNewScoreIndicator(e.note.id);
   }
 
   function updateIndicatorOnNoteComplete(e) {
-    Fire.command("view.score-card.update-indicator", {
-      id: e.note.id,
-      preview: e.note.highlight,
-      success: e.q > 0
-    });
+    self.scoreCardView.updateIndicator(e.q > 0, e.note.id, e.note.highlight);
   }
 
   Respond.toEvent("note.new", newIndicator);

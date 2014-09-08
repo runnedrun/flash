@@ -4,31 +4,23 @@
 ResultController = function() {
   var currentNote;
   var currentQ;
+  var self = this;
+  self.resultView = new ResultView(self);
 
   function showResult(e) {
     currentNote = e.note;
     currentQ = e.q;
-    var results = e.q > 0 ? "good job" : "actual answer is" +  e.note.highlight;
-    Fire.command("view.result-view.show", {
-      results: results  // this can't be called result, its a reserved property in events
-    })
-
-    Fire.command("view.note-info.show", {
-      hint: e.note.hint,
-      link: e.note.archiveUrl
-    });
+    var results = e.q > 0 ? "good job" : "FALSE. Actual answer: " +  e.note.highlight;
+    self.resultView.displayResult(results);  // this can't be called result, its a reserved property in events
   }
 
-  function onViewFinished(e) {
+  self.onViewFinished = function() {
     Fire.command("controller.note.completed", {
       note: currentNote,
       q: currentQ
     })
-
-    Fire.command("view.result-view.hide");
-    Fire.command("view.note-info.hide");
+    self.resultView.hideResult()
   }
 
   Respond.toCommand("controller.result.show", showResult)
-  Respond.toRequest("result.complete", onViewFinished)
 }

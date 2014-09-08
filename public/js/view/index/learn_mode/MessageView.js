@@ -1,13 +1,13 @@
 // fires:
 // message.view.complete
 
-MessageView = function() {
+MessageView = function(messageController) {
   var mascotDiv = $("#mascot");
   var messageDiv = $("#message");
   var messsageViewCompleteBinding;
 
   function messageViewingComplete() {
-    Fire.request("message.view.complete");
+    messageController.viewComplete();
   }
 
   function displayMessage(e) {
@@ -27,7 +27,4 @@ MessageView = function() {
     ViewUtil.fadeOut(messageDiv);
     messsageViewCompleteBinding.unbind();
   }
-
-  Respond.toCommand("view.message-view.show", displayMessage);
-  Respond.toCommand("view.message-view.hide", hideMessage);
 }

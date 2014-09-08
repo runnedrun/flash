@@ -26,7 +26,7 @@ LearnModeController = function() {
       var index = Util.random(0, notesToShow.length - 1);
       var noteToShow = notesToShow[index];
       notesToShow.splice(index, 1);
-      Fire.command("controller.notecard.new", { note: noteToShow });
+      Fire.command("controller.note-card.new", { note: noteToShow });
     } else {
       finish();
     }
@@ -38,7 +38,7 @@ LearnModeController = function() {
       var index = Util.random(0, notesToShow.length - 1);
       var noteToShow = notesToShow[index];
       notesToShow.splice(index, 1);
-      Fire.command("controller.notecard.new", { note: noteToShow });
+      Fire.command("controller.note-card.new", { note: noteToShow });
     }
   }
 

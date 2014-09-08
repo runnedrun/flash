@@ -1,38 +1,39 @@
 // this controller will keep state for the note card. It will track what the missing
 // word is, then evaluate q based on the result submitted.
 
-NotecardController = function() {
+NoteCardController = function() {
   var missingWord;
   var currentNote;
+  var self = this;
+  self.noteCardView = new NoteCardView(self);
 
   function createNewNotecard(e) {
     var note = e.note;
     currentNote = note;
     var textToShow = removeWord(note.highlight);
-
     missingWord = textToShow.missingWord;
+
     // text to show: { prefix: , missingWord: , postfix: }
-    Fire.command("view.note-card.show", { textObject: textToShow });
-    Fire.command("view.note-info.show", {
-      hint: e.note.hint,
-      link: e.note.archiveUrl
+    self.noteCardView.showNote(textToShow);
+    Fire.command("controller.note-info.show", {
+      hint : e.note.hint,
+      pageUrl : e.note.pageUrl
     });
   }
 
-  function submitNote(e) {
-    var q = evaluate(e.word);
+  self.submitNote = function(word){
+    var q = evaluate(word);
 
     NoteManager.submitEasiness(q, currentNote);
-    Fire.command("view.note-card.hide");
-    Fire.command("view.note-info.hide");
+    self.noteCardView.hideDisplay();
+    Fire.command("controller.note-info.hide")
     Fire.command("controller.result.show", {
       q: q,
       note: currentNote
     });
   }
 
-  Respond.toCommand("controller.notecard.new", createNewNotecard);
-  Respond.toRequest("missing-word.submit", submitNote);
+  Respond.toCommand("controller.note-card.new", createNewNotecard);
 
   function evaluate(answer){
     return answer.toLowerCase() == missingWord.toLowerCase() ? 1 : 0;

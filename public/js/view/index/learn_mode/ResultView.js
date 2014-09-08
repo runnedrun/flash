@@ -1,28 +1,26 @@
 // fires:
 // result.view.complete
 
-ResultView = function() {
+ResultView = function(resultController) {
   var resultDiv = $("#result");
   var submitBinding;
+  var self = this;
 
   function resultViewingComplete() {
-    Fire.request("result.complete");
+    resultController.onViewFinished();
   }
 
-  function displayResult(e) {
+  self.displayResult = function(results) {
     console.log("displaying the resultssss");
-    resultDiv.html(e.results);
+    resultDiv.html(results);
     submitBinding = KeyBinding.keypress(KeyCode.enter, $(document), resultViewingComplete);
     ViewUtil.fadeIn(resultDiv)
   }
 
-  function hideResult() {
+  self.hideResult = function() {
     submitBinding.unbind();
     ViewUtil.fadeOut(resultDiv);
   }
-
-  Respond.toCommand("view.result-view.show", displayResult);
-  Respond.toCommand("view.result-view.hide", hideResult);
 
   resultDiv.hide();
 }

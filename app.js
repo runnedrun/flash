@@ -52,16 +52,16 @@ app.configure(function(){
 
 
 
-var authWhitelistPrefixes = ["/user/sign", "/js", "/stylesheets"];
+var authWhitelistPrefixes = ["/user/sign", "/js", "/stylesheets", "/img"];
 function requiresAuth(url) {
     console.log("checking auth")
     for(var i = 0; i < authWhitelistPrefixes.length; i++) {
         if(!!url.match(new RegExp("^" + authWhitelistPrefixes[i]))) {
+            console.log(url + " does not require auth")
             return false
-            console.log(url +"does not require auth")
         }
     }
-    console.log(url +" requires auth")
+    console.log(url + " requires auth")
     return true
 }
 
@@ -99,10 +99,10 @@ function requireAuthentication(req, res, next) {
 
 app.get('/', flash.index);
 app.get('/notes', notes.index);
-app.post('/note', notes.new);
-app.post('/note/delete', notes.delete);
-app.post('/note/update', notes.update);
-app.post('/note/update_easiness', notes.updateEasiness);
+app.post('/notes', notes.new);
+app.post('/notes/delete', notes.delete);
+app.post('/notes/update', notes.update);
+app.post('/notes/update_easiness', notes.updateEasiness);
 app.get('/user/sign_in', user.signInPage);
 app.post('/user/sign_in', user.signInAction);
 app.post('/user/sign_up', user.signUpAction);

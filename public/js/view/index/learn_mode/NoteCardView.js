@@ -18,8 +18,9 @@
  (strikethrough, with correct answer above it? That's hard, but maybe cooler than the wrong answer disappearingn)
  */
 
-NotecardView = function(){
+NoteCardView = function(noteCardController){
   var submitBinding;
+  var self = this;
 
   // dynamic content
   var preUnderlineDiv = $('#pre_underline');
@@ -28,25 +29,22 @@ NotecardView = function(){
 
   var noteDiv = $('#highlighted');
 
-  function showNote(e) {
+  self.showNote = function(textObject) {
     submitBinding = KeyBinding.keypress(KeyCode.enter, $(document), submitNote);
-    updateNoteText(e.textObject);
+    updateNoteText(textObject);
     ViewUtil.fadeIn(noteDiv);
     setTimeout(function(){ underlineDiv.focus();}, 450);
   }
 
   function submitNote() {
     var missingWord = underlineDiv.val();
-    Fire.request("missing-word.submit", { word: missingWord });
+    noteCardController.submitNote(missingWord);
   }
 
-  function hideDisplay(e) {
+  self.hideDisplay = function() {
     submitBinding.unbind();
     ViewUtil.fadeOut(noteDiv);
   }
-
-  Respond.toCommand("view.note-card.show", showNote);
-  Respond.toCommand("view.note-card.hide", hideDisplay);
 
   function updateNoteText(text) {
     preUnderlineDiv.html(text.prefix);
