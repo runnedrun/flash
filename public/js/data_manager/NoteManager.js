@@ -6,8 +6,8 @@ NoteManager = new function() {
   var self = this;
 
   this.Filter = {
-    today: 0,
-    all: 1
+    today: 1,
+    all: 0
   }
 
   var API = {
@@ -54,7 +54,7 @@ NoteManager = new function() {
   this.getTodaysNotes = function() {
     var deferred = $.Deferred();
     API.getNotes(function(resp) {
-      var events = createNotesAndFireEvents(resp. notes);
+      var events = createNotesAndFireEvents(resp.notes);
       deferred.resolve(events);
     });
     return deferred.promise();
