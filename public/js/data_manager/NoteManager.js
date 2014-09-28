@@ -21,12 +21,12 @@ NoteManager = new function() {
       );
     },
 
-    submitEasiness: function(q, note, callback) {
+    solveNote: function(note, q, callback) {
       return $.post(
-        '/notes/update_easiness',
+        '/note/solve',
         {
           q: q,
-          noteId: note.id
+          id: note.id
         },
         function(data) {
           callback(data)
@@ -60,7 +60,7 @@ NoteManager = new function() {
     return deferred.promise();
   }
 
-  this.submitEasiness = function(q, note) {
-    API.submitEasiness(q, note, updateNote);
+  this.solveNote = function(note, q) {
+    API.solveNote(note, q, updateNote);
   }
 }();

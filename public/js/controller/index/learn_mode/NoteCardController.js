@@ -24,7 +24,7 @@ NoteCardController = function() {
   self.submitNote = function(word){
     var q = evaluate(word);
 
-    NoteManager.submitEasiness(q, currentNote);
+    NoteManager.solveNote(currentNote, q);
     self.noteCardView.hideDisplay();
     Fire.command("controller.note-info.hide")
     Fire.command("controller.result.show", {
@@ -36,7 +36,7 @@ NoteCardController = function() {
   Respond.toCommand("controller.note-card.new", createNewNotecard);
 
   function evaluate(answer){
-    return answer.toLowerCase() == missingWord.toLowerCase() ? 1 : 0;
+    return answer.toLowerCase() == missingWord.toLowerCase() ? 5 : 0;
   }
 
 

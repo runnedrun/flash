@@ -34,9 +34,11 @@ module.exports = {
               originalUrl: DataTypes.STRING,
               title: DataTypes.STRING,
 
-              easinessFactor: DataTypes.DECIMAL,
+              EF: DataTypes.DECIMAL,
               nextShow: DataTypes.DATE,
-              firstShow: DataTypes.DATE
+              lastShow: DataTypes.DATE,
+              interval: DataTypes.DECIMAL,
+              numberShows: DataTypes.DECIMAL
           }
       ).complete(done);
   },
