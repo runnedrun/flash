@@ -7,7 +7,7 @@ ScoreCardController = function() {
   }
 
   function updateIndicatorOnNoteComplete(e) {
-    self.scoreCardView.updateIndicator(e.q > 0, e.note.id, e.note.highlight);
+    self.scoreCardView.updateIndicator(e.q > 3, e.note.id, e.note.highlight);
   }
 
   Respond.toEvent("note.new", newIndicator);
