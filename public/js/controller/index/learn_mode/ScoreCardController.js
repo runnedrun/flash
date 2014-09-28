@@ -7,7 +7,11 @@ ScoreCardController = function() {
   }
 
   function updateIndicatorOnNoteComplete(e) {
-    self.scoreCardView.updateIndicator(e.q > 3, e.note.id, e.note.highlight);
+
+    // 0 = Failed, 1 = Succeeded, 2 = Redemption
+    var status = e.note.attempted ? 2 : 1;
+    status = e.q > 3 ? status : 0;
+    self.scoreCardView.updateIndicator(status, e.note.id, e.note.highlight);
   }
 
   Respond.toEvent("note.new", newIndicator);
