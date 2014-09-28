@@ -1,89 +1,133 @@
-body{
-  font: 14px "amnesia", "Lucida Grande", Helvetica, Arial, sans-serif;
-  font-family: "Open Sans";
+/*body{*/
+  /*font: 14px "amnesia", "Lucida Grande", Helvetica, Arial, sans-serif;*/
+  /*font-family: "Open Sans";*/
   /*background-color:black;*/
-}
-.navbar{
-  min-height:55px;
-}
-.background{
-  position:absolute;
-  width:100%;
-  height:100%;
-}
-.background_found{
-  display:none;
-}
-#tunnel_vision{
-  position:absolute;
-  height:100%;
-  width:100%;
-}
-#content{
-  padding-top:130px;
-  max-width:42%;
-  font-size:24px;
+/*}*/
+/*.navbar{*/
+  /*min-height:55px;*/
+/*}*/
+/*.background{*/
+  /*position:absolute;*/
+  /*width:100%;*/
+  /*height:100%;*/
+/*}*/
+/*.background_found{*/
+  /*display:none;*/
+/*}*/
+
+/*#content{*/
+  /*padding-top:130px;*/
+  /*max-width:42%;*/
+  /*font-size:24px;*/
   /*color:black;*/
-}
-#underline{
-  background-color:transparent;
-  border-width:0;
-  margin-left:5px;
-  margin-right:5px;
-}
+/*}*/
+/*#underline{*/
+  /*background-color:transparent;*/
+  /*border-width:0;*/
+  /*margin-left:5px;*/
+  /*margin-right:5px;*/
+/*}*/
 
-input[type="text"]{
-border-color: rgba(100, 125, 50, 0.9);
-padding:5px;
-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(100, 125, 50, 0.7);
-outline: 0 none;}
+/*input[type="text"]{*/
+/*border-color: rgba(100, 125, 50, 0.9);*/
+/*padding:5px;*/
+/*box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(100, 125, 50, 0.7);*/
+/*outline: 0 none;}*/
 
-#note_info{
-  font-size:14px;
-}
-#hint, #note_link, #hint_icon{
-  margin:5px;
-  display:block;
-}
-#note_link, #hint_icon{
-  font-size:16px;
-}
-#hint{
-  font-size:13px;
-}
+/*#note_info{*/
+  /*font-size:14px;*/
+/*}*/
+/*#hint, #note_link, #hint_icon{*/
+  /*margin:5px;*/
+  /*display:block;*/
+/*}*/
+/*#note_link, #hint_icon{*/
+  /*font-size:16px;*/
+/*}*/
+/*#hint{*/
+  /*font-size:13px;*/
+/*}*/
 
-#mascot{
-  overflow:auto;
-  position:relative;
-}
-.flipped{
-  -moz-transform: scaleX(-1);
-  -o-transform: scaleX(-1);
-  -webkit-transform: scaleX(-1);
-  transform: scaleX(-1);
-  filter: FlipH;
-  -ms-filter: "FlipH";
-}
+/*#mascot{*/
+  /*overflow:auto;*/
+  /*position:relative;*/
+/*}*/
+/*.flipped{*/
+  /*-moz-transform: scaleX(-1);*/
+  /*-o-transform: scaleX(-1);*/
+  /*-webkit-transform: scaleX(-1);*/
+  /*transform: scaleX(-1);*/
+  /*filter: FlipH;*/
+  /*-ms-filter: "FlipH";*/
+/*}*/
 
-#scorecard{
-  font-size:24px;
-  padding:10px;
-}
-.score{
-}
+/*#scorecard{*/
+  /*font-size:24px;*/
+  /*padding:10px;*/
+/*}*/
+/*.score{*/
+/*}*/
 
 /* For Icons */
-.gray{
-  color:#444;
-}
-.green{
-  color:lawngreen;
-}
-.red{
-  color:red;
+/*.gray{*/
+  /*color:#444;*/
+/*}*/
+/*.green{*/
+  /*color:lawngreen;*/
+/*}*/
+/*.red{*/
+  /*color:red;*/
+/*}*/
+
+/*.navbar{*/
+  /*background: rgba(0,0,0,0.0);*/
+  /*border-color: rgba(0,0,0,0.0);*/
+/*}*/
+
+html {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
-.navbar{
-  background: rgba(0,0,0,0.0);
-  border-color: rgba(0,0,0,0.0);
+.challenge{
+  position: relative;
+  top: 10%;
+  max-height: 6em;
+  overflow: hidden;
 }
+
+.result {
+  position: relative;
+  top: 40%
+}
+
+.highlighted-text,.result {
+  text-align: center;
+  font-size: 22px;
+}
+
+.info-cards {
+  position:relative;
+  top: -134vh;
+}
+
+.info-card-content {
+  height: 100%
+}
+
+.info-card {
+  margin-top: 20vh;
+  margin-bottom: 20vh;
+  border: 1px solid black;
+  border-radius: 5px;
+  height: 50vh;
+}
+
+.content {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.underline {
+  margin: 5px
+}
+

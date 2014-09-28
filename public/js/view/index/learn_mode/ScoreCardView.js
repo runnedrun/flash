@@ -7,7 +7,7 @@ ScoreCardView = function() {
 
   var scorecardDiv = $("#scorecard");
   var indicatorSelector = "score-indicator";
-  var scoreElement = '<a href="#" class= "' + indicatorSelector + ' glyphicon glyphicon-leaf gray"></a>';
+  var scoreElement = '<div><i href="#" class= "' + indicatorSelector + ' glyphicon glyphicon-leaf gray"></i></div>';
 
   self.addNewScoreIndicator = function(id) {
     var newScoreIndicator = $(scoreElement).addClass(id);

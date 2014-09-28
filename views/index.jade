@@ -26,28 +26,35 @@ block javascripts
   script(src='/js/controller/index/learn_mode/ScoreCardController.js')
   script(src='/js/IndexMain.js')
 
-block content
-  nav.navbar.navbar-default(role='navigation')
-      .navbar-header.pull-right
-          a.navbar-brand(href='#')
-            img(src='img/flash.png')
-        div
-          ul.nav.navbar-nav
-            li.active
-              #scorecard
+mixin info-card
+  .info-card-content
+    .row.challenge
+      .col-md-11
+        .highlighted-text
+          span.pre-underline The queeen is famous for
+          input.underline(type='text')
+          span.post-underline , name not withstanding.
+      .col-md-1.note-info.pull-right              
+        a.note_link.glyphicon.glyphicon-info-sign(href='#')
+        .hint_icon.glyphicon.glyphicon-question-sign
+        .hint
 
-  #content.container
-    #flashcard
-      div.row#note
-        //- div.col-md-8#loading 'loading...'
-        div.col-md-8#mascot
-          #message
-        div.col-md-8#highlighted
-          span#pre_underline
-          input#underline(type='text')
-          span#post_underline
-        div.col-md-8#result
-        div.col-md-4#note_info.pull-right
-          a#note_link.glyphicon.glyphicon-info-sign(href='#')
-          #hint_icon.glyphicon.glyphicon-question-sign
-          #hint
+    .row.result
+      .col-md-12 try this one!
+
+    .row.message
+      .col-md-12
+        
+    
+
+block content
+  .content.container-fluid
+    .row
+      .col-md-2
+        #scorecard           
+
+      .col-md-8.col-md-offset-1.card-container    
+        .info-cards
+          #flash-card-model.info-card
+            +info-card 
+          

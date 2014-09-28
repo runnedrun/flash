@@ -1,56 +1,63 @@
-//  NoteCard
-//
-//  Object that keeps track of the current note in the UI,
-//  and what the user has done to it.
-
-//  Responsibilities:
-//    Send notecard to notecard view
-//    Fire events upon user interaction with the notecard view
 
 
-/*
- TODO
- add sidebar with all notes
- notes are searchable/ditable inline
- prettify ui
- q is evaluated more than boolean, maybe
- maybe: resultdiv just replaces input with the word in red/green, pre and post just stay there.
- (strikethrough, with correct answer above it? That's hard, but maybe cooler than the wrong answer disappearingn)
- */
+var NoteCardView = function() {
 
-NoteCardView = function(noteCardController){
-  var submitBinding;
-  var self = this;
+}
 
-  // dynamic content
-  var preUnderlineDiv = $('#pre_underline');
-  var underlineDiv = $('#underline');
-  var postUnderlineDiv = $('#post_underline');
 
-  var noteDiv = $('#highlighted');
+var NoteCardController = function() {
 
-  self.showNote = function(textObject) {
+}
+
+var infoCard = function(challenge, infoCardController) {
+  // note display constants in percentage of view port height
+  var margin = 20;
+  var height = 20;
+
+  var flashCard = $("#flash-card-model").clone.removeAttr("id").hide();
+  flashCard.css({
+    "margin-bottom": margin + "vh",
+    "height": height + "vh"
+  });
+
+  var preUnderline = flashCard.find('.pre-underline');
+  var underline = flashCard.find('.underline');
+  var postUnderline  = flashCard.find('.post-underline');
+
+  var challenge = flashCard.('.challenge');
+  var result = flashCard.('.result');
+
+  self.showChallenge = function(textObject) {
+
     submitBinding = KeyBinding.keypress(KeyCode.enter, $(document), submitNote);
     updateNoteText(textObject);
-    ViewUtil.fadeIn(noteDiv);
-    setTimeout(function(){ underlineDiv.focus();}, 450);
+    challenge.show();
+    underline.focus();
+  }
+
+  self.hideChallenge = function() {
+    challenge.hide();
   }
 
   function submitNote() {
-    var missingWord = underlineDiv.val();
-    noteCardController.submitNote(missingWord);
+    var missingWord = underline.val();
+    infoCardController.submitNote(missingWord);
   }
 
-  self.hideDisplay = function() {
+  self.showCard = function() {
+    flashCard.show();
+  }
+
+  self.hideCard = function() {
     submitBinding.unbind();
-    ViewUtil.fadeOut(noteDiv);
+    flashCard.hide();
   }
 
   function updateNoteText(text) {
-    preUnderlineDiv.html(text.prefix);
-    underlineDiv.val("");
-    underlineDiv.attr("size", text.missingWord.length - 1);
-    postUnderlineDiv.html(text.postfix);
+    underline.val("");
+    underline.attr("size", text.missingWord.length - 1);
+
+    postUnderline.html(text.postfix);
+    preUnderline.html(text.prefix)
   }
 }
-
