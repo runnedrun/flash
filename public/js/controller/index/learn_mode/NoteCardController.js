@@ -23,20 +23,23 @@ NoteCardController = function() {
 
   self.submitNote = function(word){
     var q = evaluate(word);
-
-    NoteManager.submitEasiness(q, currentNote);
     self.noteCardView.hideDisplay();
     Fire.command("controller.note-info.hide")
     Fire.command("controller.result.show", {
       q: q,
       note: currentNote
     });
+
+    // Only submit solution on the first attempt.
+    if (!currentNote.attempted) {
+      NoteManager.solveNote(currentNote, q);
+    }
   }
 
   Respond.toCommand("controller.note-card.new", createNewNotecard);
 
   function evaluate(answer){
-    return answer.toLowerCase() == missingWord.toLowerCase() ? 1 : 0;
+    return answer.toLowerCase() == missingWord.toLowerCase() ? 5 : 0;
   }
 
 

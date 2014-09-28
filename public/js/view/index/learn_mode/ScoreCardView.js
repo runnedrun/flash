@@ -5,6 +5,7 @@
 ScoreCardView = function() {
   var self = this;
 
+  var colors = ["red", "green", "blue"]; // Failure, Success, Redemption
   var scorecardDiv = $("#scorecard");
   var indicatorSelector = "score-indicator";
   var scoreElement = '<div><i href="#" class= "' + indicatorSelector + ' glyphicon glyphicon-leaf gray"></i></div>';
@@ -15,10 +16,12 @@ ScoreCardView = function() {
   }
 
   self.updateIndicator = function(success, indicatorId, preview){
-    var newColor = success ? "green" : "red";
+    var newColor = colors[success];
     var indicatorToChange = $("." + indicatorSelector + "." + indicatorId);
 
-    indicatorToChange.removeClass("green").removeClass("red");
+    for (var i=0; i<colors.length; i++) {
+      indicatorToChange.removeClass(colors[i]);
+    }
     indicatorToChange.addClass(newColor);
 
     var ellipsis = preview.length > 25 ? "..." : ""

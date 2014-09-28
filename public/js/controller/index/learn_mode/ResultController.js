@@ -10,7 +10,7 @@ ResultController = function() {
   function showResult(e) {
     currentNote = e.note;
     currentQ = e.q;
-    var results = e.q > 0 ? "good job" : "FALSE. Actual answer: " +  e.note.highlight;
+    var results = e.q > 3 ? "good job" : "FALSE. Actual answer: " +  e.note.highlight;
     self.resultView.displayResult(results);  // this can't be called result, its a reserved property in events
   }
 

@@ -6,8 +6,8 @@ NoteManager = new function() {
   var self = this;
 
   this.Filter = {
-    today: 0,
-    all: 1
+    today: 1,
+    all: 0
   }
 
   var API = {
@@ -21,12 +21,12 @@ NoteManager = new function() {
       );
     },
 
-    submitEasiness: function(q, note, callback) {
+    solveNote: function(note, q, callback) {
       return $.post(
-        '/notes/update_easiness',
+        '/note/solve',
         {
           q: q,
-          noteId: note.id
+          id: note.id
         },
         function(data) {
           callback(data)
@@ -54,13 +54,13 @@ NoteManager = new function() {
   this.getTodaysNotes = function() {
     var deferred = $.Deferred();
     API.getNotes(function(resp) {
-      var events = createNotesAndFireEvents(resp. notes);
+      var events = createNotesAndFireEvents(resp.notes);
       deferred.resolve(events);
     });
     return deferred.promise();
   }
 
-  this.submitEasiness = function(q, note) {
-    API.submitEasiness(q, note, updateNote);
+  this.solveNote = function(note, q) {
+    API.solveNote(note, q, updateNote);
   }
 }();
