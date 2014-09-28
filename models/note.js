@@ -11,9 +11,12 @@ module.exports = function(sequelize, DataTypes) {
         originalUrl: DataTypes.STRING,
         title: DataTypes.STRING,
 
-        easinessFactor: DataTypes.INTEGER,
+        EF: DataTypes.INTEGER,
         nextShow: DataTypes.DATE,
-        firstShow: DataTypes.DATE
+        lastShow: DataTypes.DATE,
+        interval: DataTypes.INTEGER,
+        numberShows: DataTypes.INTEGER
+
     }, {
         classMethods: {
             associate: function(models) {

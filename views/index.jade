@@ -6,48 +6,55 @@ block stylesheets
 
 block javascripts
   script(src='//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
-  script(src='/js/util.js')
-  script(src='/js/notemanager.js')
-  script(src='/js/notecard.js')
-  script(src='/js/noteinfo.js')
-  script(src='/js/result.js')
-  script(src='/js/mascot.js')
-  script(src='/js/scorecard.js')
-  script(src='/js/login.js')
-  script(src='/js/flashcard.js')
+  script(src='/js/Util.js')
+  script(src='/js/BindingUtils.js') 
+  script(src='/js/ControlUtils.js')
+  script(src='/js/model/Note.js')
+  script(src='/js/data_manager/NoteManager.js')
+  script(src='/js/view/index/learn_mode/MessageView.js')
+  script(src='/js/view/index/learn_mode/ResultView.js')
+  script(src='/js/view/index/learn_mode/NoteInfoView.js')
+  script(src='/js/view/index/learn_mode/NoteCardView.js')
+  script(src='/js/view/index/learn_mode/ScoreCardView.js')
+  script(src='/js/view/index/BackgroundView.js')
+  script(src='/js/controller/index/learn_mode/LearnModeController.js')
+  script(src='/js/controller/index/learn_mode/BackgroundController.js')
+  script(src='/js/controller/index/learn_mode/MessageController.js')
+  script(src='/js/controller/index/learn_mode/NoteCardController.js')
+  script(src='/js/controller/index/learn_mode/NoteInfoController.js')
+  script(src='/js/controller/index/learn_mode/ResultController.js')
+  script(src='/js/controller/index/learn_mode/ScoreCardController.js')
+  script(src='/js/IndexMain.js')
+
+mixin info-card
+  .info-card-content
+    .row.challenge
+      .col-md-11
+        .highlighted-text
+          span.pre-underline The queeen is famous for
+          input.underline(type='text')
+          span.post-underline , name not withstanding.
+      .col-md-1.note-info.pull-right              
+        a.note_link.glyphicon.glyphicon-info-sign(href='#')
+        .hint_icon.glyphicon.glyphicon-question-sign
+        .hint
+
+    .row.result
+      .col-md-12 try this one!
+
+    .row.message
+      .col-md-12
+        
+    
 
 block content
-  img(src='img/lost.jpg').background#background_lost
-  img(src='img/found.png').background#background_found
-  img(src='img/fade.png')#tunnel_vision
+  .content.container-fluid
+    .row
+      .col-md-2
+        #scorecard           
 
-  nav.navbar.navbar-default(role='navigation')
-      .navbar-header.pull-right
-          a.navbar-brand(href='#')
-            img(src="img/flash.png")
-        div
-          ul.nav.navbar-nav
-            li.active
-              #scorecard
-
-  #content.container
-    #flashcard
-      div.row#note
-
-        div.col-md-8#login
-          div.form-group
-            label.control-label(for='usernameInput').
-            div#login_message.gray What's my name...?
-            input#userNameInput.form-control(name="username", type='text', placeholder='Username')
-
-        div.col-md-8#mascot
-          #message
-        div.col-md-8#highlighted
-          span#pre_underline
-          input#underline(type="text")
-          span#post_underline
-        div.col-md-8#result
-        div.col-md-4#note_info.pull-right
-          a#note_link.glyphicon.glyphicon-info-sign(href='#')
-          #hint_icon.glyphicon.glyphicon-question-sign
-          #hint
+      .col-md-8.col-md-offset-1.card-container    
+        .info-cards
+          #flash-card-model.info-card
+            +info-card 
+          
