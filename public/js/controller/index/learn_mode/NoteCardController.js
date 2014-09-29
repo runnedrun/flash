@@ -39,7 +39,10 @@ NoteCardController = function() {
   Respond.toCommand("controller.note-card.new", createNewNotecard);
 
   function evaluate(answer){
-    return answer.toLowerCase() == missingWord.toLowerCase() ? 5 : 0;
+    var punctuation = new RegExp('[\.,-\/#!$%\^&\*;:{}=\-_`~()]', 'g');
+    var cleanedAnswer = answer.replace(punctuation,"").toLowerCase();
+    var cleanedWord = missingWord.replace(punctuation,"").toLowerCase();
+    return cleanedAnswer == cleanedWord ? 5 : 0;
   }
 
 
