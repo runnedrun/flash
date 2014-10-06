@@ -14,7 +14,7 @@ block javascripts
   script(src='/js/view/index/learn_mode/MessageView.js')
   script(src='/js/view/index/learn_mode/ResultView.js')
   script(src='/js/view/index/learn_mode/NoteInfoView.js')
-  script(src='/js/view/index/learn_mode/NoteCardView.js')
+  script(src='/js/view/index/learn_mode/InfoCardView.js')
   script(src='/js/view/index/learn_mode/ScoreCardView.js')
   script(src='/js/view/index/BackgroundView.js')
   script(src='/js/controller/index/learn_mode/LearnModeController.js')
@@ -51,10 +51,11 @@ block content
   .content.container-fluid
     .row
       .col-md-2
-        #scorecard           
+        #scorecard HEEEE           
+
 
       .col-md-8.col-md-offset-1.card-container    
-        .info-cards
-          #flash-card-model.info-card
-            +info-card 
+          
+  #flash-card-model.info-card
+    +info-card 
           

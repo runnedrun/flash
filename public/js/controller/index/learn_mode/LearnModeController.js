@@ -1,4 +1,4 @@
-LearnModeController = function() {
+LearnModeController = function(infoCardView) {
   var self = this;
   var notes = {};  // Today's notes
   var notesToShow = []; // the list of notes which still need to be shown
@@ -37,7 +37,7 @@ LearnModeController = function() {
       var index = Util.random(0, notesToShow.length - 1);
       var noteToShow = notesToShow[index];
       notesToShow.splice(index, 1);
-      Fire.command("controller.note-card.new", { note: noteToShow });
+//      Fire.command("controller.note-card.new", { note: noteToShow });
     } else if (failedNotes.length > 0) {
       reloadFailedNotes();
     } else {
@@ -78,6 +78,8 @@ LearnModeController = function() {
       notes[newNote.id] = newNote;
       notesToShow.push(newNote);
     }
+
+    Fire.command("controller.note-card.add");
 
     if (!hasNotes) {
       showNextNoteOrFinish(newNote);

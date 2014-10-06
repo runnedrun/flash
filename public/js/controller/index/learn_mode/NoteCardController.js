@@ -5,26 +5,37 @@ NoteCardController = function() {
   var missingWord;
   var currentNote;
   var self = this;
-  self.noteCardView = new NoteCardView(self);
+  var infoCardView = new InfoCardView(self);
+  var currentIndex = 0;
+  var notes = []
+
 
   function createNewNotecard(e) {
     var note = e.note;
-    currentNote = note;
-    var textToShow = removeWord(note.highlight);
+    notes.push(note);
+    infoCardView.addNoteCard()
+  }
+
+  self.nextNote = function () {
+    var noteIndex = Util.random(0, notes.length);
+    var note = notes[noteIndex];
+    var highlight = (note && note.highlight) || "";
+    var textToShow = removeWord(highlight);
     missingWord = textToShow.missingWord;
 
     // text to show: { prefix: , missingWord: , postfix: }
-    self.noteCardView.showNote(textToShow);
-    Fire.command("controller.note-info.show", {
-      hint : e.note.hint,
-      pageUrl : e.note.pageUrl
-    });
+
+    return textToShow
+//    self.noteCardView.showNote(textToShow);
+//    Fire.command("controller.note-info.show", {
+//      hint : e.note.hint,
+//      pageUrl : e.note.pageUrl
+//    });
   }
 
   self.submitNote = function(word){
     var q = evaluate(word);
-    self.noteCardView.hideDisplay();
-    Fire.command("controller.note-info.hide")
+//    Fire.command("controller.note-info.hide")
     Fire.command("controller.result.show", {
       q: q,
       note: currentNote
@@ -36,12 +47,11 @@ NoteCardController = function() {
     }
   }
 
-  Respond.toCommand("controller.note-card.new", createNewNotecard);
+  Respond.toCommand("controller.note-card.add", createNewNotecard);
 
   function evaluate(answer){
     return answer.toLowerCase() == missingWord.toLowerCase() ? 5 : 0;
   }
-
 
   var easyWords = ["the", "of", "a", "in"]
   removeWord = function(text, depth, easyIndices){

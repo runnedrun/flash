@@ -6,10 +6,10 @@ $(function(){
   BackgroundView = new BackgroundView();
 
   LearnModeController = new LearnModeController();
-  BackgroundController = new BackgroundController();
+//  BackgroundController = new BackgroundController();
   MessageController = new MessageController();
   NoteCardController = new NoteCardController();
-  NoteInfoController = new NoteInfoController();
-  ResultController = new ResultController();
-  ScoreCardController = new ScoreCardController();
+//  NoteInfoController = new NoteInfoController();
+//  ResultController = new ResultController(resultView, infoCardView);
+//  ScoreCardController = new ScoreCardController();
 })
