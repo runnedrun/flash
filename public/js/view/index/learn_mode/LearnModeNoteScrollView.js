@@ -15,4 +15,7 @@ LearnModeNoteScrollView = function(noteCardController) {
     console.log("ERROR: should not be calling the previousNote method in the learn mode note scroller.")
   }
 
+  function scrollForwardOneNote() {
+    // unimplemented
+  }
 }
