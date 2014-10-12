@@ -1,40 +1,31 @@
+InfoCardView = function(infoCardsContainer, renderNextNote, renderPreviousNote) {
+  function generateInfoCard(margin, height) {
+    var infoCard = $("#info-card-model").clone().removeAttr("id")
+    infoCard.css({
+      "margin-bottom": margin + "vh",
+      "height": height + "vh"
+    });
 
-function generateInfoCard(margin, height) {
-  var flashCard = $("#flash-card-model").clone().removeAttr("id")//.hide();
-  flashCard.css({
-    "margin-bottom": margin + "vh",
-    "height": height + "vh"
-  });
+    return infoCard
+  }
 
-  return flashCard
-}
-
-InfoCardView = function(noteCardController) {
-  var self = this;
-
-  var infoCardsContainer = $(".card-container");
-
+  // info card display constants in percentage of view port height
   var margin = 20;
   var height = 50;
+
+  var previousScroll = 0;
 
   var focusedCard;
 
   var infoCards = [];
 
   var initializationList = [1, 2, 3];
-  // initialize the 6 displayable cards
+
+  // initialize the 3 displayable cards
   $.each(initializationList, function(index, n) {
     var cardEl = generateInfoCard(margin, height)
-    var newCard = new NoteCard(cardEl, infoCardsContainer);
     $(infoCardsContainer).append(cardEl);
-//    cardEl.html("this is number " + n);
-    infoCards.push({card: newCard, cardEl: cardEl});
-    // + 1 from the placeholder, +/- 2 for the buffer and partially showing note.
-//    var upperHideBound = (margin + height) * n;
-//    var lowerHideBound = (margin + height) * n - (margin + height);
-//    console.log("upper " + upperHideBound);
-//    console.log("lower " + lowerHideBound);
-//    infoCards.push({ upper:  upperHideBound: upperHideBound, lowerHideBound: lowerHideBound, card: newCard, cardEl: cardEl});
+    infoCards.push({cardEl: cardEl, n: n});
   })
 
   var placeHolderBottom = generateInfoCard(margin, height).css("visibility", "hidden");
@@ -49,26 +40,11 @@ InfoCardView = function(noteCardController) {
   var topBuffer = margin + height + 10; // accounts for the placeholder
   var bottomBuffer = 100 + 10;
 
-  // info card display constants in percentage of view port height
-
-
-  self.addNoteCard = function() {
-//    console.log("adding note card")
-//    var numberOfCards = infoCards.length;
-//
-//    var cardEl = generateInfoCard(margin, height)
-//    var newCard = NoteCard(cardEl);
-//    $(infoCardsContainer).prepend(cardEl);
-//
-//    // + 1 from the placeholder, +/- 2 for the buffer and partially showing note.
-//    var upperHideBound = (margin + height) * numberOfCards + 3;
-//    var lowerHideBound = (margin + height) * numberOfCards - 1;
-//
-//    infoCards.push({ upperHideBound: upperHideBound, lowerHideBound: lowerHideBound, card: newCard});
-  }
-
   function checkForNextOrPreviousNote(e) {
     var currentScroll = infoCardsContainer.scrollTop();
+    var scrollUp = previousScroll < currentScroll;
+    previousScroll = currentScroll;
+
     var cardToMoveUp =  false;
     var cardToMoveDown = false;
 
@@ -80,13 +56,25 @@ InfoCardView = function(noteCardController) {
 
       if (cardTop < upperLimit) {
         cardToMoveDown = cardData.cardEl;
+        cardToMoveDown.destroy && cardToMoveDown.destroy()
       } else if(cardTop > lowerLimit) {
         cardToMoveUp = cardData.cardEl;
-      } else if(focusedCard !== cardData.card) {
-        focusedCard = cardData.card
-        var challengeObject = noteCardController.nextNote();
-        cardData.card.showChallenge(challengeObject);
-//        debugger;
+        cardToMoveUp.destroy && cardToMoveUp.destroy()
+      } else if(focusedCard !== cardData.n) {
+        focusedCard = cardData.n;
+
+        var destroyFunc;
+
+        if (scrollUp) {
+          destroyFunc = renderNextNote(cardData.cardEl);
+        } else {
+          destroyFunc = renderPreviousNote(cardData.cardEl);
+        }
+        // make sure that the scroll didn't change when we rendered the note. If the renderer focused anything the
+        // scroll will change.
+        infoCardsContainer.scrollTop(currentScroll);
+
+        cardData.destroy = destroyFunc;
       }
     });
 
@@ -111,48 +99,3 @@ InfoCardView = function(noteCardController) {
   infoCardsContainer.scrollTop(startingScroll *  infoCardsContainer.height());
 }
 
-var NoteCard = function(cardEl, infoCardsContainer) {
-  var self = this;
-
-  var preUnderline = cardEl.find('.pre-underline');
-  var underline = cardEl.find('.underline');
-  var postUnderline  = cardEl.find('.post-underline');
-
-  var challenge = cardEl.find('.challenge');
-  var result = cardEl.find('.result');
-
-  self.showChallenge = function(challengeObject) {
-    submitBinding = KeyBinding.keypress(KeyCode.enter, $(self.cardEl), submitNote);
-    updateNoteText(challengeObject);
-    challenge.show();
-    var y = infoCardsContainer.scrollTop();
-    challenge.focus();
-    infoCardsContainer.scrollTop(y);
-  }
-
-  self.hideChallenge = function() {
-    challenge.hide();
-  }
-
-  self.showResult = function() {
-
-  }
-
-  self.hideResult = function() {
-
-  }
-
-  function submitNote() {
-    var missingWord = underline.val();
-    infoCardController.submitNote(missingWord);
-  }
-
-  function updateNoteText(text) {
-    console.log("upating note text with:", text)
-    underline.val("");
-    underline.attr("size", text.missingWord.length - 1);
-
-    postUnderline.html(text.postfix);
-    preUnderline.html(text.prefix)
-  }
-}

@@ -16,6 +16,8 @@ block javascripts
   script(src='/js/view/index/learn_mode/NoteInfoView.js')
   script(src='/js/view/index/learn_mode/InfoCardView.js')
   script(src='/js/view/index/learn_mode/ScoreCardView.js')
+  script(src='/js/view/index/learn_mode/LearnModeNoteScrollView.js')
+  script(src='/js/view/index/learn_mode/NoteCardView.js')
   script(src='/js/view/index/BackgroundView.js')
   script(src='/js/controller/index/learn_mode/LearnModeController.js')
   script(src='/js/controller/index/learn_mode/BackgroundController.js')
@@ -26,27 +28,29 @@ block javascripts
   script(src='/js/controller/index/learn_mode/ScoreCardController.js')
   script(src='/js/IndexMain.js')
 
-mixin info-card
-  .info-card-content
+mixin note-card
+  #note-card-model.note-card
     .row.challenge
-      .col-md-11
-        .highlighted-text
-          span.pre-underline The queeen is famous for
-          input.underline(type='text')
-          span.post-underline , name not withstanding.
-      .col-md-1.note-info.pull-right              
-        a.note_link.glyphicon.glyphicon-info-sign(href='#')
-        .hint_icon.glyphicon.glyphicon-question-sign
-        .hint
+        .col-md-11
+          .highlighted-text
+            span.pre-underline The queeen is famous for
+            input.underline(type='text')
+            span.post-underline , name not withstanding.
+        .col-md-1.note-info.pull-right              
+          a.note_link.glyphicon.glyphicon-info-sign(href='#')
+          .hint_icon.glyphicon.glyphicon-question-sign
+          .hint
 
     .row.result
       .col-md-12 try this one!
 
     .row.message
       .col-md-12
-        
-    
 
+mixin info-card
+  #info-card-model.info-card
+    .info-card-content    
+            
 block content
   .content.container-fluid
     .row
@@ -56,6 +60,7 @@ block content
 
       .col-md-8.col-md-offset-1.card-container    
           
-  #flash-card-model.info-card
+  
     +info-card 
+    +note-card
           

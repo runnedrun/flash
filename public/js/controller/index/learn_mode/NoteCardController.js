@@ -5,41 +5,40 @@ NoteCardController = function() {
   var missingWord;
   var currentNote;
   var self = this;
-  var infoCardView = new InfoCardView(self);
   var currentIndex = 0;
-  var notes = []
-
+  var notes = [];
+  var scrollView;
 
   function createNewNotecard(e) {
+    var firstNote = notes.length === 0;
+
+    console.log("adding new note");
+
     var note = e.note;
     notes.push(note);
-    infoCardView.addNoteCard()
+
+    if (firstNote) {
+      scrollView = new LearnModeNoteScrollView(self)
+    }
   }
 
-  self.nextNote = function () {
+  self.nextNoteChallenge = function () {
     var noteIndex = Util.random(0, notes.length);
     var note = notes[noteIndex];
     var highlight = (note && note.highlight) || "";
     var textToShow = removeWord(highlight);
     missingWord = textToShow.missingWord;
 
-    // text to show: { prefix: , missingWord: , postfix: }
-
     return textToShow
-//    self.noteCardView.showNote(textToShow);
-//    Fire.command("controller.note-info.show", {
-//      hint : e.note.hint,
-//      pageUrl : e.note.pageUrl
-//    });
   }
 
   self.submitNote = function(word){
     var q = evaluate(word);
-//    Fire.command("controller.note-info.hide")
-    Fire.command("controller.result.show", {
-      q: q,
-      note: currentNote
-    });
+
+//    Fire.command("controller.result.show", {
+//      q: q,
+//      note: currentNote
+//    });
 
     // Only submit solution on the first attempt.
     if (!currentNote.attempted) {
