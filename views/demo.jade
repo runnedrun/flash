@@ -28,29 +28,6 @@ block extra_scripts
   script(src="/flash-extension/chrome_extension/js/background/main.js")
   script(src="/flash-extension/chrome_extension/js/background/UrlResolver.js")
 
-mixin info-card
-  .info-card-content
-    .row.challenge
-      .col-md-11
-        .highlighted-text
-          span.pre-underline The queeen is famous for
-          input.underline(type='text')
-          span.post-underline , name not withstanding.
-      .col-md-1.note-info.pull-right              
-        a.note_link.glyphicon.glyphicon-info-sign(href='#')
-        .hint_icon.glyphicon.glyphicon-question-sign
-        .hint
-
-    .row.result
-      .col-md-12 try this one!
-
-    .row.message
-      .col-md-12
-        
-mixin info-card
-  #info-card-model.info-card
-    .info-card-content
-
 block content
   .content.container-fluid
     .row
@@ -58,3 +35,6 @@ block content
         #scorecard HEEEE
 
       .col-md-8.col-md-offset-1.card-container
+
+    +note-card
+    +info-card
