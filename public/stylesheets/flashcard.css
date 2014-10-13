@@ -134,7 +134,7 @@ html {
   color:blue;
 }
 
-#flash-card-model {
+#flash-card-model, #note-card-model {
   display: none;
 }
 

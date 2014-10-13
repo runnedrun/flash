@@ -6,16 +6,21 @@ LearnModeNoteScrollView = function(noteCardController) {
   function nextNote(cardEl) {
     console.log("making next note");
     var noteChallenge = noteCardController.nextNoteChallenge();
-    var noteCard = new NoteCardView(noteCardController, cardEl, noteChallenge)
-    return noteCard.destroy
+
+    if (noteChallenge) {
+      var noteCard = new NoteCardView(noteCardController, cardEl, noteChallenge)
+      return noteCard.destroy
+    } else {
+      return false
+    }
   }
 
   function previousNote(cardEl) {
     // this should never be called
-    console.log("ERROR: should not be calling the previousNote method in the learn mode note scroller.")
   }
 
   function scrollForwardOneNote() {
-    // unimplemented
+    console.log("scrolling forward one note");
+    infoCardView.scrollToPrevious();
   }
 }

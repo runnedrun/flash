@@ -26,6 +26,7 @@ var NoteCardView = function(noteCardController, cardEl, noteChallenge) {
   }
 
   self.destroy = function() {
+    console.log("destroying")
     submitBinding.unbind();
     noteCard.remove();
   }

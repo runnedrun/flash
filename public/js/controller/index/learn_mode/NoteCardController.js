@@ -23,13 +23,21 @@ NoteCardController = function() {
   }
 
   self.nextNoteChallenge = function () {
-    var noteIndex = Util.random(0, notes.length);
-    var note = notes[noteIndex];
-    var highlight = (note && note.highlight) || "";
-    var textToShow = removeWord(highlight);
-    missingWord = textToShow.missingWord;
+    console.log("Getting next note");
+    if (notes.length) {
+      var noteIndex = Util.random(0, notes.length);
+      console.log("note index,", noteIndex)
+      console.log(notes);
+      var note = notes[noteIndex];
+      console.log("returnign data for note:", note);
+      var highlight = (note && note.highlight) || "";
+      var textToShow = removeWord(highlight);
+      missingWord = textToShow.missingWord;
 
-    return textToShow
+      return textToShow
+    } else {
+      return false
+    }
   }
 
   self.submitNote = function(word){

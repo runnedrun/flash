@@ -77,13 +77,13 @@ LearnModeController = function(infoCardView) {
     if (filter === NoteManager.Filter.today) {
       notes[newNote.id] = newNote;
       notesToShow.push(newNote);
+
+      Fire.command("controller.note-card.add", {note: newNote});
     }
 
-    Fire.command("controller.note-card.add");
-
-    if (!hasNotes) {
-      showNextNoteOrFinish(newNote);
-    }
+//    if (!hasNotes) {
+//      showNextNoteOrFinish(newNote);
+//    }
   }
 
   Respond.toCommand("controller.message.complete", respondToMessageComplete);

@@ -13,9 +13,8 @@ InfoCardView = function(infoCardsContainer, renderNextNote, renderPreviousNote) 
   var margin = 20;
   var height = 50;
 
-  var previousScroll = 0;
-
-  var focusedCard;
+  // the scroll percentage which is necesary to center the middle card;
+  var centeredScroll = height + margin + height * .90;
 
   var infoCards = [];
 
@@ -24,8 +23,10 @@ InfoCardView = function(infoCardsContainer, renderNextNote, renderPreviousNote) 
   // initialize the 3 displayable cards
   $.each(initializationList, function(index, n) {
     var cardEl = generateInfoCard(margin, height)
+    var destroyFunc = renderNextNote(cardEl);
+
     $(infoCardsContainer).append(cardEl);
-    infoCards.push({cardEl: cardEl, n: n});
+    infoCards.push({cardEl: cardEl, destroy: destroyFunc});
   })
 
   var placeHolderBottom = generateInfoCard(margin, height).css("visibility", "hidden");
@@ -42,9 +43,6 @@ InfoCardView = function(infoCardsContainer, renderNextNote, renderPreviousNote) 
 
   function checkForNextOrPreviousNote(e) {
     var currentScroll = infoCardsContainer.scrollTop();
-    var scrollUp = previousScroll < currentScroll;
-    previousScroll = currentScroll;
-
     var cardToMoveUp =  false;
     var cardToMoveDown = false;
 
@@ -52,50 +50,74 @@ InfoCardView = function(infoCardsContainer, renderNextNote, renderPreviousNote) 
     var lowerLimit = bottomBuffer + 5;
 
     $.each(infoCards, function(i, cardData) {
-      var cardTop = ((cardData.cardEl.position().top / infoCardsContainer.height()) * 100)
+      var cardEl = cardData.cardEl;
+
+      var cardTop = ((cardEl.position().top / infoCardsContainer.height()) * 100)
 
       if (cardTop < upperLimit) {
-        cardToMoveDown = cardData.cardEl;
-        cardToMoveDown.destroy && cardToMoveDown.destroy()
+        cardToMoveDown = cardData;
       } else if(cardTop > lowerLimit) {
-        cardToMoveUp = cardData.cardEl;
-        cardToMoveUp.destroy && cardToMoveUp.destroy()
-      } else if(focusedCard !== cardData.n) {
-        focusedCard = cardData.n;
-
-        var destroyFunc;
-
-        if (scrollUp) {
-          destroyFunc = renderNextNote(cardData.cardEl);
-        } else {
-          destroyFunc = renderPreviousNote(cardData.cardEl);
-        }
-        // make sure that the scroll didn't change when we rendered the note. If the renderer focused anything the
-        // scroll will change.
-        infoCardsContainer.scrollTop(currentScroll);
-
-        cardData.destroy = destroyFunc;
+        cardToMoveUp = cardData;
       }
     });
 
     if (cardToMoveDown) {
       var newScrollPos = currentScroll - ((margin + height) / 100)  * infoCardsContainer.height();
-      cardToMoveDown.detach();
-      placeHolderBottom.before(cardToMoveDown);
-      infoCardsContainer.scrollTop(newScrollPos);
+      var destroyFunc = renderPreviousNote(cardToMoveDown.cardEl);
+
+      console.log("destroy func is ", destroyFunc);
+
+      if (destroyFunc) {
+        cardToMoveDown.destroy && cardToMoveDown.destroy();
+        infoCardsContainer.scrollTop(currentScroll);
+        cardToMoveDown.destroy = destroyFunc;
+
+        var cardIndex = infoCards.indexOf(cardToMoveDown);
+        infoCards.splice(cardIndex, 0);
+        infoCards.push(cardToMoveDown);
+
+        cardToMoveDown.cardEl.detach();
+        placeHolderBottom.before(cardToMoveDown.cardEl);
+        infoCardsContainer.scrollTop(newScrollPos);
+      }
     }
 
     if (cardToMoveUp) {
       var newScrollPos = currentScroll + ((margin + height) / 100) * infoCardsContainer.height();
-      cardToMoveUp.detach();
-      placeHolderTop.after(cardToMoveUp);
-      infoCardsContainer.scrollTop(newScrollPos);
+      var destroyFunc = renderNextNote(cardToMoveUp.cardEl);
+
+      // if the renderer returns false, this is the end of the list, do nothing
+      if (destroyFunc) {
+        cardToMoveUp.destroy && cardToMoveUp.destroy();
+        infoCardsContainer.scrollTop(currentScroll);
+        cardToMoveUp.destroy = destroyFunc;
+
+        var cardIndex = infoCards.indexOf(cardToMoveUp);
+        infoCards.splice(cardIndex, 0);
+        infoCards.push(cardToMoveUp);
+
+        cardToMoveUp.cardEl.detach();
+        placeHolderTop.after(cardToMoveUp.cardEl);
+        infoCardsContainer.scrollTop(newScrollPos);
+      }
     }
   }
 
-  infoCardsContainer.scroll(checkForNextOrPreviousNote)
+  this.scrollToNext = function() {
+    var nextScroll = (centeredScroll + margin + height)
+    infoCardsContainer.scrollTop(nextScroll/100 *  infoCardsContainer.height());
+  }
 
-  var startingScroll = (height + margin + height * .90)/100;
-  infoCardsContainer.scrollTop(startingScroll *  infoCardsContainer.height());
+  this.scrollToPrevious = function() {
+    var nextScroll = (centeredScroll - margin - height)
+    infoCardsContainer.scrollTop(nextScroll/100 *  infoCardsContainer.height());
+  }
+
+  function centerCard() {
+    infoCardsContainer.scrollTop(centeredScroll/100 *  infoCardsContainer.height());
+  }
+
+  infoCardsContainer.scroll(checkForNextOrPreviousNote);
+  centerCard()
 }
 
