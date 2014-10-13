@@ -1,0 +1,3 @@
+[submodule "public/flash-extension"]
+	path = public/flash-extension
+	url = git://github.com/runnedrun/flash-extension.git

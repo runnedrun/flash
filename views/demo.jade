@@ -1,0 +1,60 @@
+extends flash
+
+block extra_scripts
+  script.
+    window.FLASH_DEMO_MODE = true;
+  
+  script(src="/flash-extension/chrome_extension/third_party_js/autoresize.js")
+  script(src="/flash-extension/chrome_extension/third_party_js/fuse.js")
+  script(src="/flash-extension/chrome_extension/third_party_js/jquery.js")
+  script(src="/flash-extension/chrome_extension/third_party_js/rangy-core.js")
+  script(src="/flash-extension/chrome_extension/third_party_js/URI.js")
+
+  script(src="/flash-extension/chrome_extension/js/Comment.js")
+  script(src="/flash-extension/chrome_extension/js/CommentCreator.js")
+  script(src="/flash-extension/chrome_extension/js/CssPropertyDefaults.js")
+  script(src="/flash-extension/chrome_extension/js/EventHandler.js")
+  script(src="/flash-extension/chrome_extension/js/GetIframeHtml.js")
+  script(src="/flash-extension/chrome_extension/js/HighlightManager.js")
+  script(src="/flash-extension/chrome_extension/js/HtmlProcessor.js")
+  script(src="/flash-extension/chrome_extension/js/InlineBootstrapStyles.js")
+  script(src="/flash-extension/chrome_extension/js/main.js")
+  script(src="/flash-extension/chrome_extension/js/Requests.js")
+  script(src="/flash-extension/chrome_extension/js/TrailNameTypeahead.js")
+
+  script(src="/flash-extension/chrome_extension/js/background/BackgroundRequests.js")
+  script(src="/flash-extension/chrome_extension/js/background/DownloadStatusChecker.js")
+  script(src="/flash-extension/chrome_extension/js/background/LocalStorageTrail.js")
+  script(src="/flash-extension/chrome_extension/js/background/main.js")
+  script(src="/flash-extension/chrome_extension/js/background/UrlResolver.js")
+
+mixin info-card
+  .info-card-content
+    .row.challenge
+      .col-md-11
+        .highlighted-text
+          span.pre-underline The queeen is famous for
+          input.underline(type='text')
+          span.post-underline , name not withstanding.
+      .col-md-1.note-info.pull-right              
+        a.note_link.glyphicon.glyphicon-info-sign(href='#')
+        .hint_icon.glyphicon.glyphicon-question-sign
+        .hint
+
+    .row.result
+      .col-md-12 try this one!
+
+    .row.message
+      .col-md-12
+        
+mixin info-card
+  #info-card-model.info-card
+    .info-card-content
+
+block content
+  .content.container-fluid
+    .row
+      .col-md-2
+        #scorecard HEEEE
+
+      .col-md-8.col-md-offset-1.card-container

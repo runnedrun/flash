@@ -1,0 +1,32 @@
+extends layout
+
+block stylesheets
+  link(rel='stylesheet', href='//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css')
+  link(rel='stylesheet', href='/stylesheets/flashcard.css')
+
+block javascripts
+  script(src='//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
+  script(src='/js/Util.js')
+  script(src='/js/BindingUtils.js') 
+  script(src='/js/ControlUtils.js')
+  script(src='/js/model/Note.js')
+  script(src='/js/data_manager/NoteManager.js')
+  script(src='/js/view/index/learn_mode/MessageView.js')
+  script(src='/js/view/index/learn_mode/ResultView.js')
+  script(src='/js/view/index/learn_mode/NoteInfoView.js')
+  script(src='/js/view/index/learn_mode/NoteCardView.js')
+  script(src='/js/view/index/learn_mode/InfoCardView.js')
+  script(src='/js/view/index/learn_mode/ScoreCardView.js')
+  script(src='/js/view/index/learn_mode/LearnModeNoteScrollView.js')
+  script(src='/js/view/index/BackgroundView.js')
+  script(src='/js/controller/index/learn_mode/LearnModeController.js')
+  script(src='/js/controller/index/learn_mode/BackgroundController.js')
+  script(src='/js/controller/index/learn_mode/MessageController.js')
+  script(src='/js/controller/index/learn_mode/NoteCardController.js')
+  script(src='/js/controller/index/learn_mode/NoteInfoController.js')
+  script(src='/js/controller/index/learn_mode/ResultController.js')
+  script(src='/js/controller/index/learn_mode/ScoreCardController.js')
+  script(src='/js/IndexMain.js')
+
+
+  block extra_scripts
