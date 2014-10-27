@@ -52,4 +52,16 @@ ViewUtil = new function() {
       element.fadeIn(400);
     }, 420);
   }
+
+  // ISNT working, need to debug
+  this.isElementInContainerViewport = function(el, container) {
+    var rect = el.getBoundingClientRect();
+
+    return (
+      rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= $(container).height && /*or $(window).height() */
+        rect.right <= $(container).height /*or $(window).width() */
+      );
+  }
 }();

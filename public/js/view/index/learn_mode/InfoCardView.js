@@ -1,4 +1,4 @@
-InfoCardView = function(infoCardsContainer, renderNextNote, renderPreviousNote) {
+InfoCardView = function(infoCardsContainer, getNextNote, getPreviousNote) {
   function generateInfoCard(margin, height) {
     var infoCard = $("#info-card-model").clone().removeAttr("id")
     infoCard.css({
@@ -20,13 +20,15 @@ InfoCardView = function(infoCardsContainer, renderNextNote, renderPreviousNote) 
 
   var initializationList = [1, 2, 3];
 
+  var focusedCard;
+
   // initialize the 3 displayable cards
   $.each(initializationList, function(index, n) {
-    var cardEl = generateInfoCard(margin, height)
-    var destroyFunc = renderNextNote(cardEl);
+    var cardEl = generateInfoCard(margin, height);
+    var card = getNextNote(cardEl);
 
     $(infoCardsContainer).append(cardEl);
-    infoCards.push({cardEl: cardEl, destroy: destroyFunc});
+    infoCards.push({cardEl: cardEl, card: card});
   })
 
   var placeHolderBottom = generateInfoCard(margin, height).css("visibility", "hidden");
@@ -63,44 +65,69 @@ InfoCardView = function(infoCardsContainer, renderNextNote, renderPreviousNote) 
 
     if (cardToMoveDown) {
       var newScrollPos = currentScroll - ((margin + height) / 100)  * infoCardsContainer.height();
-      var destroyFunc = renderPreviousNote(cardToMoveDown.cardEl);
+      var newNoteCard = getPreviousNote(cardToMoveDown.cardEl);
+      var previousNoteCard = cardToMoveDown.card;
 
-      console.log("destroy func is ", destroyFunc);
+      if (newNoteCard) {
+        previousNoteCard && previousNoteCard.destroy();
+        cardToMoveDown.card = newNoteCard;
 
-      if (destroyFunc) {
-        cardToMoveDown.destroy && cardToMoveDown.destroy();
-        infoCardsContainer.scrollTop(currentScroll);
-        cardToMoveDown.destroy = destroyFunc;
-
+        // rearrange the note list
         var cardIndex = infoCards.indexOf(cardToMoveDown);
         infoCards.splice(cardIndex, 0);
         infoCards.push(cardToMoveDown);
 
+        // rearrange the note elements in the dom
         cardToMoveDown.cardEl.detach();
         placeHolderBottom.before(cardToMoveDown.cardEl);
+
+        // render the new note
+        newNoteCard.render();
+        switchFocusIfNecessary();
+
+        // scroll to compensate for the element changes, and focus change from rendering.
         infoCardsContainer.scrollTop(newScrollPos);
       }
     }
 
     if (cardToMoveUp) {
       var newScrollPos = currentScroll + ((margin + height) / 100) * infoCardsContainer.height();
-      var destroyFunc = renderNextNote(cardToMoveUp.cardEl);
+      var newNoteCard = getNextNote(cardToMoveUp.cardEl);
+      var previousNoteCard = cardToMoveUp.card;
 
-      // if the renderer returns false, this is the end of the list, do nothing
-      if (destroyFunc) {
-        cardToMoveUp.destroy && cardToMoveUp.destroy();
-        infoCardsContainer.scrollTop(currentScroll);
-        cardToMoveUp.destroy = destroyFunc;
+      if (newNoteCard) {
+        previousNoteCard && previousNoteCard.destroy();
+        cardToMoveUp.card = newNoteCard;
 
+        // rearrange the note list
         var cardIndex = infoCards.indexOf(cardToMoveUp);
         infoCards.splice(cardIndex, 0);
-        infoCards.push(cardToMoveUp);
+        infoCards.unshift(cardToMoveUp);
 
+        // rearrange the note elements in the dom
         cardToMoveUp.cardEl.detach();
         placeHolderTop.after(cardToMoveUp.cardEl);
+
+        // render the new note
+        newNoteCard.render();
+        switchFocusIfNecessary();
+
+        // scroll to compensate for the element changes.
         infoCardsContainer.scrollTop(newScrollPos);
       }
     }
+  }
+
+  function switchFocusIfNecessary() {
+    $.each(infoCards, function(i, card) {
+      // switch to the last card which should focus, and doesn't have focus
+      if (card.card.shouldSwitchFocus(infoCardsContainer) && (card !== focusedCard || !focusedCard)) {
+        card.card.focus();
+      } else {
+        card.card.focus();
+      }
+    })
+
   }
 
   this.scrollToNext = function() {

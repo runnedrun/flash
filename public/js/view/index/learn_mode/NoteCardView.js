@@ -10,15 +10,7 @@ var NoteCardView = function(noteCardController, cardEl, noteChallenge) {
   var challenge = noteCard.find('.challenge');
   var result = noteCard.find('.result');
 
-  var submitBinding = KeyBinding.keypress(KeyCode.enter, $(self.cardEl), submitNote);
-
-  underline.val("");
-  underline.attr("size", noteChallenge.missingWord.length - 1);
-
-  postUnderline.html(noteChallenge.postfix);
-  preUnderline.html(noteChallenge.prefix)
-
-  challenge.focus();
+  var submitBinding;
 
   function submitNote() {
     var missingWord = underline.val();
@@ -27,7 +19,27 @@ var NoteCardView = function(noteCardController, cardEl, noteChallenge) {
 
   self.destroy = function() {
     console.log("destroying")
-    submitBinding.unbind();
+    submitBinding && submitBinding.unbind();
     noteCard.remove();
+  }
+
+  self.render = function () {
+    submitBinding = KeyBinding.keypress(KeyCode.enter, $(self.cardEl), submitNote);
+
+    underline.val("");
+    underline.attr("size", noteChallenge.missingWord.length - 1);
+
+    postUnderline.html(noteChallenge.postfix);
+    preUnderline.html(noteChallenge.prefix);
+  }
+
+  self.focus = function() {
+    underline.focus();
+  }
+
+  self.shouldSwitchFocus = function(container) {
+    var should = ViewUtil.isElementInContainerViewport(underline[0], container);
+    if (should) console.log("FOCUSING");
+    return should;
   }
 }

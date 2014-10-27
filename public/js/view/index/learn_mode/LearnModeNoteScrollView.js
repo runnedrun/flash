@@ -8,8 +8,7 @@ LearnModeNoteScrollView = function(noteCardController) {
     var noteChallenge = noteCardController.nextNoteChallenge();
 
     if (noteChallenge) {
-      var noteCard = new NoteCardView(noteCardController, cardEl, noteChallenge)
-      return noteCard.destroy
+      return new NoteCardView(noteCardController, cardEl, noteChallenge);
     } else {
       return false
     }
