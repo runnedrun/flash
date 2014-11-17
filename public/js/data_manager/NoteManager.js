@@ -49,7 +49,6 @@ NoteManager = new function() {
 
   function updateNote(data) {
     console.log("updating note");
-    Fire.event("note.updated", data.note);
   }
 
   this.getTodaysNotes = function() {

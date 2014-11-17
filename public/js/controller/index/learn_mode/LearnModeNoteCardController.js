@@ -23,7 +23,7 @@ LearnModeNoteCardController = function(note, submitNoteScore) {
     var highlight = (note && note.highlight) || "";
     var challenge = removeWord(highlight);
 
-    return highlight
+    return challenge;
   };
 
   function evaluate(answer){

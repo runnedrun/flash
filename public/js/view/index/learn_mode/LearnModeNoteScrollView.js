@@ -6,17 +6,22 @@
   by ScrollCardView, and returns that.
  */
 
-LearnModeNoteScrollView = function(noteCardController) {
+LearnModeNoteScrollView = function(nextNoteCardController) {
+  var self = this;
   var cardsContainer = $(".card-container");
 
   var infoCardView = new ScrollCardView(cardsContainer, nextNote, previousNote);
 
+  self.refreshNoteList = function() {
+    infoCardView.refreshMissingCards();
+  }
+
   function nextNote(cardEl) {
     console.log("making next note");
-    var controller = noteCardController.nextNoteCardController();
+    var controller = nextNoteCardController();
 
     if (controller) {
-      return new NoteCardView(controller, cardEl);
+      return new LearnModeNoteCardView(controller, cardEl);
     } else {
       return false
     }

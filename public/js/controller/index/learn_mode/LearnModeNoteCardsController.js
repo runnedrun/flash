@@ -8,16 +8,19 @@
   successful and failed notes.
  */
 
-LearnModeNoteCardsController = function() {
+LearnModeNoteCardsController = function(learnModeController, handleFinishedNote, onNotesExhausted) {
   var self = this;
-
-  var scrollView = new LearnModeNoteScrollView(self);
   var notes = [];
   var attemptedNotes;
 
   self.addNote = function(note) {
     console.log("adding new note");
     notes.push(note);
+
+    // if there were less than 3 notes to begin with try to refresh  the note card list
+    if (notes.length <= 3 ) {
+      scrollView.refreshNoteList();
+    }
   }
 
   function nextNoteCardController() {
@@ -28,17 +31,19 @@ LearnModeNoteCardsController = function() {
 
       return new LearnModeNoteCardController(note, submitNoteScore);
     } else {
+//      onNotesExhausted();
       return false
-      LearnModeController
     }
   }
 
   function submitNoteScore(note, score) {
     if (attemptedNotes.indexOf(note) < 0) {
       attemptedNotes.push(note);
-
+      notes.splice(notes.indexOf(note), 1);
+      handleFinishedNote(note);
       NoteManager.solveNote(note, score);
     }
   }
 
+  var scrollView = new LearnModeNoteScrollView(nextNoteCardController);
 }

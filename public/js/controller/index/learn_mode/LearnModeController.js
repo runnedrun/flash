@@ -10,15 +10,11 @@
 LearnModeController = function() {
   var self = this;
 
-  var noteCardsController = new LearnModeNoteCardsController(self, handleFinishedNote, onNotesExhausted);
-
   var failedNotes = [];
 
   function finish() {
     Fire.command("controller.background.change", { background: BackgroundView.Background.review })
   }
-
-
 
   function handleFinishedNote(note) {
     var q = e.q;
@@ -33,26 +29,7 @@ LearnModeController = function() {
         noteCardsController.addNote(note);
       })
     } else {
-      finish()
-    }
-  }
-
-  // At end of note list, replay the failed notes.
-  function reloadFailedNotes() {
-    for (var i=0; i<failedNotes.length; i++) {
-      failedNotes[i].attempted = true;
-    }
-    failedNotes = [];
-    showNextNoteOrFinish();
-  }
-
-  // rename this function once we know all that it does
-  function respondToMessageComplete() {
-    if (notesToShow.length > 0) {
-      var index = Util.random(0, notesToShow.length - 1);
-      var noteToShow = notesToShow[index];
-      notesToShow.splice(index, 1);
-      Fire.command("controller.note-card.new", { note: noteToShow });
+      finish();
     }
   }
 
@@ -63,21 +40,14 @@ LearnModeController = function() {
   function addNote(e) {
     var newNote = e.note;
     var filter = e.filter;
-    var hasNotes = Object.keys(notes).length > 0;
 
     if (filter === NoteManager.Filter.today) {
-      notes[newNote.id] = newNote;
-      notesToShow.push(newNote);
-
-      Fire.command("controller.note-card.add", {note: newNote});
+      noteCardsController.addNote(newNote);
     }
-
-//    if (!hasNotes) {
-//      showNextNoteOrFinish(newNote);
-//    }
   }
 
+  Respond.toEvent("note.new", addNote);
 
-
+  var noteCardsController = new LearnModeNoteCardsController(self, handleFinishedNote, onNotesExhausted);
   getNotes();
 }

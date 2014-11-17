@@ -45,8 +45,8 @@ LearnModeNoteCardView = function(noteCardController, cardEl) {
   }
 
   self.shouldSwitchFocus = function(container) {
-    var should = ViewUtil.isElementInContainerViewport(underline[0], container);
-    if (should) console.log("FOCUSING");
+    var should = ViewUtil.isElementInContainerViewportVertically(underline[0], container);
+    if (should) console.log("SHOULD FOCUS");
     return should;
   }
 
@@ -55,7 +55,7 @@ LearnModeNoteCardView = function(noteCardController, cardEl) {
   }
 
   self.destroy = function() {
-    console.log("destroying")
+    console.log("destroying");
     submitBinding && submitBinding.unbind();
     noteCard.remove();
   }
