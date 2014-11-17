@@ -60,8 +60,8 @@ ViewUtil = new function() {
     return (
       rect.top >= 0 &&
         rect.left >= 0 &&
-        rect.bottom <= $(container).height && /*or $(window).height() */
-        rect.right <= $(container).height /*or $(window).width() */
+        rect.bottom <= $(container).height() && /*or $(window).height() */
+        rect.right <= $(container).width() /*or $(window).width() */
       );
   }
 }();
