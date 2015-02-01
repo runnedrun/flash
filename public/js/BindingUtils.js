@@ -1,5 +1,7 @@
 var KeyCode = {
-  enter: 13
+  enter: 13,
+  down: 40,
+  up: 38
 }
 
 // contains convenience methods for binding to certain key presses

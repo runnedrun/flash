@@ -14,7 +14,6 @@ LearnModeNoteCardsController = function(learnModeController, handleFinishedNote,
   var attemptedNotes;
 
   self.addNote = function(note) {
-    console.log("adding new note");
     notes.push(note);
 
     // if there were less than 3 notes to begin with try to refresh  the note card list
@@ -24,7 +23,6 @@ LearnModeNoteCardsController = function(learnModeController, handleFinishedNote,
   }
 
   function nextNoteCardController() {
-    console.log("Getting next note card");
     if (notes.length) {
       var noteIndex = Util.random(0, notes.length);
       var note = notes[noteIndex];

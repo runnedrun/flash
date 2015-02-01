@@ -1,2 +1,4 @@
 local server:
-foreman start -p Procfile.dev -e devel.env
+foreman start -f Procfile.dev -e devel.env
+redis-server
+

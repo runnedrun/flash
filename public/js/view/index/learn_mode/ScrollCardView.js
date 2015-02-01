@@ -21,7 +21,6 @@
  */
 
 ScrollCardView = function(parentContainer, fillNextCard, fillPreviousCard) {
-  parent = parentContainer
   function generateCard(margin, height) {
     var card = $("#info-card-model").clone().removeAttr("id")
     card.css({
@@ -32,14 +31,15 @@ ScrollCardView = function(parentContainer, fillNextCard, fillPreviousCard) {
     return card
   }
 
+  // the number of times a card has been moved from the bottom to the top, and vice versa, used for scrolling
+  var transposeUpCount = 0
+  var transposeDownCount = 0
+
   // info card display constants in percentage of view port height
   var margin = 20;
   var height = 50;
 
-  // the scroll percentage which is necesary to center the middle card;
-  var centeredScroll = height + margin + height * .90;
-
-  cards = [];
+  var cards = [];
 
   var initializationList = [1, 2, 3];
 
@@ -65,6 +65,10 @@ ScrollCardView = function(parentContainer, fillNextCard, fillPreviousCard) {
     }
   })
 
+  // the scroll percentage which is necesary to center the middle card;
+//  var centeredScroll = height + margin + height * .90;
+  var numberOfCards = initializationList.length + 2
+  var percentScrollToCenterOfCenterCard = (height + margin)*2 + height/2;
 
 
   // if the top of a info card passes this limit, we move it to the bottom
@@ -73,8 +77,75 @@ ScrollCardView = function(parentContainer, fillNextCard, fillPreviousCard) {
   // if the top of a info card passes this limit, we move it to the bottom
   var bottomBuffer = 100 + 10;
 
-  function fillNextOrPreviousCardIfNecessary(e) {
+  function getCardOffsetPx() {
+    return (margin + height)/100 * parentContainer.height();
+  }
+
+  function getCenteredScrollPx() {
+    var parentHeight = parentContainer.height();
+    return (percentScrollToCenterOfCenterCard / 100) * parentHeight - parentHeight / 2;
+  }
+
+  function moveCardDown(cardToMoveDown) {
     var currentScroll = parentContainer.scrollTop();
+    var newScrollPos = currentScroll - ((margin + height) / 100)  * parentContainer.height();
+    var cardContent = fillPreviousCard(cardToMoveDown.cardEl);
+    var previousNoteCard = cardToMoveDown.card;
+
+    if (cardContent) {
+      previousNoteCard && previousNoteCard.destroy();
+      cardToMoveDown.card = cardContent;
+
+      // rearrange the note list
+      var cardIndex = cards.indexOf(cardToMoveDown);
+      cards.splice(cardIndex, 1);
+      cards.push(cardToMoveDown);
+
+      // rearrange the note elements in the dom
+      cardToMoveDown.cardEl.detach();
+      placeHolderBottom.before(cardToMoveDown.cardEl);
+
+      // render the new note
+      cardContent.render();
+
+      transposeDownCount += 1;
+
+      // scroll to compensate for the element changes, and focus change from rendering.
+      parentContainer.scrollTop(newScrollPos);
+      console.log("ending scroll is: " + parentContainer.scrollTop())
+    }
+  }
+
+  function moveCardUp(cardToMoveUp) {
+    var currentScroll = parentContainer.scrollTop();
+    var newScrollPos = currentScroll + ((margin + height) / 100) * parentContainer.height();
+    var cardContent = fillNextCard(cardToMoveUp.cardEl);
+    var previousNoteCard = cardToMoveUp.card;
+
+    if (cardContent) {
+      previousNoteCard && previousNoteCard.destroy();
+      cardToMoveUp.card = cardContent;
+
+      // rearrange the note list
+      var cardIndex = cards.indexOf(cardToMoveUp);
+      cards.splice(cardIndex, 1);
+      cards.unshift(cardToMoveUp);
+
+      // rearrange the note elements in the dom
+      cardToMoveUp.cardEl.detach();
+      placeHolderTop.after(cardToMoveUp.cardEl);
+
+      // render the new note
+      cardContent.render();
+
+      transposeUpCount += 1;
+
+      // scroll to compensate for the element changes.
+      parentContainer.scrollTop(newScrollPos);
+    }
+  }
+
+  function fillNextOrPreviousCardIfNecessary(e) {
     var cardToMoveUp =  false;
     var cardToMoveDown = false;
 
@@ -93,57 +164,8 @@ ScrollCardView = function(parentContainer, fillNextCard, fillPreviousCard) {
       }
     });
 
-    if (cardToMoveDown) {
-      var newScrollPos = currentScroll - ((margin + height) / 100)  * parentContainer.height();
-      var cardContent = fillPreviousCard(cardToMoveDown.cardEl);
-      var previousNoteCard = cardToMoveDown.card;
-
-      if (cardContent) {
-        previousNoteCard && previousNoteCard.destroy();
-        cardToMoveDown.card = cardContent;
-
-        // rearrange the note list
-        var cardIndex = cards.indexOf(cardToMoveDown);
-        cards.splice(cardIndex, 1);
-        cards.push(cardToMoveDown);
-
-        // rearrange the note elements in the dom
-        cardToMoveDown.cardEl.detach();
-        placeHolderBottom.before(cardToMoveDown.cardEl);
-
-        // render the new note
-        cardContent.render();
-
-        // scroll to compensate for the element changes, and focus change from rendering.
-        parentContainer.scrollTop(newScrollPos);
-      }
-    }
-
-    if (cardToMoveUp) {
-      var newScrollPos = currentScroll + ((margin + height) / 100) * parentContainer.height();
-      var cardContent = fillNextCard(cardToMoveUp.cardEl);
-      var previousNoteCard = cardToMoveUp.card;
-
-      if (cardContent) {
-        previousNoteCard && previousNoteCard.destroy();
-        cardToMoveUp.card = cardContent;
-
-        // rearrange the note list
-        var cardIndex = cards.indexOf(cardToMoveUp);
-        cards.splice(cardIndex, 1);
-        cards.unshift(cardToMoveUp);
-
-        // rearrange the note elements in the dom
-        cardToMoveUp.cardEl.detach();
-        placeHolderTop.after(cardToMoveUp.cardEl);
-
-        // render the new note
-        cardContent.render();
-
-        // scroll to compensate for the element changes.
-        parentContainer.scrollTop(newScrollPos);
-      }
-    }
+    cardToMoveDown && moveCardDown(cardToMoveDown);
+    cardToMoveUp && moveCardUp(cardToMoveUp);
 
     switchFocusIfNecessary();
   }
@@ -155,7 +177,6 @@ ScrollCardView = function(parentContainer, fillNextCard, fillPreviousCard) {
       var wasFocusableBefore = focusableCards.indexOf(cardData.card);
 
       if (cardData.card && cardData.card.shouldSwitchFocus(parentContainer)) {
-        console.log("adding a newly focusable card");
         newFocusableCards.push(cardData.card)
 
         // if this card is newly focusable, or if the currently focused card is now not
@@ -171,21 +192,46 @@ ScrollCardView = function(parentContainer, fillNextCard, fillPreviousCard) {
   }
 
   this.scrollToNext = function() {
-    var nextScroll = (centeredScroll + margin + height)
-    parentContainer.scrollTop(nextScroll/100 *  parentContainer.height());
+    var currentScroll = parentContainer.scrollTop();
+    var centeredScrollPx = getCenteredScrollPx()
+    var scrollByToCenter = centeredScrollPx - currentScroll;
+
+    var scrollTo
+    if (scrollByToCenter > 5) {
+      scrollTo = centeredScrollPx;
+    } else {
+      var numberOfCardsToScroll = Math.floor(Math.max(scrollByToCenter, 0) / getCardOffsetPx()) + 1;
+      scrollTo = centeredScrollPx + getCardOffsetPx() * numberOfCardsToScroll;
+    }
+
+    animateScroll(parentContainer, scrollTo);
   }
 
   this.scrollToPrevious = function() {
-    var nextScroll = (centeredScroll - margin - height)
-    parentContainer.scrollTop(nextScroll/100 *  parentContainer.height());
+    var currentScroll = parentContainer.scrollTop();
+    var centeredScrollPx = getCenteredScrollPx()
+    var scrollByToCenter = centeredScrollPx - currentScroll;
+
+    var scrollTo
+    if (scrollByToCenter < -5) {
+      console.log("mini scroll");
+      scrollTo = centeredScrollPx;
+    } else {
+      var numberOfCardsToScroll = Math.floor(Math.max(scrollByToCenter, 0) / getCardOffsetPx()) + 1;
+      scrollTo = centeredScrollPx - getCardOffsetPx() * numberOfCardsToScroll;
+    }
+
+    animateScroll(parentContainer, scrollTo);
   }
 
   function centerCard() {
-    parentContainer.scrollTop(centeredScroll/100 *  parentContainer.height());
+    var parentHeight = parentContainer.height();
+    var centeredScrollPx = (percentScrollToCenterOfCenterCard/100) * parentHeight - parentHeight / 2;
+    parentContainer.scrollTop(centeredScrollPx);
   }
 
   /*
-    This method is called on every scroll. If any card is the attribute "notAppended" then this method will
+    This method is called on every scroll. If any card has the attribute "notAppended" then this method will
     attempt to get content for the card. If the card has content then it will prepend the card to the scroll
     container.
    */
@@ -208,7 +254,57 @@ ScrollCardView = function(parentContainer, fillNextCard, fillPreviousCard) {
     attemptToFillMissingCards();
   }
 
+  function animateScroll($el, scrollTo) {
+    console.log("srating scroll is: " + $el.scrollTop());
+    console.log("starting goal scroll is: " + scrollTo);
+    var startingTransposeUp = transposeUpCount;
+    var startingTransposeDown = transposeDownCount;
+    var unitToScrollBy = 2
+    scroll();
+
+    function scroll() {
+      var numberOfTransposeUpsSinceStart = transposeUpCount - startingTransposeUp;
+      var numberOfTransposeDownsSinceStart = transposeDownCount - startingTransposeDown;
+      var goalScrollOffset = numberOfTransposeUpsSinceStart * (getCardOffsetPx()) - numberOfTransposeDownsSinceStart * (getCardOffsetPx)();
+
+
+      var newGoalScroll = goalScrollOffset + scrollTo;
+
+//      console.log("number of transposes since start: "  + numberOfTransposeUpsSinceStart)
+//      console.log("new goal scroll: "  + newGoalScroll);
+
+      var currentScroll = $el.scrollTop();
+      var scrollDifference = newGoalScroll - currentScroll;
+
+//      console.log("current scroll: " + currentScroll)
+//      console.log("scroll difference: " + scrollDifference)
+
+      if (scrollDifference > 1 || scrollDifference < -1){
+        // just scroll the difference if the diff is less than the interval
+        var absInterval = Math.min(Math.abs(scrollDifference), unitToScrollBy);
+
+        var interval = scrollDifference < 0 ? -1 * absInterval : absInterval
+        var newScrollTo = currentScroll + interval
+        $el.scrollTop(newScrollTo);
+        setTimeout(scroll, 1);
+      }
+    }
+  }
+
   parentContainer.scroll(fillNextOrPreviousCardIfNecessary);
   centerCard()
+
+  function moveCardDownOnKeypress() {
+    var cardToMove = cards[0]
+    moveCardDown(cardToMove)
+  }
+
+  function moveCardUpOnKeypress() {
+    var cardToMove = cards[cards.length - 1];
+    moveCardUp(cardToMove);
+  }
+
+//  KeyBinding.keydown(KeyCode.down, $(document.body), moveCardDownOnKeypress);
+//  KeyBinding.keydown(KeyCode.up, $(document.body), moveCardUpOnKeypress)
 }
 

@@ -16,6 +16,10 @@ LearnModeNoteScrollView = function(nextNoteCardController) {
     infoCardView.refreshMissingCards();
   }
 
+  console.log("binding now!");
+  KeyBinding.keydown(KeyCode.down, $(document.body), scrollForwardOneNote);
+  KeyBinding.keydown(KeyCode.up, $(document.body), infoCardView.scrollToNext);
+
   function nextNote(cardEl) {
     console.log("making next note");
     var controller = nextNoteCardController();
@@ -31,8 +35,10 @@ LearnModeNoteScrollView = function(nextNoteCardController) {
     // this should never be called
   }
 
-  function scrollForwardOneNote() {
+  function scrollForwardOneNote(e) {
     console.log("scrolling forward one note");
     infoCardView.scrollToPrevious();
+    e.preventDefault();
+    return false;
   }
 }
