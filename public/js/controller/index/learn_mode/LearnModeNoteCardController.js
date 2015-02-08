@@ -16,7 +16,8 @@ LearnModeNoteCardController = function(note, submitNoteScore) {
 
   self.submitNote = function(word){
     var q = evaluate(word);
-    submitNoteScore(note)
+    console.log("submitting");
+    submitNoteScore(note, q);
   };
 
   self.generateChallenge = function() {
@@ -28,8 +29,8 @@ LearnModeNoteCardController = function(note, submitNoteScore) {
 
   function evaluate(answer){
     var punctuation = new RegExp('[\.,-\/#!$%\^&\*;:{}=\-_`~()]', 'g');
-    var cleanedAnswer = answer.replace(punctuation,"").toLowerCase();
-    var cleanedWord = missingWord.replace(punctuation,"").toLowerCase();
+    var cleanedAnswer = answer.replace(punctuation, "").toLowerCase();
+    var cleanedWord = missingWord.replace(punctuation, "").toLowerCase();
     return cleanedAnswer == cleanedWord ? 5 : 0;
   }
 
@@ -44,6 +45,7 @@ LearnModeNoteCardController = function(note, submitNoteScore) {
     if (easyWords.indexOf(wordToRemove) == -1 || depth >= words.length){
       var preUnderline = words.slice(0, missingWordIndex).join(" ");
       var postUnderline = words.slice(missingWordIndex + 1).join(" ");
+      missingWord = wordToRemove;
       return { prefix: preUnderline, missingWord: wordToRemove, postfix: postUnderline };
     }
     else{

@@ -13,7 +13,7 @@
   evaluate the answer for correctness.
  */
 
-LearnModeNoteCardView = function(noteCardController, cardEl) {
+LearnModeNoteCardView = function(noteCardController, cardEl, onCompletete) {
   var self = this;
 
   var noteChallenge = noteCardController.generateChallenge()
@@ -30,12 +30,18 @@ LearnModeNoteCardView = function(noteCardController, cardEl) {
   var submitBinding;
 
   function submitNote() {
+    console.log("getting to the view!!");
     var missingWord = underline.val();
-    noteCardController.submitNote(missingWord);
+    if(missingWord) {
+      noteCardController.submitNote(missingWord);
+      onCompletete();
+    }
+
   }
 
   self.render = function () {
-    submitBinding = KeyBinding.keypress(KeyCode.enter, $(self.cardEl), submitNote);
+    console.log("rendering this now!");
+    submitBinding = KeyBinding.keydown(KeyCode.enter, $(cardEl), submitNote);
 
     underline.val("");
     underline.attr("size", noteChallenge.missingWord.length - 1);

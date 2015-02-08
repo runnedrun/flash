@@ -27,7 +27,9 @@ KeyBinding = new function() {
 
   function bindKeyEvent(eventType, keyCode, $bindTo, callback) {
     return new Binding(eventType, $bindTo, function(e) {
-      if (checkForKeyCode(e, keyCode)) { callback(e) }
+      if (checkForKeyCode(e, keyCode)) {
+        callback(e)
+      }
     })
   }
 }();

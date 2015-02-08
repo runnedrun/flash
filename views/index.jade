@@ -18,6 +18,7 @@ block javascripts
   script(src='/js/view/index/learn_mode/ScoreCardView.js')
   script(src='/js/view/index/learn_mode/LearnModeNoteScrollView.js')
   script(src='/js/view/index/learn_mode/LearnModeNoteCardView.js')
+  script(src='/js/view/index/learn_mode/ResultsView.js')
   script(src='/js/view/index/BackgroundView.js')
   script(src='/js/controller/index/learn_mode/LearnModeController.js')
   script(src='/js/controller/index/learn_mode/BackgroundController.js')
@@ -25,7 +26,6 @@ block javascripts
   script(src='/js/controller/index/learn_mode/LearnModeNoteCardsController.js')
   script(src='/js/controller/index/learn_mode/LearnModeNoteCardController.js')
   script(src='/js/controller/index/learn_mode/NoteInfoController.js')
-  script(src='/js/controller/index/learn_mode/ResultController.js')
   script(src='/js/controller/index/learn_mode/ScoreCardController.js')
   script(src='/js/IndexMain.js')
 
@@ -34,16 +34,16 @@ mixin note-card
     .row.challenge
         .col-md-11
           .highlighted-text
-            span.pre-underline The queeen is famous for
+            span.pre-underline
             input.underline(type='text')
-            span.post-underline , name not withstanding.
+            span.post-underline
         .col-md-1.note-info.pull-right              
           a.note_link.glyphicon.glyphicon-info-sign(href='#')
           .hint_icon.glyphicon.glyphicon-question-sign
           .hint
 
     .row.result
-      .col-md-12 try this one!
+      .col-md-12
 
     .row.message
       .col-md-12

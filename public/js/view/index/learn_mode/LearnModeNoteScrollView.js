@@ -6,29 +6,32 @@
   by ScrollCardView, and returns that.
  */
 
-LearnModeNoteScrollView = function(nextNoteCardController) {
+LearnModeNoteScrollView = function(nextNoteCardController, resultsView) {
   var self = this;
   var cardsContainer = $(".card-container");
 
-  var infoCardView = new ScrollCardView(cardsContainer, nextNote, previousNote);
+  var infoCardView = new ScrollCardView(cardsContainer, nextNote, previousNote, 3, fillTopBumper);
 
+  // This is called when there were less than less than three cards and new ones have been
+  // added.
   self.refreshNoteList = function() {
     infoCardView.refreshMissingCards();
   }
 
-  console.log("binding now!");
   KeyBinding.keydown(KeyCode.down, $(document.body), scrollForwardOneNote);
-  KeyBinding.keydown(KeyCode.up, $(document.body), infoCardView.scrollToNext);
 
   function nextNote(cardEl) {
-    console.log("making next note");
     var controller = nextNoteCardController();
-
+    console.log("controller", controller)
     if (controller) {
-      return new LearnModeNoteCardView(controller, cardEl);
+      return new LearnModeNoteCardView(controller, cardEl, scrollForwardOneNote);
     } else {
       return false
     }
+  }
+
+  function fillTopBumper(cardEl) {
+//    return resultsView(cardEl);
   }
 
   function previousNote(cardEl) {
@@ -38,7 +41,6 @@ LearnModeNoteScrollView = function(nextNoteCardController) {
   function scrollForwardOneNote(e) {
     console.log("scrolling forward one note");
     infoCardView.scrollToPrevious();
-    e.preventDefault();
     return false;
   }
 }

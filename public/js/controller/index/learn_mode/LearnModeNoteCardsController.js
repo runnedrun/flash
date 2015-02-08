@@ -8,16 +8,24 @@
   successful and failed notes.
  */
 
-LearnModeNoteCardsController = function(learnModeController, handleFinishedNote, onNotesExhausted) {
+LearnModeNoteCardsController = function(learnModeController, resultsView, handleFinishedNote, onNotesExhausted) {
   var self = this;
+  var notesDisplayed = 0;
+  var notesAttempted = 0;
   var notes = [];
-  var attemptedNotes;
+  var attemptedNotes = [];
 
   self.addNote = function(note) {
+    console.log("adding note");
+    var numberOfNotesBeforeAdding = notes.length
     notes.push(note);
 
+    notesDisplayed += 1;
+
+
     // if there were less than 3 notes to begin with try to refresh  the note card list
-    if (notes.length <= 3 ) {
+    if (numberOfNotesBeforeAdding < 3 ) {
+      console.log("refreshing note list");
       scrollView.refreshNoteList();
     }
   }
@@ -26,22 +34,25 @@ LearnModeNoteCardsController = function(learnModeController, handleFinishedNote,
     if (notes.length) {
       var noteIndex = Util.random(0, notes.length);
       var note = notes[noteIndex];
-
+      notes.splice(notes.indexOf(note), 1);
       return new LearnModeNoteCardController(note, submitNoteScore);
     } else {
-//      onNotesExhausted();
+      onNotesExhausted();
       return false
     }
   }
 
   function submitNoteScore(note, score) {
+    console.log("submitting!!!!;");
     if (attemptedNotes.indexOf(note) < 0) {
       attemptedNotes.push(note);
-      notes.splice(notes.indexOf(note), 1);
-      handleFinishedNote(note);
       NoteManager.solveNote(note, score);
     }
+    notesAttempted += 1;
+    console.log(notesAttempted, notesDisplayed)
+    var complete = (notes.length == 0) && (notesAttempted == notesDisplayed);
+    handleFinishedNote(note, score, complete);
   }
 
-  var scrollView = new LearnModeNoteScrollView(nextNoteCardController);
+  var scrollView = new LearnModeNoteScrollView(nextNoteCardController, resultsView);
 }

@@ -10,26 +10,37 @@
 LearnModeController = function() {
   var self = this;
 
-  var failedNotes = [];
+  var allFailedNotes = new Set()
+  var allSuccessfulNotes = [];
+  var currentFailedNotes = [];
 
-  function finish() {
-    Fire.command("controller.background.change", { background: BackgroundView.Background.review })
+  this.getResults = function() {
+    return {successfulNotes: allSuccessfulNotes, failedNotes: allFailedNotes};
   }
 
-  function handleFinishedNote(note) {
-    var q = e.q;
-    if (q <= 3) {
-      failedNotes.push(note);
+  function finish() {
+    console.log("DONEEE!");
+//    Fire.command("controller.background.change", { background: BackgroundView.Background.review })
+  }
+
+  function handleFinishedNote(note, score, isComplete) {
+    console.log("score:", score);
+    if (score <= 3) {
+      allFailedNotes.add(note);
+      currentFailedNotes.push(note);
+    } else if (!allFailedNotes.has(note)) {
+      allSuccessfulNotes.add(note);
     }
+
+    isComplete && finish()
   }
 
   function onNotesExhausted() {
-    if (failedNotes.length > 0) {
-      $.each(failedNotes, function(i, note) {
+    if (currentFailedNotes.length > 0) {
+      $.each(currentFailedNotes, function(i, note) {
         noteCardsController.addNote(note);
       })
-    } else {
-      finish();
+      currentFailedNotes = []
     }
   }
 
@@ -48,6 +59,7 @@ LearnModeController = function() {
 
   Respond.toEvent("note.new", addNote);
 
-  var noteCardsController = new LearnModeNoteCardsController(self, handleFinishedNote, onNotesExhausted);
+  var resultsView = []//new ResultsView(self);
+  var noteCardsController = new LearnModeNoteCardsController(self, resultsView, handleFinishedNote, onNotesExhausted);
   getNotes();
 }
