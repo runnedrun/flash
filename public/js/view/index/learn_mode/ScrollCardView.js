@@ -7,8 +7,8 @@
   fillPreviousCard. fillNextCard is called when moving a card from the bottom to the  top, to prepare for the user
   seeing the next card. The opposite is true for fillPreviousCard. The methods are passed the jquery element for the
   card container being moved. These methods should return an object with at least 4 methods, render,
-  shouldSwitchFocus, focus and destroy. centerOn should be 1 of 3 options: 1, 2, or 3. Where 1 is first card, 2 is
-  middle and 3 is last.
+  shouldSwitchFocus, focus and destroy. centerOn should be 1 of 3 options: 0, 1, or 2. Where 0 is first card, 1 is
+  middle and 2 is last.
 
   render: called after a card is moved. render should insert the correct content into the card.
 
@@ -21,7 +21,7 @@
   tear down actions (unbinding callbacks etc.). it is the last call that is made to the object.
  */
 
-ScrollCardView = function(parentContainer, fillNextCard, fillPreviousCard, centerOn, fillTopBumper, fillBottomBumper) {
+ScrollCardView = function(parentContainer, fillNextCard, fillPreviousCard, centerOn) {
   function generateCard(margin, height) {
     var card = $("#info-card-model").clone().removeAttr("id")
     card.css({
@@ -40,6 +40,14 @@ ScrollCardView = function(parentContainer, fillNextCard, fillPreviousCard, cente
   var margin = 20;
   var height = 50;
 
+  // the top bumper needs to be high enough such that the top card is centered when all the way scrolled
+  var topBumperMargin = 0
+  var topBumperHeight = Math.max(0, (100 - height)/2 - topBumperMargin);
+
+  var bottomBumperMargin = 0
+  var bottomBumperHeight = Math.max(0, (100 - height)/2 - margin);
+
+
   var cards = [];
 
   var initializationList = [1, 2, 3];
@@ -47,11 +55,8 @@ ScrollCardView = function(parentContainer, fillNextCard, fillPreviousCard, cente
   var focusedCard;
   var focusableCards = [];
 
-  var bottomBumper = generateCard(margin, height).css("visibility", "hidden");
-  var topBumper = generateCard(margin, height).css("visibility", "hidden");
-
-  var topBumperShown = false;
-  var bottomBumperShown = false;
+  var bottomBumper = generateCard(bottomBumperMargin, bottomBumperHeight).css("visibility", "hidden");
+  var topBumper = generateCard(topBumperMargin, topBumperHeight).css("visibility", "hidden");
 
   parentContainer.append(bottomBumper);
   parentContainer.prepend(topBumper);
@@ -67,33 +72,22 @@ ScrollCardView = function(parentContainer, fillNextCard, fillPreviousCard, cente
       card.render();
       cards.push({cardEl: cardEl, card: card});
     } else {
-      cards.push({cardEl: cardEl, notAppended: true})
+      topBumper.after(cardEl);
+      cardEl.css("display", "none");
+      cards.push({cardEl: cardEl, notDisplayed: true})
     }
   })
 
-  // the scroll percentage which is necesary to center the middle card;
-//  var centeredScroll = height + margin + height * .90;
-  var numberOfCards = initializationList.length + 2;
-  function percentScrollToCenterCard(cardNumber) {
-    return (height + margin)*cardNumber + height/2;
-  }
-
-  function numberOfShownCards() {
-    var n = 0
-      $.each(cards, function(i, card) {
-        if (card.notAppended) {
-          n += 1
-        }
-      })
-    return cards.length - n
-  }
-
-
   // if the top of a info card passes this limit, we move it to the bottom
-  var topBuffer = margin + height + 10; // accounts for the placeholder
+  var topBuffer = topBumperMargin + topBumperHeight + margin + height + 10; // accounts for the bumper
 
   // if the top of a info card passes this limit, we move it to the bottom
   var bottomBuffer = 100 + 10;
+
+  // the scroll percentage which is necessary to center the middle card;
+  function percentScrollToCenterCard(cardNumber) {
+    return topBumperMargin + topBumperHeight + (height + margin) * cardNumber + height/2;
+  }
 
   function getCardOffsetPx() {
     return (margin + height)/100 * parentContainer.height();
@@ -130,13 +124,6 @@ ScrollCardView = function(parentContainer, fillNextCard, fillPreviousCard, cente
 
       // scroll to compensate for the element changes, and focus change from rendering.
       parentContainer.scrollTop(newScrollPos);
-      console.log("ending scroll is: " + parentContainer.scrollTop())
-    } else {
-      var bumperContent = fillBottomBumper && fillBottomBumper(topBumper);
-
-      if (bumperContent) {
-//        cardContent.render();
-      }
     }
   }
 
@@ -147,7 +134,6 @@ ScrollCardView = function(parentContainer, fillNextCard, fillPreviousCard, cente
     var previousNoteCard = cardToMoveUp.card;
 
     if (cardContent) {
-      console.log("content ", cardContent)
       previousNoteCard && previousNoteCard.destroy();
       cardToMoveUp.card = cardContent;
 
@@ -167,26 +153,20 @@ ScrollCardView = function(parentContainer, fillNextCard, fillPreviousCard, cente
 
       // scroll to compensate for the element changes.
       parentContainer.scrollTop(newScrollPos);
-    } else {
-      var bumperContent = fillTopBumper && fillTopBumper(topBumper);
-
-      if (bumperContent) {
-//        cardContent.render();
-      }
     }
   }
 
-  function fillNextOrPreviousCardIfNecessary(e) {
+  function fillNextOrPreviousCardIfNecessary() {
     var cardToMoveUp =  false;
     var cardToMoveDown = false;
 
     var upperLimit = -1 * topBuffer - 5;
     var lowerLimit = bottomBuffer + 5;
 
-    $.each(cards, function(i, cardData) {
+    $.each(cards, function(cardNumber, cardData) {
       var cardEl = cardData.cardEl;
 
-      var cardTop = ((cardEl.position().top / parentContainer.height()) * 100)
+      var cardTop = ((cardEl.position().top / parentContainer.height()) * 100);
 
       if (cardTop < upperLimit) {
         cardToMoveDown = cardData;
@@ -224,7 +204,7 @@ ScrollCardView = function(parentContainer, fillNextCard, fillPreviousCard, cente
 
   this.scrollToNext = function() {
     var currentScroll = parentContainer.scrollTop();
-    var centeredScrollPx = getCenteredScrollPx(2)
+    var centeredScrollPx = getCenteredScrollPx(1);
     var scrollByToCenter = centeredScrollPx - currentScroll;
 
     var scrollTo
@@ -240,7 +220,13 @@ ScrollCardView = function(parentContainer, fillNextCard, fillPreviousCard, cente
 
   this.scrollToPrevious = function() {
     var currentScroll = parentContainer.scrollTop();
-    var centeredScrollPx = getCenteredScrollPx(2)
+
+    if (currentScroll < 5) {
+      attemptToFillMissingCards();
+      fillNextOrPreviousCardIfNecessary();
+    }
+
+    var centeredScrollPx = getCenteredScrollPx(1);
     var scrollByToCenter = centeredScrollPx - currentScroll;
 
     var scrollTo
@@ -256,9 +242,8 @@ ScrollCardView = function(parentContainer, fillNextCard, fillPreviousCard, cente
   }
 
   function scrollToCenterCard(cardNumber) {
-    var scrollToNumber = Math.min(numberOfShownCards(), cardNumber);
-    console.log("scrolling to card number", scrollToNumber);
-    var centerScroll = getCenteredScrollPx(scrollToNumber)
+    console.log("scrolling to card number", cardNumber);
+    var centerScroll = getCenteredScrollPx(cardNumber)
     console.log("CENTERING to:", centerScroll);
     parentContainer.scrollTop(centerScroll);
   }
@@ -269,24 +254,40 @@ ScrollCardView = function(parentContainer, fillNextCard, fillPreviousCard, cente
     container.
    */
   function attemptToFillMissingCards() {
-    console.log("attempting to fill in the missing cards");
-    var numberOfShownCardsBefore = numberOfShownCards();
+    var startingScroll = parentContainer.scrollTop();
 
-    $.each(cards, function(i, card) {
-      if (card.notAppended) {
+    console.log("attempting to fill in the missing cards");
+    // this specifies the different orderings of card display we should use, depending on which
+    // card should be centered. fixScrollOn specifies on which elements we should scroll down, to compensate
+    // for a shift in cards shown on screen.
+    var cardListOrdering = [
+      {cards: [cards[0], cards[1], cards[2]], fixScrollOn: []},
+      {cards: [cards[1], cards[0], cards[2]], fixScrollOn: [1]},
+      {cards: cards, fixScrollOn: [1,2]}
+    ]
+
+    var orderedCards = cardListOrdering[centerOn];
+    var scrollCompensation = 0;
+
+    $.each(orderedCards.cards, function(i, card) {
+      if (card.notDisplayed) {
         var cardContent = fillNextCard(card.cardEl);
+        console.log("card content", cardContent);
         if (cardContent) {
+          card.cardEl.css("display", "block");
           card.card = cardContent;
           topBumper.after(card.cardEl);
           card.card.render();
-          card.notAppended = false;
+          card.notDisplayed = false;
+
+          if (orderedCards.fixScrollOn.indexOf(i) > -1) {
+            scrollCompensation += getCardOffsetPx();
+          }
         }
       }
-    })
+    });
 
-    if (numberOfShownCards() > numberOfShownCardsBefore) {
-      scrollToCenterCard(centerOn)
-    }
+    parentContainer.scrollTop(startingScroll + scrollCompensation);
   }
 
   this.refreshMissingCards = function() {

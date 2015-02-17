@@ -8,51 +8,72 @@
   successful and failed notes.
  */
 
-LearnModeNoteCardsController = function(learnModeController, resultsView, handleFinishedNote, onNotesExhausted) {
+LearnModeNoteCardsController = function() {
   var self = this;
+  var uniqueNotes = {};
+  var allFailedNotes = {};
+  var allSuccessfulNotes = [];
   var notesDisplayed = 0;
   var notesAttempted = 0;
   var notes = [];
   var attemptedNotes = [];
+  var resultsShown = false;
 
   self.addNote = function(note) {
-    console.log("adding note");
-    var numberOfNotesBeforeAdding = notes.length
+    console.log("adding note", note.id, uniqueNotes);
+    var numberOfNotesBeforeAdding = notes.length;
     notes.push(note);
+    uniqueNotes[note.id] = note;
 
     notesDisplayed += 1;
 
-
     // if there were less than 3 notes to begin with try to refresh  the note card list
     if (numberOfNotesBeforeAdding < 3 ) {
-      console.log("refreshing note list");
       scrollView.refreshNoteList();
     }
   }
 
-  function nextNoteCardController() {
-    if (notes.length) {
-      var noteIndex = Util.random(0, notes.length);
-      var note = notes[noteIndex];
-      notes.splice(notes.indexOf(note), 1);
-      return new LearnModeNoteCardController(note, submitNoteScore);
-    } else {
-      onNotesExhausted();
-      return false
+  self.getResults = function() {
+    return {successfulNotes: allSuccessfulNotes, failedNotes: Util.objectValues(allFailedNotes)};
+  }
+
+  function getResultsView() {
+    if (notesComplete() && !resultsShown) {
+      resultsShown = true;
+      return self;
     }
   }
 
+  function nextNoteCardController() {
+    var noteIndex = Util.random(0, notes.length);
+    var note = notes[noteIndex];
+    notes.splice(notes.indexOf(note), 1);
+    return note && new LearnModeNoteCardController(note, submitNoteScore);
+  }
+
+  function notesComplete() {
+    return (notes.length == 0) && (notesAttempted > 0) && (notesAttempted == notesDisplayed)
+  }
+
   function submitNoteScore(note, score) {
-    console.log("submitting!!!!;");
     if (attemptedNotes.indexOf(note) < 0) {
       attemptedNotes.push(note);
       NoteManager.solveNote(note, score);
     }
+
     notesAttempted += 1;
-    console.log(notesAttempted, notesDisplayed)
-    var complete = (notes.length == 0) && (notesAttempted == notesDisplayed);
-    handleFinishedNote(note, score, complete);
+
+    if (score <= 3) {
+      allFailedNotes[note.id] = note;
+      notes.push(note);
+    } else if (!allFailedNotes[note]) {
+      allSuccessfulNotes.push(note);
+    }
+
+    var percentDone = allSuccessfulNotes.length / Object.keys(uniqueNotes).length;
+    backgroundView.moveBackgroundToPercent(percentDone);
   }
 
-  var scrollView = new LearnModeNoteScrollView(nextNoteCardController, resultsView);
+  var backgroundView = new BackgroundView();
+  var scrollView = new LearnModeNoteScrollView(nextNoteCardController, getResultsView);
 }

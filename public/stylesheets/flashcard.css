@@ -110,15 +110,13 @@ html {
   /*top: -134vh;*/
 /*}*/
 
-.info-card-content {
-  height: 100%
-}
 
 .info-card {
   /*margin-top: 20vh;*/
   /*margin-bottom: 20vh;*/
   border: 1px solid black;
   border-radius: 5px;
+  background: white;
   /*height: 50vh;*/
 }
 
@@ -134,7 +132,7 @@ html {
   color:blue;
 }
 
-#flash-card-model,#note-card-model {
+#flash-card-model,#note-card-model,#result-card-model {
   display: none;
 }
 
@@ -145,4 +143,45 @@ html {
 
 .card-container::-webkit-scrollbar {
   display: none;
+}
+
+.background-container {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.background {
+  width: 100%;
+  height: 500%;
+  position: absolute;
+  background: #d3d3d3;
+  bottom: 0;
+  left: 0;
+
+  /* Safari 4-5, Chrome 1-9 */
+  /*background: -webkit-gradient(linear, 0% 100%, 0% 0%, from(#1964C8), color-stop(0.70, #1964C8), color-stop(0.70, #1964c8), to(#FAFAFA));*/
+
+  /* Safari 5.1, Chrome 10+ */
+  background: -webkit-linear-gradient(bottom, #1857af 10%, #5279AE 20%, #5279AE 30%, #7392BD 40%, #819DC4 50%, #9DB3D1 60%, #ABBED7 70%, #FAFAFA 79%, #FAFAFA);
+              /*-webkit-linear-gradient(left, #2F2727, #1a82f7 5%, #2F2727, #1a82f7 95%, #2F2727);*/
+
+
+  /* Firefox 3.6+ */
+  background: -moz-linear-gradient(bottom, #1964C8, #FAFAFA, 80%%);
+
+  /* IE 10 */
+  background: -ms-linear-gradient(bottom, #1964C8, #FAFAFA, 80%, #FAFAFA);
+
+  /* Opera 11.10+ */
+  background: -o-linear-gradient(bottom, #1964C8, #FAFAFA, 80%, #FAFAFA);
+}
+
+.result-card {
+  text-align: center;
+}
+
+.result-card .successful,.result-card .failed {
+  font-size: 24px;
 }

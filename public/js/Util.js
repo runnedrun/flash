@@ -40,6 +40,17 @@ Util = new function() {
     });
     return array.splice(i,1);
   }
+
+  this.objectValues = function(obj) {
+    var keys = Object.keys(obj);
+    var vals = [];
+
+    for (var i = 0; i < keys.length; i++) {
+      vals.push(obj[keys[i]])
+    }
+
+    return vals
+  }
 }()
 
 ViewUtil = new function() {

@@ -16,7 +16,6 @@ LearnModeNoteCardController = function(note, submitNoteScore) {
 
   self.submitNote = function(word){
     var q = evaluate(word);
-    console.log("submitting");
     submitNoteScore(note, q);
   };
 
@@ -31,7 +30,8 @@ LearnModeNoteCardController = function(note, submitNoteScore) {
     var punctuation = new RegExp('[\.,-\/#!$%\^&\*;:{}=\-_`~()]', 'g');
     var cleanedAnswer = answer.replace(punctuation, "").toLowerCase();
     var cleanedWord = missingWord.replace(punctuation, "").toLowerCase();
-    return cleanedAnswer == cleanedWord ? 5 : 0;
+//    return cleanedAnswer == cleanedWord ? 5 : 0;
+    return 5;
   }
 
   var easyWords = ["the", "of", "a", "in"]

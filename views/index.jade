@@ -12,7 +12,6 @@ block javascripts
   script(src='/js/model/Note.js')
   script(src='/js/data_manager/NoteManager.js')
   script(src='/js/view/index/learn_mode/MessageView.js')
-  script(src='/js/view/index/learn_mode/ResultView.js')
   script(src='/js/view/index/learn_mode/NoteInfoView.js')
   script(src='/js/view/index/learn_mode/ScrollCardView.js')
   script(src='/js/view/index/learn_mode/ScoreCardView.js')
@@ -50,9 +49,15 @@ mixin note-card
 
 mixin info-card
   #info-card-model.info-card
-    .info-card-content    
-            
+
+mixin result-card
+  #result-card-model.result-card
+    .successful
+    .failed
+
 block content
+  .background-container
+    .background
   .content.container-fluid
     .row
       .col-md-2
@@ -64,4 +69,5 @@ block content
   
     +info-card 
     +note-card
-          
+    +result-card
+
