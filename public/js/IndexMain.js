@@ -2,5 +2,5 @@ debug = false;
 verbose = false;
 
 $(function(){
-  LearnModeController = new LearnModeController();
+  ModeController = new ModeController();
 })

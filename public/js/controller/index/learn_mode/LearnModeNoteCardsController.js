@@ -8,7 +8,7 @@
   successful and failed notes.
  */
 
-LearnModeNoteCardsController = function() {
+LearnModeNoteCardsController = function(showResults) {
   var self = this;
   var uniqueNotes = {};
   var allFailedNotes = {};
@@ -21,30 +21,24 @@ LearnModeNoteCardsController = function() {
 
   self.addNote = function(note) {
     console.log("adding note", note.id, uniqueNotes);
-    var numberOfNotesBeforeAdding = notes.length;
     notes.push(note);
     uniqueNotes[note.id] = note;
 
     notesDisplayed += 1;
-
-    // if there were less than 3 notes to begin with try to refresh  the note card list
-    if (numberOfNotesBeforeAdding < 3 ) {
-      scrollView.refreshNoteList();
-    }
   }
 
   self.getResults = function() {
-    return {successfulNotes: allSuccessfulNotes, failedNotes: Util.objectValues(allFailedNotes)};
+    return { successfulNotes: allSuccessfulNotes, failedNotes: Util.objectValues(allFailedNotes) };
   }
 
-  function getResultsView() {
+  self.getResultsController = function() {
     if (notesComplete() && !resultsShown) {
       resultsShown = true;
       return self;
     }
   }
 
-  function nextNoteCardController() {
+  self.nextNoteCardController = function() {
     var noteIndex = Util.random(0, notes.length);
     var note = notes[noteIndex];
     notes.splice(notes.indexOf(note), 1);
@@ -72,8 +66,11 @@ LearnModeNoteCardsController = function() {
 
     var percentDone = allSuccessfulNotes.length / Object.keys(uniqueNotes).length;
     backgroundView.moveBackgroundToPercent(percentDone);
+
+    if (notesComplete() && !resultsShown) {
+      showResults();
+    }
   }
 
   var backgroundView = new BackgroundView();
-  var scrollView = new LearnModeNoteScrollView(nextNoteCardController, getResultsView);
 }

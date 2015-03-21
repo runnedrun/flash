@@ -1,10 +1,12 @@
-ResultsView = function(resultsController, cardEl) {
+ResultsView = function(resultsController, cardEl, onFinishedViewing) {
   var self = this;
-  var resultCardModel = $("#result-card-model").clone().removeAttr("id");
-  var successEl = resultCardModel.find(".successful");
-  var failedEl = resultCardModel.find(".failed");
+  var resultCard = $("#result-card-model").clone().removeAttr("id");
+  var successEl = resultCard.find(".successful");
+  var failedEl = resultCard.find(".failed");
 
   self.render = function() {
+    var finishedViewingBinding = KeyBinding.keydown(KeyCode.enter, $(resultCard), onFinishedViewing);
+
     var results = resultsController.getResults();
 
     var failedNoteCount = results.failedNotes.length;
@@ -12,7 +14,7 @@ ResultsView = function(resultsController, cardEl) {
     cardEl.css({"border": "1px solid black", visibility: "shown"});
     failedEl.html("Failed: " + failedNoteCount);
     successEl.html("Successful: "+ successfullNoteCount);
-    cardEl.append(resultCardModel);
+    cardEl.append(resultCard);
   }
 
   self.shouldSwitchFocus = function(container) {
@@ -21,11 +23,16 @@ ResultsView = function(resultsController, cardEl) {
   }
 
   self.focus = function() {
-    console.log("focusing");
+    resultCard.attr("tabindex", -1);
+    resultCard.focus();
   }
 
   self.destroy = function() {
 //    submitBinding && submitBinding.unbind();
-//    noteCard.remove();
+    resultCard.remove();
+  }
+
+  self.getCursor = function() {
+    return Number.MIN_VALUE;
   }
 }

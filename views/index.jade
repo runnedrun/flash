@@ -14,22 +14,23 @@ block javascripts
   script(src='/js/view/index/learn_mode/MessageView.js')
   script(src='/js/view/index/learn_mode/NoteInfoView.js')
   script(src='/js/view/index/learn_mode/ScrollCardView.js')
-  script(src='/js/view/index/learn_mode/ScoreCardView.js')
-  script(src='/js/view/index/learn_mode/LearnModeNoteScrollView.js')
   script(src='/js/view/index/learn_mode/LearnModeNoteCardView.js')
+  script(src='/js/view/index/view_mode/ViewModeNoteCardView.js')
   script(src='/js/view/index/learn_mode/ResultsView.js')
+  script(src='/js/view/index/NotesView.js')
   script(src='/js/view/index/BackgroundView.js')
-  script(src='/js/controller/index/learn_mode/LearnModeController.js')
   script(src='/js/controller/index/learn_mode/BackgroundController.js')
   script(src='/js/controller/index/learn_mode/MessageController.js')
   script(src='/js/controller/index/learn_mode/LearnModeNoteCardsController.js')
+  script(src='/js/controller/index/view_mode/ViewModeNoteCardsController.js')
   script(src='/js/controller/index/learn_mode/LearnModeNoteCardController.js')
+  script(src='/js/controller/index/view_mode/ViewModeNoteCardController.js')
   script(src='/js/controller/index/learn_mode/NoteInfoController.js')
-  script(src='/js/controller/index/learn_mode/ScoreCardController.js')
+  script(src='/js/controller/index/ModeController.js')
   script(src='/js/IndexMain.js')
 
-mixin note-card
-  #note-card-model.note-card
+mixin learn-mode-note-card
+  #learn-mode-note-card-model.learn-mode-note-card
     .row.challenge
         .col-md-11
           .highlighted-text
@@ -47,13 +48,25 @@ mixin note-card
     .row.message
       .col-md-12
 
+mixin view-mode-note-card
+  #view-mode-note-card-model.view-mode-note-card
+    .row.note-text
+      .col-md-11
+        .highlighted-text
+            .text
+      .col-md-1.note-info.pull-right
+        a.note_link.glyphicon.glyphicon-info-sign(href='#')
+        .hint_icon.glyphicon.glyphicon-question-sign
+        .hint
+
 mixin info-card
   #info-card-model.info-card
 
 mixin result-card
   #result-card-model.result-card
-    .successful
-    .failed
+    .row
+      .successful
+      .failed
 
 block content
   .background-container
@@ -68,6 +81,7 @@ block content
           
   
     +info-card 
-    +note-card
+    +learn-mode-note-card
+    +view-mode-note-card
     +result-card
 

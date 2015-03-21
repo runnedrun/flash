@@ -17,7 +17,7 @@ LearnModeNoteCardView = function(noteCardController, cardEl, onComplete) {
   var self = this;
 
   var noteChallenge = noteCardController.generateChallenge()
-  var noteCard = $("#note-card-model").clone().removeAttr("id");
+  var noteCard = $("#learn-mode-note-card-model").clone().removeAttr("id");
   cardEl.html(noteCard);
 
   var preUnderline = noteCard.find('.pre-underline');
@@ -61,4 +61,7 @@ LearnModeNoteCardView = function(noteCardController, cardEl, onComplete) {
     submitBinding && submitBinding.unbind();
     noteCard.remove();
   }
+
+  // learn mode cards don't have cursors
+  self.getCursor = function() { }
 }

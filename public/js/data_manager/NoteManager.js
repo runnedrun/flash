@@ -35,11 +35,16 @@ NoteManager = new function() {
     }
   };
 
+  function formatNoteFields(note) {
+    note.id = Number(note.id)
+    return note
+  }
+
   function createNotesAndFireEvents(notes) {
     console.log("creating notes!", notes);
     var events = $.map(notes, function(note, i) {
       var newNote = new Note(note);
-      var eventData = { note: newNote, filter: self.Filter.today };
+      var eventData = { note: formatNoteFields(newNote), filter: self.Filter.today };
       Fire.event("note.new", eventData);
       return eventData;
     });
