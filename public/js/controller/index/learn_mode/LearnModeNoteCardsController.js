@@ -8,7 +8,7 @@
   successful and failed notes.
  */
 
-LearnModeNoteCardsController = function(showResults) {
+LearnModeNoteCardsController = function(showResults, refreshStatus) {
   var self = this;
   var uniqueNotes = {};
   var allFailedNotes = {};
@@ -25,6 +25,8 @@ LearnModeNoteCardsController = function(showResults) {
     uniqueNotes[note.id] = note;
 
     notesDisplayed += 1;
+
+    refreshExternalStatus();
   }
 
   self.getResults = function() {
@@ -49,6 +51,11 @@ LearnModeNoteCardsController = function(showResults) {
     return (notes.length == 0) && (notesAttempted > 0) && (notesAttempted == notesDisplayed)
   }
 
+  // this is used to refresh the background, and update the note count
+  function refreshExternalStatus() {
+    refreshStatus(allSuccessfulNotes.length, Object.keys(uniqueNotes).length)
+  }
+
   function submitNoteScore(note, score) {
     if (attemptedNotes.indexOf(note) < 0) {
       attemptedNotes.push(note);
@@ -64,13 +71,11 @@ LearnModeNoteCardsController = function(showResults) {
       allSuccessfulNotes.push(note);
     }
 
-    var percentDone = allSuccessfulNotes.length / Object.keys(uniqueNotes).length;
-    backgroundView.moveBackgroundToPercent(percentDone);
+    refreshExternalStatus();
+
 
     if (notesComplete() && !resultsShown) {
       showResults();
     }
   }
-
-  var backgroundView = new BackgroundView();
 }

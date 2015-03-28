@@ -5,6 +5,6 @@ BackgroundView = function() {
   // the view mode. -400% is the position for view mode and -300% is where we show results.
   this.moveBackgroundToPercent = function(percent) {
     var percentToMoveTo = -300 * percent;
-    backgroundEl.animate({"bottom": percentToMoveTo + "%"}, {duration: 1000});
+    backgroundEl.animate({"bottom": percentToMoveTo + "%"}, {duration: 500});
   }
 }

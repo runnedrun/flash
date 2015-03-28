@@ -11,7 +11,7 @@ exports.signInAction = function(req, res) {
         if (user) {
             console.log("signing in user: " + usernameToSignIn);
             req.session.username = usernameToSignIn;
-            res.json( {success : true} );
+            res.redirect("/");
         } else {
             res.json({err: "user: " + String(usernameToSignIn) + " not found"}, 403);
         }

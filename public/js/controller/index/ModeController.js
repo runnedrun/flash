@@ -15,8 +15,16 @@ ModeController = function() {
 
   // passing 2 indicates that the scroll view should start centered on the last card;
   var scrollCardView = new ScrollCardView(nextNoteToRender, function() {}, 2);
-  var learnModeNoteCardsController = new LearnModeNoteCardsController(readyToShowLearnModeResults);
+  var learnModeNoteCardsController = new LearnModeNoteCardsController(readyToShowLearnModeResults, updateLearnModeStatus);
   var viewModeNoteCardsController = new ViewModeNoteCardsController();
+  var backgroundView = new BackgroundView();
+  var statusView = new StatusView();
+
+  function updateLearnModeStatus(numberComplete, total) {
+    var percentDone = numberComplete / total;
+    backgroundView.moveBackgroundToPercent(percentDone);
+    statusView.update(total - numberComplete);
+  }
 
   function getNotes() {
     NoteManager.getTodaysNotes();
@@ -68,6 +76,8 @@ ModeController = function() {
   function switchToViewMode() {
     console.log("switching modes");
     mode = "view";
+    statusView.hide();
+    backgroundView.moveBackgroundToPercent(100);
     scrollCardView.refreshCards();
     scrollCardView.scrollNCards(-1 * viewModeNoteCardsController.noteCount());
   }

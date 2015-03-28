@@ -9,6 +9,8 @@ var express = require('express')
     , flash = require('./routes/flash')
     , http = require('http')
     , path = require('path')
+    , redis = require('redis')
+    , url = require("url")
     , RedisStore = require('connect-redis')(express)
     , db   = require('./models')
     , ultraRepl = require('ultra-repl')
@@ -17,11 +19,19 @@ var express = require('express')
 
 var app = express();
 
+var redisClient;
+if (process.env.REDISTOGO_URL) {
+  var rtg = url.parse(process.env.REDISTOGO_URL);
+  var redisClient = redis.createClient(rtg.port, rtg.hostname);
+
+  redisClient.auth(rtg.auth.split(":")[1]);
+} else {
+  redisClient = redis.createClient();
+}
+
 app.configure(function(){
     var session = express.session({secret: '1234567890QWERTY', store: new RedisStore({
-        host:'127.0.0.1',
-        port:6379,
-        prefix:'sess'
+      client: redisClient
     })});
 
 //    var session = express.session({secret: '1234567890QWERTY'});
