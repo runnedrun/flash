@@ -11,7 +11,7 @@
     "sequelize": "~1.7.9",
     "pg": "~3.3.0",
     "connect-redis": "1.4.7",
-    "lodash": "3.6.0",
+    "lodash": "*",
     "aws-sdk": "*",
     "request": "*",
     "replify": "*",
