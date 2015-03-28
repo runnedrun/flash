@@ -1,5 +1,5 @@
 var db = require('../models')
-var _ = require('lodash/dist/lodash.underscore');
+var _ = require('lodash');
 
 var fakeNote = {
     highlight: "Europe's most interesting new king came into power in the late 18th century",
