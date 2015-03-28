@@ -34,6 +34,7 @@ app.configure(function(){
       client: redisClient
     })});
 
+  sdf
 //    var session = express.session({secret: '1234567890QWERTY'});
 
     app.set('port', process.env.PORT || 3000);
