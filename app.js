@@ -13,7 +13,6 @@ var express = require('express')
     , url = require("url")
     , RedisStore = require('connect-redis')(express)
     , db   = require('./models')
-    , ultraRepl = require('ultra-repl')
     , replify = require('replify');
 
 
