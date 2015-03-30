@@ -101,8 +101,11 @@ html {
 }
 
 .highlighted-text,.result {
-  text-align: center;
   font-size: 22px;
+}
+
+.content {
+  padding-left: 5px;
 }
 
 /*.info-cards {*/
@@ -160,22 +163,8 @@ html {
   bottom: 0;
   left: 0;
 
-  /* Safari 4-5, Chrome 1-9 */
-  /*background: -webkit-gradient(linear, 0% 100%, 0% 0%, from(#1964C8), color-stop(0.70, #1964C8), color-stop(0.70, #1964c8), to(#FAFAFA));*/
-
   /* Safari 5.1, Chrome 10+ */
   background: -webkit-linear-gradient(bottom, #1857af 10%, #5279AE 20%, #5279AE 30%, #7392BD 40%, #819DC4 50%, #9DB3D1 60%, #ABBED7 70%, #FAFAFA 79%, #FAFAFA);
-              /*-webkit-linear-gradient(left, #2F2727, #1a82f7 5%, #2F2727, #1a82f7 95%, #2F2727);*/
-
-
-  /* Firefox 3.6+ */
-  background: -moz-linear-gradient(bottom, #1964C8, #FAFAFA, 80%%);
-
-  /* IE 10 */
-  background: -ms-linear-gradient(bottom, #1964C8, #FAFAFA, 80%, #FAFAFA);
-
-  /* Opera 11.10+ */
-  background: -o-linear-gradient(bottom, #1964C8, #FAFAFA, 80%, #FAFAFA);
 }
 
 .result-card {
@@ -193,4 +182,14 @@ html {
 .status-display {
   font-size: 50px;
   font-weight: bold;
+}
+
+.hint {
+  font-size: 16px;
+  color: #808080;
+}
+
+.notes-loading-display {
+  font-size: 22px;
+  text-align: center;
 }

@@ -329,29 +329,22 @@ ScrollCardView = function(fillNextCard, fillPreviousCard, centerOn) {
 
   self.refreshCards = function() {
     attemptToFillMissingCards();
+    console.log("Refreshing");
     fillNextOrPreviousCardIfNecessary();
   }
 
   function animateScroll(scrollTo, timeToTake) {
-    var currentScroll = parentContainer.scrollTop();
-    var pxToScroll = Math.abs(currentScroll - scrollTo);
-
     var d = new Date();
     var currentTime = d.getTime();
 
     var desiredEndTime = currentTime + timeToTake;
 
-//    console.log("srating scroll is: " + parentContainer.scrollTop());
-//    console.log("starting goal scroll is: " + scrollTo);
-
     var lastLoopEndTime = currentTime;
     var startingTransposeUp = transposeUpCount;
     var startingTransposeDown = transposeDownCount;
-//    var unitToScrollBy = 2
     scroll();
 
     function scroll() {
-      console.log("scrolling now");
       var numberOfTransposeUpsSinceStart = transposeUpCount - startingTransposeUp;
       var numberOfTransposeDownsSinceStart = transposeDownCount - startingTransposeDown;
       var goalScrollOffset = numberOfTransposeUpsSinceStart * (getCardOffsetPx()) - numberOfTransposeDownsSinceStart * (getCardOffsetPx)();
@@ -369,8 +362,6 @@ ScrollCardView = function(fillNextCard, fillPreviousCard, centerOn) {
 
       var stepSize = Math.abs(scrollDifference / iterationsRemaining);
 
-      console.log("step size is: ", stepSize)
-
       if (scrollDifference > 1 || scrollDifference < -1){
         var absInterval = Math.min(Math.abs(scrollDifference), stepSize);
 
@@ -380,8 +371,6 @@ ScrollCardView = function(fillNextCard, fillPreviousCard, centerOn) {
         lastLoopEndTime = currentTime
         setTimeout(scroll , 1);
       }
-
-      console.log("desired end time: ", desiredEndTime, "actual end time", currentTime);
     }
   }
 }

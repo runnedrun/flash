@@ -11,23 +11,38 @@ ModeController = function() {
   var self = this;
   var mode = "learn";
 
+  var learnModeNotesLoaded = false;
+  var viewModeNotesLoaded = false;
+
   var notesView = new NotesView();
 
   // passing 2 indicates that the scroll view should start centered on the last card;
   var scrollCardView = new ScrollCardView(nextNoteToRender, function() {}, 2);
-  var learnModeNoteCardsController = new LearnModeNoteCardsController(readyToShowLearnModeResults, updateLearnModeStatus);
-  var viewModeNoteCardsController = new ViewModeNoteCardsController();
+  var learnModeNoteCardsController = new LearnModeNoteCardsController(updateLearnModeStatus);
+  var viewModeNoteCardsController = new ViewModeNoteCardsController(updateViewModeStatus);
   var backgroundView = new BackgroundView();
   var statusView = new StatusView();
+  var notesLoadingView = new NotesLoadingView(switchToViewMode);
+
+  function updateViewModeStatus(numberComplete, total) {
+    if (mode == "view"){
+      scrollCardView.refreshCards();
+    }
+
+    viewModeNotesLoaded = true
+  }
 
   function updateLearnModeStatus(numberComplete, total) {
+    scrollCardView.refreshCards();
+
+    if (!notesLoaded) {
+      notesLoaded = true;
+      notesLoadingView.hide();
+    }
+
     var percentDone = numberComplete / total;
     backgroundView.moveBackgroundToPercent(percentDone);
     statusView.update(total - numberComplete);
-  }
-
-  function getNotes() {
-    NoteManager.getTodaysNotes();
   }
 
   function addNote(e) {
@@ -69,15 +84,11 @@ ModeController = function() {
   }
 
 
-  function readyToShowLearnModeResults() {
-    scrollCardView.refreshCards();
-  }
-
   function switchToViewMode() {
     console.log("switching modes");
     mode = "view";
     statusView.hide();
-    backgroundView.moveBackgroundToPercent(100);
+    backgroundView.viewMode();
     scrollCardView.refreshCards();
     scrollCardView.scrollNCards(-1 * viewModeNoteCardsController.noteCount());
   }
@@ -85,5 +96,13 @@ ModeController = function() {
   Respond.toEvent("note.new", addNote);
   notesView.render(scrollCardView);
 
-  getNotes();
+  setTimeout(function() {
+    if (!learnModeNotesLoaded && viewModeNotesLoaded) {
+      notesLoadingView.displayNoLearnModeNotesLoaded();
+    } else if(!learnModeNotesLoaded && !viewModeNotesLoaded) {
+      notesLoadingView.displayNoNotesLoaded();
+    }
+  }, 2000);
+
+  NoteManager.getNotes();
 }

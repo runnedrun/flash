@@ -26,12 +26,13 @@ LearnModeNoteCardController = function(note, submitNoteScore) {
     return challenge;
   };
 
+  self.hint = note.hint;
+
   function evaluate(answer){
     var punctuation = new RegExp('[\.,-\/#!$%\^&\*;:{}=\-_`~()]', 'g');
     var cleanedAnswer = answer.replace(punctuation, "").toLowerCase();
     var cleanedWord = missingWord.replace(punctuation, "").toLowerCase();
-//    return cleanedAnswer == cleanedWord ? 5 : 0;
-    return 5;
+    return cleanedAnswer == cleanedWord ? 5 : 0;
   }
 
   var easyWords = ["the", "of", "a", "in"]

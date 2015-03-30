@@ -15,18 +15,20 @@ block javascripts
   script(src='/js/view/index/learn_mode/NoteInfoView.js')
   script(src='/js/view/index/learn_mode/ScrollCardView.js')
   script(src='/js/view/index/learn_mode/LearnModeNoteCardView.js')
-  script(src='/js/view/index/view_mode/ViewModeNoteCardView.js')
   script(src='/js/view/index/learn_mode/ResultsView.js')
   script(src='/js/view/index/learn_mode/StatusView.js')
+  script(src='/js/view/index/learn_mode/NotesLoadingView.js')
+  script(src='/js/view/index/view_mode/ViewModeNoteCardView.js')
   script(src='/js/view/index/NotesView.js')
   script(src='/js/view/index/BackgroundView.js')
   script(src='/js/controller/index/learn_mode/BackgroundController.js')
   script(src='/js/controller/index/learn_mode/MessageController.js')
   script(src='/js/controller/index/learn_mode/LearnModeNoteCardsController.js')
-  script(src='/js/controller/index/view_mode/ViewModeNoteCardsController.js')
   script(src='/js/controller/index/learn_mode/LearnModeNoteCardController.js')
-  script(src='/js/controller/index/view_mode/ViewModeNoteCardController.js')
   script(src='/js/controller/index/learn_mode/NoteInfoController.js')
+  script(src='/js/controller/index/view_mode/ViewModeNoteCardsController.js')
+  script(src='/js/controller/index/view_mode/ViewModeNoteCardController.js')
+
   script(src='/js/controller/index/ModeController.js')
   script(src='/js/IndexMain.js')
 
@@ -34,14 +36,17 @@ mixin learn-mode-note-card
   #learn-mode-note-card-model.learn-mode-note-card
     .row.challenge
         .col-md-11
-          .highlighted-text
-            span.pre-underline
-            input.underline(type='text')
-            span.post-underline
+          .content
+            .highlighted-text
+              span.pre-underline
+              input.underline(type='text')
+              span.post-underline
+            .hint
+
         .col-md-1.note-info.pull-right              
-          a.note_link.glyphicon.glyphicon-info-sign(href='#')
-          .hint_icon.glyphicon.glyphicon-question-sign
-          .hint
+          //a.note_link.glyphicon.glyphicon-info-sign(href='#')
+          //.hint_icon.glyphicon.glyphicon-question-sign
+          //.hint
 
     .row.result
       .col-md-12
@@ -53,12 +58,14 @@ mixin view-mode-note-card
   #view-mode-note-card-model.view-mode-note-card
     .row.note-text
       .col-md-11
-        .highlighted-text
-            .text
-      .col-md-1.note-info.pull-right
-        a.note_link.glyphicon.glyphicon-info-sign(href='#')
-        .hint_icon.glyphicon.glyphicon-question-sign
-        .hint
+        .content
+          .highlighted-text
+              .text
+          .hint
+        .col-md-1.note-info.pull-right
+          //- a.note_link.glyphicon.glyphicon-info-sign(href='#')
+          //- .hint_icon.glyphicon.glyphicon-question-sign
+          //- .hint
 
 mixin info-card
   #info-card-model.info-card
@@ -77,7 +84,8 @@ block content
       .col-md-2
         .status-display
 
-      .col-md-8.col-md-offset-1.card-container    
+      .col-md-8.col-md-offset-1.card-container
+          .notes-loading-display Loading notes...
           
   
     +info-card 

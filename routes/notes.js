@@ -31,7 +31,8 @@ exports.index = function(req, res) {
     ];
 
     db.Note.findAll({where: {UserId: req.user.id, nextShow: {lte: new Date()}}, limit: limit, order: ['createdAt']}).then(function(notes) {
-        res.send({notes: notes.concat(fakeNotes)}, 200);
+//        res.send({notes: notes.concat(fakeNotes)}, 200);
+        res.send({notes: notes}, 200);
     })
 }
 

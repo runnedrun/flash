@@ -23,6 +23,7 @@ LearnModeNoteCardView = function(noteCardController, cardEl, onComplete) {
   var preUnderline = noteCard.find('.pre-underline');
   var underline = noteCard.find('.underline');
   var postUnderline  = noteCard.find('.post-underline');
+  var hint = noteCard.find('.hint');
 
   var challenge = noteCard.find('.challenge');
   var result = noteCard.find('.result');
@@ -46,6 +47,8 @@ LearnModeNoteCardView = function(noteCardController, cardEl, onComplete) {
 
     postUnderline.html(noteChallenge.postfix);
     preUnderline.html(noteChallenge.prefix);
+
+    hint.html(noteCardController.hint);
   }
 
   self.shouldSwitchFocus = function(container) {
