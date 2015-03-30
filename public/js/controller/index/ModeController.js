@@ -17,7 +17,7 @@ ModeController = function() {
   var notesView = new NotesView();
 
   // passing 2 indicates that the scroll view should start centered on the last card;
-  var scrollCardView = new ScrollCardView(nextNoteToRender, function() {}, 2);
+  var scrollCardView = new ScrollCardView(nextNoteToRender, previousNoteToRender, 2);
   var learnModeNoteCardsController = new LearnModeNoteCardsController(updateLearnModeStatus);
   var viewModeNoteCardsController = new ViewModeNoteCardsController(updateViewModeStatus);
   var backgroundView = new BackgroundView();
@@ -78,7 +78,7 @@ ModeController = function() {
   }
 
   function previousNoteToRender(cardEl, cursor) {
-    if (mode = "view") {
+    if (mode == "view") {
       var noteCardController = viewModeNoteCardsController.previousNoteCardController(cursor);
       return noteCardController && new ViewModeNoteCardView(noteCardController, cardEl);
     }

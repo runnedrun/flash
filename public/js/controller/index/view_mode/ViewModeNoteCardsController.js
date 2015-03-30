@@ -28,19 +28,19 @@ ViewModeNoteCardsController = function(updateViewModeStatus) {
   }
 
   function getNextNote(prevNoteId) {
-    var newIndex = -1;
+    var newNote;
 
     console.log("prev id", prevNoteId)
 
     var prevId = prevNoteId || Number.MIN_VALUE
     $.each(notes, function(i, note) {
       if (note.id > prevId) {
-        newIndex = i;
+        newNote = note;
         return false;
       }
     })
 
-    return notes[newIndex];
+    return newNote;
   }
 
   self.noteCount = function() {
@@ -48,19 +48,21 @@ ViewModeNoteCardsController = function(updateViewModeStatus) {
   }
 
   function getPrevNote(prevNoteId) {
-    var newIndex = -1;
+    console.log("getting prev")
+    var newNote;
 
-    var revNotes = notes.reverse();
+    var revNotes = notes.reverse().slice();
     notes.reverse();
 
     var prevId = prevNoteId || Number.MAX_VALUE
+    console.log("rev notes", revNotes)
     $.each(revNotes, function(i, note) {
       if (note.id < prevId) {
-        newIndex = i;
+        newNote = note;
         return false
       }
     })
 
-    return notes[newIndex];
+    return newNote;
   }
 };

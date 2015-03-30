@@ -21,5 +21,8 @@ ViewModeNoteCardView = function(noteCardController, cardEl) {
 
   self.destroy = function() { noteCard.remove(); };
 
-  self.getCursor = function() { return noteCardController.getCursor() };
+  self.getCursor = function() {
+    console.log("the urso is ", noteCardController.getCursor())
+    return noteCardController.getCursor()
+  };
 }
