@@ -2,7 +2,7 @@ var db = require('../models')
 var _ = require('lodash');
 
 var fakeNote = {
-    highlight: "Europe's most interesting new king came into power in the late 18th century",
+    highlight: "Europe's most interesting new king came into power in the late 18th century. But alas multi line note is real.",
     id: "442223402",
     hint: "he is interesting because of his affiliation with the church",
     pageUrl: "https://s3.amazonaws.com/TrailsSitesProto/40/411/stackoverflow_.com/questions/520611/how-can-i-match-multiple-occurrences-with-a-regex-in-javascript-similar-to-phps/0",
@@ -31,8 +31,8 @@ exports.index = function(req, res) {
     ];
 
     db.Note.findAll({where: {UserId: req.user.id, nextShow: {lte: new Date()}}, limit: limit, order: ['createdAt']}).then(function(notes) {
-//        res.send({notes: notes.concat(fakeNotes)}, 200);
-        res.send({notes: notes}, 200);
+        res.send({notes: notes.concat(fakeNotes)}, 200);
+//        res.send({notes: notes}, 200);
     })
 }
 

@@ -35,8 +35,8 @@ ModeController = function() {
   function updateLearnModeStatus(numberComplete, total) {
     scrollCardView.refreshCards();
 
-    if (!notesLoaded) {
-      notesLoaded = true;
+    if (!learnModeNotesLoaded) {
+      learnModeNotesLoaded = true;
       notesLoadingView.hide();
     }
 
