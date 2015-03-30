@@ -11,10 +11,10 @@ NoteManager = new function() {
   }
 
   var API = {
-    getNotes: function(callback) {
+    getNotes: function(filter, callback) {
       return $.get(
         '/notes',
-        { filter: 'today' },
+        { filter: filter },
         function(data) {
           callback(data)
         }
@@ -40,11 +40,11 @@ NoteManager = new function() {
     return note
   }
 
-  function createNotesAndFireEvents(notes) {
+  function createNotesAndFireEvents(notes, filter) {
     console.log("creating notes!", notes);
     var events = $.map(notes, function(note, i) {
       var newNote = new Note(note);
-      var eventData = { note: formatNoteFields(newNote), filter: self.Filter.today };
+      var eventData = { note: formatNoteFields(newNote), filter: filter };
       Fire.event("note.new", eventData);
       return eventData;
     });
@@ -57,12 +57,20 @@ NoteManager = new function() {
   }
 
   this.getNotes = function() {
-    var deferred = $.Deferred();
-    API.getNotes(function(resp) {
-      var events = createNotesAndFireEvents(resp.notes);
-      deferred.resolve(events);
+    var todayDeferred = $.Deferred();
+    var allDeferred = $.Deferred();
+
+    API.getNotes(self.Filter.today, function(resp) {
+      var events = createNotesAndFireEvents(resp.notes, self.Filter.today);
+      todayDeferred.resolve(events);
     });
-    return deferred.promise();
+
+    API.getNotes(self.Filter.all, function(resp) {
+      var events = createNotesAndFireEvents(resp.notes, self.Filter.all);
+      allDeferred.resolve(events);
+    });
+
+    return $.when(todayDeferred.promise(), allDeferred.promise());
   }
 
   this.solveNote = function(note, q) {

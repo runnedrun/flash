@@ -22,18 +22,27 @@ var fakeNote2 = {
 }
 
 exports.index = function(req, res) {
-    var resp ;
+
     var limit = req.query.limit;
+    var filter = req.query.filter;
 
     var fakeNotes = [
         fakeNote,
         fakeNote2
     ];
 
+  if (filter == 1) {
     db.Note.findAll({where: {UserId: req.user.id, nextShow: {lte: new Date()}}, limit: limit, order: ['createdAt']}).then(function(notes) {
 //        res.send({notes: notes.concat(fakeNotes)}, 200);
-        res.send({notes: notes}, 200);
+      res.send({notes: notes}, 200);
     })
+  } else {
+    db.Note.findAll({where: {UserId: req.user.id}, limit: limit, order: ['createdAt']}).then(function(notes) {
+//        res.send({notes: notes.concat(fakeNotes)}, 200);
+      res.send({notes: notes}, 200);
+    })
+  }
+
 }
 
 exports.new = function(req, res) {

@@ -4,7 +4,7 @@
   displayed. Then they return the controller for the next or previous note.
  */
 
-ViewModeNoteCardsController = function() {
+ViewModeNoteCardsController = function(updateViewModeStatus) {
   var self = this;
   var notes = [];
 
@@ -14,6 +14,7 @@ ViewModeNoteCardsController = function() {
     notes.sort(function(note1, note2) {
       return (note1.id - note2.id)
     })
+    updateViewModeStatus();
   }
 
   self.nextNoteCardController = function(idOfPreviousNote) {

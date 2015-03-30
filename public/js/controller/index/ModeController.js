@@ -25,6 +25,7 @@ ModeController = function() {
   var notesLoadingView = new NotesLoadingView(switchToViewMode);
 
   function updateViewModeStatus(numberComplete, total) {
+    console.log("updatingg view mode status")
     if (mode == "view"){
       scrollCardView.refreshCards();
     }
@@ -51,9 +52,9 @@ ModeController = function() {
 
     if (filter === NoteManager.Filter.today) {
       learnModeNoteCardsController.addNote($.extend(newNote, {id: newNote.id}));
+    } else {
+      viewModeNoteCardsController.addNote($.extend(newNote, {id: newNote.id}));
     }
-
-    viewModeNoteCardsController.addNote($.extend(newNote, {id: newNote.id}));
 
     scrollCardView.refreshCards();
   }
