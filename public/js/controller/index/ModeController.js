@@ -9,7 +9,7 @@
 
 ModeController = function() {
   var self = this;
-  var mode = "view";
+  var mode = "learn";
 
   var learnModeNotesLoaded = false;
   var viewModeNotesLoaded = false;
@@ -92,13 +92,13 @@ ModeController = function() {
   Respond.toEvent("note.new", addNote);
   notesView.render(scrollCardView);
 
-//  setTimeout(function() {
-//    if (!learnModeNotesLoaded && viewModeNotesLoaded) {
-//      notesLoadingView.displayNoLearnModeNotesLoaded();
-//    } else if(!learnModeNotesLoaded && !viewModeNotesLoaded) {
-//      notesLoadingView.displayNoNotesLoaded();
-//    }
-//  }, 2000);
+  setTimeout(function() {
+    if (!learnModeNotesLoaded && viewModeNotesLoaded) {
+      notesLoadingView.displayNoLearnModeNotesLoaded();
+    } else if(!learnModeNotesLoaded && !viewModeNotesLoaded) {
+      notesLoadingView.displayNoNotesLoaded();
+    }
+  }, 2000);
 
   NoteManager.getNotes();
 }

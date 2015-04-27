@@ -92,8 +92,6 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
 
     cards.reverse();
 
-    scrollToCenterCard(centerOn)
-
     parentContainer.scroll(function(e) {
       var d = new Date();
       lastScrollTime = d.getTime();
@@ -389,49 +387,31 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
     return scrollDifference * -1;
   }
 
-  self.scrollNCards = function(numOfCardsToScroll) {
-
+  self.scrollNCards = function(numOfCardsToScroll, totalCardsScrollingArg) {
     // if we are scrolling 0 cards, do nothing
     if (numOfCardsToScroll === 0) {
       return
     }
 
     var absNumCardsToScroll = Math.abs(numOfCardsToScroll);
+
+    var totalCardsScrolling = totalCardsScrollingArg || absNumCardsToScroll
+
     var numOfCardsToScrollSign = numOfCardsToScroll && (absNumCardsToScroll / numOfCardsToScroll);
-//
+
     var currentScroll = parentContainer.scrollTop();
-//
-//    var centeredScrollPx = getCenteredScrollPx(1);
-//    var scrollByToCenter = centeredScrollPx + (currentScroll * numOfCardsToScrollSign);
-//
-//    // if the sign of the scrollByToCenter is not that same as the number of cards we want
-//    // to scroll, then we'll have to get the distance to the next card. This is so we always scroll
-//    // in the correct direction.
-//    if (scrollByToCenter * numOfCardsToScrollSign < 0) {
-//      scrollByToCenter = (getCardOffsetPx() - Math.abs(scrollByToCenter)) * numOfCardsToScrollSign;
-//      centeredScrollPx = currentScroll + scrollByToCenter;
-//    }
-//
-//    // if we're close to centered let's pretend we're centered and just scroll up to the next card.
-//    // else, let's count the scroll to the next card as a full card scroll.
-//    if (Math.abs(scrollByToCenter) > 5) {
-//      numOfCardsToScroll = numOfCardsToScroll + (-1 * numOfCardsToScrollSign);
-//    }
-//
-//    var scrollToCenter = centeredScrollPx + getCardOffsetPx() * numOfCardsToScroll;
 
     var scrollTime = 700;
 
-    for(var i = 0; i < absNumCardsToScroll; i++) {
-      var scrollDifference = getScrollToCenterNextCard(numOfCardsToScrollSign);
-      console.log("scroll one card", scrollDifference);
-      animateScroll(currentScroll + scrollDifference, scrollTime / numOfCardsToScroll, false);
-    }
-  }
+    var scrollDifference = getScrollToCenterNextCard(numOfCardsToScrollSign);
+    console.log("scroll one card", scrollDifference);
 
-  function scrollToCenterCard(cardNumber) {
-    var centerScroll = getCenteredScrollPx(cardNumber)
-    parentContainer.scrollTop(centerScroll);
+
+    animateScroll(currentScroll + scrollDifference, scrollTime / totalCardsScrolling, function() {
+      if (absNumCardsToScroll > 0) {
+        self.scrollNCards((absNumCardsToScroll - 1) * numOfCardsToScrollSign, absNumCardsToScroll);
+      }
+    }) ;
   }
 
   /*
@@ -491,7 +471,7 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
     fillNextOrPreviousCardIfNecessary();
   }
 
-  function animateScroll(scrollTo, timeToTake) {
+  function animateScroll(scrollTo, timeToTake, onScrollComplete) {
     var d = new Date();
     var currentTime = d.getTime();
 
@@ -500,6 +480,8 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
     var lastLoopEndTime = currentTime;
     var startingTransposeUp = transposeUpCount;
     var startingTransposeDown = transposeDownCount;
+
+
     scroll();
 
     function scroll() {
@@ -512,6 +494,9 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
       var timeRemaining = desiredEndTime - currentTime;
       var lastLoopDuration = currentTime - lastLoopEndTime;
       var iterationsRemaining = timeRemaining / lastLoopDuration
+
+      // if easing is off then don't reduce scroll size as much based on the number of iterations left
+
 
       var newGoalScroll = goalScrollOffset + scrollTo;
 
@@ -528,6 +513,8 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
         parentContainer.scrollTop(newScrollTo);
         lastLoopEndTime = currentTime
         setTimeout(scroll , 1);
+      } else {
+        onScrollComplete();
       }
     }
   }
