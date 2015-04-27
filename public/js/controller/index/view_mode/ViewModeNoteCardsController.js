@@ -4,12 +4,13 @@
   displayed. Then they return the controller for the next or previous note.
  */
 
+var notes
+
 ViewModeNoteCardsController = function(updateViewModeStatus) {
   var self = this;
-  var notes = [];
+  notes = [];
 
   self.addNote = function(note) {
-    console.log("adding note to view mode", note.id);
     notes.push(note);
     notes.sort(function(note1, note2) {
       return (note1.id - note2.id)
@@ -29,9 +30,6 @@ ViewModeNoteCardsController = function(updateViewModeStatus) {
 
   function getNextNote(prevNoteId) {
     var newNote;
-
-    console.log("prev id", prevNoteId)
-
     var prevId = prevNoteId || Number.MIN_VALUE
     $.each(notes, function(i, note) {
       if (note.id > prevId) {
@@ -39,6 +37,10 @@ ViewModeNoteCardsController = function(updateViewModeStatus) {
         return false;
       }
     })
+
+    if (!newNote) {
+//      console.log(notes);
+    }
 
     return newNote;
   }
@@ -48,14 +50,12 @@ ViewModeNoteCardsController = function(updateViewModeStatus) {
   }
 
   function getPrevNote(prevNoteId) {
-    console.log("getting prev")
     var newNote;
 
     var revNotes = notes.reverse().slice();
     notes.reverse();
 
     var prevId = prevNoteId || Number.MAX_VALUE
-    console.log("rev notes", revNotes)
     $.each(revNotes, function(i, note) {
       if (note.id < prevId) {
         newNote = note;

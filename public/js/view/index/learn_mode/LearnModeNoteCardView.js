@@ -65,6 +65,11 @@ LearnModeNoteCardView = function(noteCardController, cardEl, onComplete) {
     noteCard.remove();
   }
 
+  self.hide = function()  {
+    submitBinding && submitBinding.unbind();
+    noteCard.hide();
+  }
+
   // learn mode cards don't have cursors
   self.getCursor = function() { }
 }

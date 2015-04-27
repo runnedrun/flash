@@ -6,7 +6,6 @@ ScrollCardController = function(nextNoteCardController, getResultsController) {
     var resultsController = getResultsController();
 
     if (resultsController) {
-      console.log("returning results");
       return new ResultsView(resultsController, cardEl);
     } else {
       var noteCardController = nextNoteCardController();

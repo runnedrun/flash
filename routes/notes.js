@@ -32,11 +32,13 @@ exports.index = function(req, res) {
     ];
 
   if (filter == 1) {
+    // return only the notes for today
     db.Note.findAll({where: {UserId: req.user.id, nextShow: {lte: new Date()}}, limit: limit, order: ['createdAt']}).then(function(notes) {
-//        res.send({notes: notes.concat(fakeNotes)}, 200);
-      res.send({notes: notes}, 200);
+      res.send({notes: notes.concat(fakeNotes)}, 200);
+//      res.send({notes: notes}, 200);
     })
   } else {
+    // return all the notes
     db.Note.findAll({where: {UserId: req.user.id}, limit: limit, order: ['createdAt']}).then(function(notes) {
 //        res.send({notes: notes.concat(fakeNotes)}, 200);
       res.send({notes: notes}, 200);

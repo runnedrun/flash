@@ -9,7 +9,7 @@
 
 ModeController = function() {
   var self = this;
-  var mode = "learn";
+  var mode = "view";
 
   var learnModeNotesLoaded = false;
   var viewModeNotesLoaded = false;
@@ -17,7 +17,7 @@ ModeController = function() {
   var notesView = new NotesView();
 
   // passing 2 indicates that the scroll view should start centered on the last card;
-  var scrollCardView = new ScrollCardView(nextNoteToRender, previousNoteToRender, 2);
+  var scrollCardView = new ScrollCardView(renderCardAbove, renderCardBelow, 1);
   var learnModeNoteCardsController = new LearnModeNoteCardsController(updateLearnModeStatus);
   var viewModeNoteCardsController = new ViewModeNoteCardsController(updateViewModeStatus);
   var backgroundView = new BackgroundView();
@@ -25,7 +25,6 @@ ModeController = function() {
   var notesLoadingView = new NotesLoadingView(switchToViewMode);
 
   function updateViewModeStatus(numberComplete, total) {
-    console.log("updatingg view mode status")
     if (mode == "view"){
       scrollCardView.refreshCards();
     }
@@ -51,21 +50,18 @@ ModeController = function() {
     var filter = e.filter;
 
     if (filter === NoteManager.Filter.today) {
-      learnModeNoteCardsController.addNote($.extend(newNote, {id: newNote.id}));
+      learnModeNoteCardsController.addNote(newNote);
     } else {
-      viewModeNoteCardsController.addNote($.extend(newNote, {id: newNote.id}));
+      viewModeNoteCardsController.addNote(newNote);
     }
-
-    scrollCardView.refreshCards();
   }
 
-  function nextNoteToRender(cardEl, cursor) {
+  function renderCardAbove(cardEl, cursor) {
     if (mode === "learn") {
       // if there are results, let's show them
       var resultsController = learnModeNoteCardsController.getResultsController();
 
       if (resultsController) {
-        console.log("returning results");
         return new ResultsView(resultsController, cardEl, switchToViewMode);
       } else {
         var noteCardController = learnModeNoteCardsController.nextNoteCardController();
@@ -77,7 +73,7 @@ ModeController = function() {
     }
   }
 
-  function previousNoteToRender(cardEl, cursor) {
+  function renderCardBelow(cardEl, cursor) {
     if (mode == "view") {
       var noteCardController = viewModeNoteCardsController.previousNoteCardController(cursor);
       return noteCardController && new ViewModeNoteCardView(noteCardController, cardEl);
@@ -86,7 +82,6 @@ ModeController = function() {
 
 
   function switchToViewMode() {
-    console.log("switching modes");
     mode = "view";
     statusView.hide();
     backgroundView.viewMode();
@@ -97,13 +92,13 @@ ModeController = function() {
   Respond.toEvent("note.new", addNote);
   notesView.render(scrollCardView);
 
-  setTimeout(function() {
-    if (!learnModeNotesLoaded && viewModeNotesLoaded) {
-      notesLoadingView.displayNoLearnModeNotesLoaded();
-    } else if(!learnModeNotesLoaded && !viewModeNotesLoaded) {
-      notesLoadingView.displayNoNotesLoaded();
-    }
-  }, 2000);
+//  setTimeout(function() {
+//    if (!learnModeNotesLoaded && viewModeNotesLoaded) {
+//      notesLoadingView.displayNoLearnModeNotesLoaded();
+//    } else if(!learnModeNotesLoaded && !viewModeNotesLoaded) {
+//      notesLoadingView.displayNoNotesLoaded();
+//    }
+//  }, 2000);
 
   NoteManager.getNotes();
 }

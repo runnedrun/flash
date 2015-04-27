@@ -1,3 +1,6 @@
+// All note cards must implement hide as well as destroy. Hide is used while the page is scrolling,
+// as remove during a scroll stops momentum. Once scrolling is complete, destroy is called.
+
 ViewModeNoteCardView = function(noteCardController, cardEl) {
   var self = this;
 
@@ -5,11 +8,10 @@ ViewModeNoteCardView = function(noteCardController, cardEl) {
   var noteCardText = noteCard.find(".text");
   var hint = noteCard.find(".hint");
 
-  cardEl.append(noteCard);
-
   var submitBinding;
 
   self.render = function () {
+    cardEl.append(noteCard);
     noteCardText.html(noteCardController.getText());
     hint.html(noteCardController.getHint());
   }
@@ -19,10 +21,17 @@ ViewModeNoteCardView = function(noteCardController, cardEl) {
 
   self.focus = function() {};
 
-  self.destroy = function() { noteCard.remove(); };
+  self.destroy = function() {
+    noteCard.remove();
+  };
+
+  self.hide = function () {
+    noteCard.hide();
+  }
 
   self.getCursor = function() {
-    console.log("the urso is ", noteCardController.getCursor())
     return noteCardController.getCursor()
   };
+
+//  self.height = 50
 }

@@ -20,7 +20,6 @@ LearnModeNoteCardsController = function(refreshStatus) {
   var resultsShown = false;
 
   self.addNote = function(note) {
-    console.log("adding note", note.id, uniqueNotes);
     notes.push(note);
     uniqueNotes[note.id] = note;
 
@@ -40,7 +39,6 @@ LearnModeNoteCardsController = function(refreshStatus) {
 
   self.nextNoteCardController = function() {
     var noteIndex = Util.random(0, notes.length);
-    console.log("getting the next notes");
     var note = notes[noteIndex];
     notes.splice(notes.indexOf(note), 1);
     if (note) {
@@ -69,7 +67,6 @@ LearnModeNoteCardsController = function(refreshStatus) {
     if (score <= 3) {
       allFailedNotes[note.id] = note;
       notes.push(note);
-      console.log("got a failed note");
     } else if (!allFailedNotes[note]) {
       allSuccessfulNotes.push(note);
     }

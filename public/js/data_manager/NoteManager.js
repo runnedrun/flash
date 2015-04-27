@@ -41,7 +41,6 @@ NoteManager = new function() {
   }
 
   function createNotesAndFireEvents(notes, filter) {
-    console.log("creating notes!", notes);
     var events = $.map(notes, function(note, i) {
       var newNote = new Note(note);
       var eventData = { note: formatNoteFields(newNote), filter: filter };

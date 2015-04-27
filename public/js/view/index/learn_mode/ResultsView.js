@@ -28,8 +28,11 @@ ResultsView = function(resultsController, cardEl, onFinishedViewing) {
   }
 
   self.destroy = function() {
-//    submitBinding && submitBinding.unbind();
     resultCard.remove();
+  }
+
+  self.hide = function() {
+    resultCard.hide();
   }
 
   self.getCursor = function() {
