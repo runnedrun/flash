@@ -72,4 +72,6 @@ LearnModeNoteCardView = function(noteCardController, cardEl, onComplete) {
 
   // learn mode cards don't have cursors
   self.getCursor = function() { }
+
+  self.height = 50;
 }

@@ -38,4 +38,6 @@ ResultsView = function(resultsController, cardEl, onFinishedViewing) {
   self.getCursor = function() {
     return Number.MIN_VALUE;
   }
+
+  self.height = 50;
 }
