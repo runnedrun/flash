@@ -33,5 +33,5 @@ ViewModeNoteCardView = function(noteCardController, cardEl) {
     return noteCardController.getCursor()
   };
 
-  self.height = 50;
+  self.height = 20;
 }
