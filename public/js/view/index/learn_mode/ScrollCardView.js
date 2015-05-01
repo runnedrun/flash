@@ -7,7 +7,7 @@
   fillPreviousCard. fillNextCard is called when moving a card from the bottom to the  top, to prepare for the user
   seeing the next card. The opposite is true for fillPreviousCard. The methods are passed the jquery element for the
   card container being moved. These methods should return an object with at least 4 methods, render,
-  shouldSwitchFocus, focus and destroy. centerOn should be 1 of 2 options: 0, 1. Where 0 is first card, and 1 is last.
+  shouldSwitchFocus, focus and destroy. centerOn should be 1 of 2 options: 0, 1. Where 1 is first card, and -1 is last.
 
   render: called after a card is moved. render should insert the correct content into the card.
 
@@ -76,7 +76,7 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
     parentContainer.scroll(function(e) {
       var d = new Date();
       lastScrollTime = d.getTime();
-      addNewCardsIfNecessary(e);
+      addNewCardsIfNecessary();
     });
   }
 
@@ -104,7 +104,7 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
   var bottomBumperMargin = 0
   var bottomBumperHeight = 25
 
-  var cardsDatas = [];
+  var cardDatas = [];
 
 //  // the number of cards we should have already rendered, must be an odd number
 //  var numberOfCardsPreRendered = 5
@@ -133,14 +133,14 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
     return { cardEl: generateCardEl(0, 0) }
   }
 
-  function addNewCardsIfNecessary(count) {
-    var count = count || 0
+  function addNewCardsIfNecessary(noCardsToStart) {
+    var noCardsToStart = noCardsToStart || (cardDatas.length == 0);
 
     var viewPortHeight = parentContainer.height();
 
     var offscreenCardsTop = [];
     var offscreenCardsBottom = [];
-    $.each(cardsDatas, function(cardNumber, cardData) {
+    $.each(cardDatas, function(cardNumber, cardData) {
       var cardEl = cardData.cardEl;
 
       if((cardEl.position().top + getCardHeightPx(cardData.card) + margin) < 0) {
@@ -184,16 +184,21 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
     }
 
     // if we had to new cards, now we should check again to see if we should add new cards again.
-    if ((newCardTop || newCardBottom) && count < 20) {
-      addNewCardsIfNecessary(count + 1);
+    if (newCardTop || newCardBottom) {
+      addNewCardsIfNecessary(noCardsToStart);
     } else {
-      switchFocusIfNecessary();
+      if (noCardsToStart) {
+        (centerOn > 0) && centerCard(cardDatas[0], switchFocusIfNecessary);
+        (centerOn < 0) && centerCard(cardDatas[cardDatas.length - 1], switchFocusIfNecessary);
+      } else {
+        switchFocusIfNecessary();
+      }
     }
   }
 
   function addCardToBottom(cardDataToMoveDown) {
     var currentScroll = parentContainer.scrollTop();
-    var currentBottomCardData = cardsDatas[cardsDatas.length - 1];
+    var currentBottomCardData = cardDatas[cardDatas.length - 1];
     var currentBottomCardCursor = currentBottomCardData && currentBottomCardData.card && currentBottomCardData.card.getCursor();
 
     var newCard = fillCardBelow(cardDataToMoveDown.cardEl, currentBottomCardCursor);
@@ -209,9 +214,9 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
       cardDataToMoveDown.card = newCard;
 
       // rearrange the note list
-      var cardIndex = cardsDatas.indexOf(cardDataToMoveDown);
-      (cardIndex > -1) && cardsDatas.splice(cardIndex, 1);
-      cardsDatas.push(cardDataToMoveDown);
+      var cardIndex = cardDatas.indexOf(cardDataToMoveDown);
+      (cardIndex > -1) && cardDatas.splice(cardIndex, 1);
+      cardDatas.push(cardDataToMoveDown);
 
       //adjust the height based on the height specified in the card view
       cardDataToMoveDown.cardEl.css({"height": newCardHeightPx, "margin-bottom": getMarginPx()});
@@ -233,7 +238,7 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
 
   function addCardToTop(cardDataToMoveUp) {
     var currentScroll = parentContainer.scrollTop();
-    var currentTopCardCursor = cardsDatas[0] && cardsDatas[0].card && cardsDatas[0].card.getCursor();
+    var currentTopCardCursor = cardDatas[0] && cardDatas[0].card && cardDatas[0].card.getCursor();
 
     var newCard = fillCardAbove(cardDataToMoveUp.cardEl, currentTopCardCursor);
 
@@ -247,9 +252,9 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
       cardDataToMoveUp.card = newCard;
 
       // rearrange the note list
-      var cardIndex = cardsDatas.indexOf(cardDataToMoveUp);
-      (cardIndex > -1) && cardsDatas.splice(cardIndex, 1);
-      cardsDatas.unshift(cardDataToMoveUp);
+      var cardIndex = cardDatas.indexOf(cardDataToMoveUp);
+      (cardIndex > -1) && cardDatas.splice(cardIndex, 1);
+      cardDatas.unshift(cardDataToMoveUp);
 
 //      adjust the height based on the height specified in the card view
       cardDataToMoveUp.cardEl.css({"height": newCardHeightPx, "margin-bottom": getMarginPx()});
@@ -272,7 +277,7 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
   function switchFocusIfNecessary() {
     var newFocusableCards  = [];
 
-    $.each(cardsDatas, function(i, cardData) {
+    $.each(cardDatas, function(i, cardData) {
       var wasFocusableBefore = focusableCards.indexOf(cardData.card);
 
       if (cardData.card && cardData.card.shouldSwitchFocus(parentContainer)) {
@@ -298,6 +303,15 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
     self.scrollNCards(-1);
   }
 
+  function centerCard(cardData, scrollComplete) {
+    var currentScroll = parentContainer.scrollTop();
+    var centeredLocation = parentContainer.height() / 2 - getCardHeightPx(cardData.card) / 2;
+    var top = cardData.cardEl.position().top;
+
+    var scroll = currentScroll - (centeredLocation - top);
+    parentContainer.scrollTop(scroll);
+  }
+
   // returns the distance to of the card which is closest to centered in the specified scroll direction. -1 means scrolling
   // up (cards move down), and 1 means scrolling down (cards move up).
   function getAmountToScrollToCenterNextCard(direction) {
@@ -305,7 +319,7 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
     var scrollDifference = 0;
 
     if (direction < 0) {
-      $.each(cardsDatas, function(i, cardData) {
+      $.each(cardDatas, function(i, cardData) {
         var height = getCardHeightPx(cardData.card);
         var totalCardSpace = height + getMarginPx();
         var cardTop = cardData.cardEl.position().top;
@@ -321,7 +335,7 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
           scrollDifference = desiredScrollForTopOfCard - cardTop;
           return false
         } else if (cardOverCenterLine) {
-          var prevCard = cardsDatas[i-1];
+          var prevCard = cardDatas[i-1];
           if (prevCard) {
             scrollDifference = desiredScrollForTopOfCard - prevCard.cardEl.position().top;
           }
@@ -333,7 +347,7 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
       })
     } else {
       // in order from the bottom to the top
-      var reversedCards = cardsDatas.slice(0, cardsDatas.length).reverse();
+      var reversedCards = cardDatas.slice(0, cardDatas.length).reverse();
 
       $.each(reversedCards, function(i, cardData) {
         var height = getCardHeightPx(cardData.card);
@@ -442,7 +456,7 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
         lastLoopEndTime = currentTime;
         setTimeout(scroll , 1);
       } else {
-        onScrollComplete();
+        onScrollComplete && onScrollComplete();
       }
     }
   }
