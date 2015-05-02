@@ -20,10 +20,6 @@
   tear down actions (unbinding callbacks etc.). it is the last call that is made to the object.
  */
 
-
-var printCardPos;
-var check;
-
 ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
   var self = this
   var parentContainer;
@@ -102,16 +98,9 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
   var topBumperHeight = 25
 
   var bottomBumperMargin = 0
-  var bottomBumperHeight = 25
+  var bottomBumperHeight = 0
 
   var cardDatas = [];
-
-//  // the number of cards we should have already rendered, must be an odd number
-//  var numberOfCardsPreRendered = 5
-
-//  var initializationList = Array.apply(null, new Array(numberOfCardsPreRendered)).map(function(v, i) {
-//    return i + 1
-//  })
 
   var focusedCard;
   var focusableCards = [];
@@ -143,19 +132,19 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
     $.each(cardDatas, function(cardNumber, cardData) {
       var cardEl = cardData.cardEl;
 
-      if((cardEl.position().top + getCardHeightPx(cardData.card) + margin) < 0) {
+      if((cardEl.position().top + getCardOffsetPx(cardData.card)) < 0) {
         offscreenCardsTop.push(cardData);
       } else if (cardEl.position().top > viewPortHeight) {
         offscreenCardsBottom.push(cardData);
       }
     });
 
-    var lessThanOneOffscreenTop = offscreenCardsTop.length == 0
-    var lessThanOneOffscreenBottom = offscreenCardsTop.length == 0
+    var lessThanOneOffscreenTop = offscreenCardsTop.length === 0;
+    var lessThanOneOffscreenBottom = offscreenCardsBottom.length === 0;
 
     // the first element offscreen should stay as a buffer. All other offscreen cards cards are reclaimable
-    offscreenCardsTop.shift();
-    offscreenCardsBottom.unshift();
+    offscreenCardsTop = offscreenCardsTop.slice(0, offscreenCardsTop.length - 1);;
+    offscreenCardsBottom = offscreenCardsBottom.slice(1, offscreenCardsBottom.length);
 
     var offScreenTopCardToMove = offscreenCardsTop[0];
     var offScreenBottomCardToMove = offscreenCardsBottom[offscreenCardsBottom.length - 1];
@@ -205,7 +194,7 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
 
     if (newCard) {
       var newCardHeightPx = getCardHeightPx(newCard);
-      var newScrollOffset = getMarginPx() + newCardHeightPx
+      var newScrollOffset = getCardOffsetPx(newCard)
       var newScrollPos = currentScroll - newScrollOffset;
 
       cardDataToMoveDown.card && cardDataToMoveDown.card.hide();
@@ -244,7 +233,7 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
 
     if (newCard) {
       var newCardHeightPx = getCardHeightPx(newCard);
-      var newScrollOffset = getMarginPx() + newCardHeightPx
+      var newScrollOffset = getCardOffsetPx(newCard)
       var newScrollPos = currentScroll + newScrollOffset;
 
       cardDataToMoveUp.card && cardDataToMoveUp.card.hide();
@@ -323,7 +312,6 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
         var height = getCardHeightPx(cardData.card);
         var totalCardSpace = height + getMarginPx();
         var cardTop = cardData.cardEl.position().top;
-        console.log("checckin card ith top", cardTop);
 
         var cardOverCenterLine = (cardTop + totalCardSpace) > centeredLocation;
 
@@ -402,8 +390,6 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
     var scrollTime = 700;
 
     var scrollDifference = getAmountToScrollToCenterNextCard(numOfCardsToScrollSign);
-    console.log("scroll one card", scrollDifference);
-
 
     animateScroll(currentScroll + scrollDifference, scrollTime / totalCardsScrolling, function() {
       if (absNumCardsToScroll > 0) {
@@ -417,6 +403,14 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
   }
 
   function animateScroll(scrollTo, timeToTake, onScrollComplete) {
+    var heightOfView = parentContainer[0].scrollHeight;
+    // make sure we don't get stuck in an infinite loop trying to scroll
+    if (scrollTo >= heightOfView) {
+      scrollTo = heightOfView - 1
+    } else if(scrollTo <= 0 ) {
+      scrollTo = 1
+    }
+
     var d = new Date();
     var currentTime = d.getTime();
 
