@@ -98,7 +98,7 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
   var topBumperHeight = 25
 
   var bottomBumperMargin = 0
-  var bottomBumperHeight = 0
+  var bottomBumperHeight = 25
 
   var cardDatas = [];
 
@@ -116,6 +116,10 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
 
   function getCardOffsetPx(card) {
     return (margin + card.height)/100 * parentContainer.height();
+  }
+
+  function getMarginHeightToCenterCard(card){
+    return (parentContainer.height() - getCardHeightPx(card)) / 2
   }
 
   function generateCardData() {
@@ -220,6 +224,8 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
 
       // scroll to compensate for the element changes, and focus change from rendering.
       parentContainer.scrollTop(newScrollPos);
+    } else if(currentBottomCardData) {
+      bottomBumper.css({"height": getMarginHeightToCenterCard(currentBottomCardData.card)})
     }
 
     return newCard;
@@ -227,13 +233,14 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
 
   function addCardToTop(cardDataToMoveUp) {
     var currentScroll = parentContainer.scrollTop();
+    var currentTopCardData = cardDatas[0];
     var currentTopCardCursor = cardDatas[0] && cardDatas[0].card && cardDatas[0].card.getCursor();
 
     var newCard = fillCardAbove(cardDataToMoveUp.cardEl, currentTopCardCursor);
 
     if (newCard) {
       var newCardHeightPx = getCardHeightPx(newCard);
-      var newScrollOffset = getCardOffsetPx(newCard)
+      var newScrollOffset = getCardOffsetPx(newCard);
       var newScrollPos = currentScroll + newScrollOffset;
 
       cardDataToMoveUp.card && cardDataToMoveUp.card.hide();
@@ -258,6 +265,8 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
 
       // scroll to compensate for the element changes.
       parentContainer.scrollTop(newScrollPos);
+    } else if(currentTopCardData) {
+      topBumper.css({"height": getMarginHeightToCenterCard(currentTopCardData.card)})
     }
 
     return newCard

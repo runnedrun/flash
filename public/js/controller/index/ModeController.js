@@ -9,7 +9,7 @@
 
 ModeController = function() {
   var self = this;
-  var mode = "view";
+  var mode = "learn";
 
   var learnModeNotesLoaded = false;
   var viewModeNotesLoaded = false;
