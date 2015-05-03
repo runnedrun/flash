@@ -9,7 +9,7 @@
 
 ModeController = function() {
   var self = this;
-  var mode = "learn";
+  var mode = "view";
 
   var learnModeNotesLoaded = false;
   var viewModeNotesLoaded = false;
@@ -69,7 +69,14 @@ ModeController = function() {
       }
     } else {
       var noteCardController = viewModeNoteCardsController.nextNoteCardController(cursor);
-      return noteCardController && new ViewModeNoteCardView(noteCardController, cardEl);
+
+      if (noteCardController) {
+        return new ViewModeNoteCardView(noteCardController, cardEl);
+      } else if(cursor !== Number.MAX_VALUE) {
+        return new NewNoteView(new NewNoteController(), cardEl, function(){
+          console.log("createComplete!");
+        });
+      }
     }
   }
 
@@ -86,7 +93,8 @@ ModeController = function() {
     statusView.hide();
     backgroundView.viewMode();
     scrollCardView.refreshCards();
-    scrollCardView.scrollNCards(-1 * viewModeNoteCardsController.noteCount());
+    // we need to add 1 to account for the new-note card
+    scrollCardView.scrollNCards(-1 * viewModeNoteCardsController.noteCount() + 1);
   }
 
   Respond.toEvent("note.new", addNote);

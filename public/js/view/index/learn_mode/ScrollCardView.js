@@ -126,6 +126,40 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
     return { cardEl: generateCardEl(0, 0) }
   }
 
+  function destroyCardData(cardData) {
+    var cardIndex = cardDatas.indexOf(cardData);
+    (cardIndex > -1) && cardDatas.splice(cardIndex, 1);
+    cardData.cardEl.remove();
+  }
+
+  // this should be called if there is a possibility that there is now a new card amongst the currently visible
+  // ones
+  function destroyOutOfDateCards() {
+    var newCardCursors = [];
+
+    // we look at the card that would be rendered below each card, and check if it's the same as the current
+    // card rendered below. So we don't need to use the final card currently rendered.
+    $.each(cardDatas.slice(0, cardDatas.length - 1), function(i, cardData) {
+      var card = cardData.card;
+      var cardEl = cardData.cardEl;
+      var cursor = card && card.getCursor();
+      var newCardBelow = fillCardBelow(cardEl, cursor);
+      var newCardBelowCursor = newCardBelow && newCardBelow.cursor;
+      newCardCursors.push(newCardBelowCursor);
+    })
+
+    var cardDatasToCheck = cardDatas.slice(1, cardDatas.length);
+    var cardCursorsToCheck = cardDatasToCheck.map(function(cardData) { cardData.card && cardData.card.getCursor() });
+
+    if (cardCursorsToCheck !== newCardCursors) {
+      // destroy all the cards except for the first cards, which we're using as an "anchor", based off which we
+      // will render all new cards
+      $.each(cardDatasToCheck, function(i, cardData) {
+        destroyCardData(cardData);
+      })
+    }
+  }
+
   function addNewCardsIfNecessary(noCardsToStart) {
     var noCardsToStart = noCardsToStart || (cardDatas.length == 0);
 
@@ -408,6 +442,7 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
   }
 
   self.refreshCards = function() {
+    destroyOutOfDateCards();
     addNewCardsIfNecessary();
   }
 

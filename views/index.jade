@@ -19,6 +19,7 @@ block javascripts
   script(src='/js/view/index/learn_mode/StatusView.js')
   script(src='/js/view/index/learn_mode/NotesLoadingView.js')
   script(src='/js/view/index/view_mode/ViewModeNoteCardView.js')
+  script(src='/js/view/index/view_mode/NewNoteView.js')
   script(src='/js/view/index/NotesView.js')
   script(src='/js/view/index/BackgroundView.js')
   script(src='/js/controller/index/learn_mode/BackgroundController.js')
@@ -28,6 +29,7 @@ block javascripts
   script(src='/js/controller/index/learn_mode/NoteInfoController.js')
   script(src='/js/controller/index/view_mode/ViewModeNoteCardsController.js')
   script(src='/js/controller/index/view_mode/ViewModeNoteCardController.js')
+  script(src='/js/controller/index/view_mode/NewNoteController.js')
 
   script(src='/js/controller/index/ModeController.js')
   script(src='/js/IndexMain.js')
@@ -61,6 +63,16 @@ mixin result-card
       .successful
       .failed
 
+mixin new-note
+    #new-note-model.new-note
+      .row
+        .col-md-11
+          .note-content
+            .highlighted-text
+              textarea.new-note-entry(type='text')
+            input.new-hint-entry.hint
+
+
 block content
   .background-container
     .background
@@ -77,4 +89,5 @@ block content
     +learn-mode-note-card
     +view-mode-note-card
     +result-card
+    +new-note
 

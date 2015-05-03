@@ -128,7 +128,7 @@ html {
   color:blue;
 }
 
-#flash-card-model,#learn-mode-note-card-model,#view-mode-note-card-model,#result-card-model {
+#flash-card-model,#learn-mode-note-card-model,#view-mode-note-card-model,#result-card-model,#new-note-model {
   display: none;
 }
 

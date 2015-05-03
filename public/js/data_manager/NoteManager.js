@@ -32,6 +32,19 @@ NoteManager = new function() {
           callback(data)
         }
       );
+    },
+
+    createNote: function(content, hint, callback) {
+      return $.post(
+        '/note',
+        {
+          content: content,
+          hint: hint
+        },
+        function(data) {
+          callback(data.note)
+        }
+      );
     }
   };
 
@@ -74,5 +87,13 @@ NoteManager = new function() {
 
   this.solveNote = function(note, q) {
     API.solveNote(note, q, updateNote);
+  }
+
+  this.createNote = function(content, hint) {
+    var createDeferred = $.Deferred();
+    API.createNote(content,hint, function(resp) {
+      var notes = createNotesAndFireEvents([resp.note], self.Filter.all);
+      createDeferred.resolve(note);
+    })
   }
 }();
