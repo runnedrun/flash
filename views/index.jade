@@ -35,27 +35,22 @@ block javascripts
   script(src='/js/IndexMain.js')
 
 mixin learn-mode-note-card
-  #learn-mode-note-card-model.learn-mode-note-card
-    .row.challenge
-        .col-md-11
-          .note-content
-            .highlighted-text
-              span.pre-underline
-              input.underline(type='text')
-              span.post-underline
-            .hint
+  #learn-mode-note-card-model.learn-mode-note-card.row.note-card
+    .col-md-11.note-content
+      .note-text
+        span.pre-underline
+        input.underline(type='text')
+        span.post-underline
+      .hint
 
 mixin view-mode-note-card
-  #view-mode-note-card-model.view-mode-note-card
-    .row.note-text
-      .col-md-11
-        .note-content
-          .highlighted-text
-              .text
-          .hint
+  #view-mode-note-card-model.view-mode-note-card.row.note-card
+      .col-md-11.note-content
+        .note-text              
+        .hint
 
 mixin info-card
-  #info-card-model.info-card
+  #info-card-model.info-card.note-card
 
 mixin result-card
   #result-card-model.result-card
@@ -64,13 +59,10 @@ mixin result-card
       .failed
 
 mixin new-note
-    #new-note-model.new-note
-      .row
-        .col-md-11
-          .note-content
-            .highlighted-text
-              textarea.new-note-entry(type='text')
-            input.new-hint-entry.hint
+  #new-note-model.new-note.note-card.row
+    .col-md-11.note-content
+      textarea.note-text(type='text')
+      input.hint
 
 
 block content

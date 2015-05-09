@@ -5,7 +5,7 @@ ViewModeNoteCardView = function(noteCardController, cardEl) {
   var self = this;
 
   var noteCard = $("#view-mode-note-card-model").clone().removeAttr("id");
-  var noteCardText = noteCard.find(".text");
+  var noteCardText = noteCard.find(".note-text");
   var hint = noteCard.find(".hint");
 
   var submitBinding;

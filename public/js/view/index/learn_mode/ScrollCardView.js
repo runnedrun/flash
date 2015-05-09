@@ -91,7 +91,7 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
   var transposeDownPx = 0
 
   // info card display constants in percentage of view port height
-  var margin = 10;
+  var margin = 5;
 
   // the top bumper needs to be high enough such that the top card is centered when all the way scrolled
   var topBumperMargin = 0
@@ -231,7 +231,6 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
     var newCard = fillCardBelow(cardDataToMoveDown.cardEl, currentBottomCardCursor);
 
     if (newCard) {
-      var newCardHeightPx = getCardHeightPx(newCard);
       var newScrollOffset = getCardOffsetPx(newCard)
       var newScrollPos = currentScroll - newScrollOffset;
 
@@ -246,7 +245,7 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
       cardDatas.push(cardDataToMoveDown);
 
       //adjust the height based on the height specified in the card view
-      cardDataToMoveDown.cardEl.css({"height": newCardHeightPx, "margin-bottom": getMarginPx()});
+      cardDataToMoveDown.cardEl.css({"height": newCard.height + "vh", "margin-bottom":  margin + "vh"});
 
       // rearrange/add the note element to the dom
       bottomBumper.before(cardDataToMoveDown.cardEl);
@@ -273,7 +272,6 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
     var newCard = fillCardAbove(cardDataToMoveUp.cardEl, currentTopCardCursor);
 
     if (newCard) {
-      var newCardHeightPx = getCardHeightPx(newCard);
       var newScrollOffset = getCardOffsetPx(newCard);
       var newScrollPos = currentScroll + newScrollOffset;
 
@@ -287,7 +285,7 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
       cardDatas.unshift(cardDataToMoveUp);
 
 //      adjust the height based on the height specified in the card view
-      cardDataToMoveUp.cardEl.css({"height": newCardHeightPx, "margin-bottom": getMarginPx()});
+      cardDataToMoveUp.cardEl.css({"height": newCard.height + "vh", "margin-bottom": margin + "vh"});
 
       // rearrange/ add the note elements to the dom
       topBumper.after(cardDataToMoveUp.cardEl);

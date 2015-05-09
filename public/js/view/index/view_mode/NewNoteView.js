@@ -1,8 +1,8 @@
 NewNoteView = function(newNoteController, cardEl, onCreate) {
   var self = this;
   var newNoteCard = $("#new-note-model").clone().removeAttr("id");
-  var noteEntry = newNoteCard.find(".new-note-entry");
-  var hintEntry = newNoteCard.find(".new-hint-entry");
+  var noteEntry = newNoteCard.find(".note-text");
+  var hintEntry = newNoteCard.find(".hint");
   var createBinding;
 
   function create() {

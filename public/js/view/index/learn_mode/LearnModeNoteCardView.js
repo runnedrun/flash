@@ -25,9 +25,6 @@ LearnModeNoteCardView = function(noteCardController, cardEl, onComplete) {
   var postUnderline  = noteCard.find('.post-underline');
   var hint = noteCard.find('.hint');
 
-  var challenge = noteCard.find('.challenge');
-  var result = noteCard.find('.result');
-
   var submitBinding;
 
   function submitNote() {
