@@ -37,12 +37,39 @@ NoteManager = new function() {
     createNote: function(content, hint, callback) {
       return $.post(
         '/note',
-        {
-          content: content,
-          hint: hint
+        { note: {
+            highlight: content,
+            hint: hint
+          }
         },
         function(data) {
-          callback(data.note)
+          callback(data)
+        }
+      );
+    },
+
+    updateNote: function(content, hint, id, callback) {
+      return $.post(
+        '/note/update',
+        {
+          highlight: content,
+          hint: hint,
+          id: id
+        },
+        function(data) {
+          callback(data)
+        }
+      );
+    },
+
+    deleteNote: function(id, callback) {
+      return $.post(
+        '/note/delete',
+        {
+          id: id
+        },
+        function(data) {
+          callback(data)
         }
       );
     }
@@ -64,8 +91,24 @@ NoteManager = new function() {
     return { "note.new": events };
   }
 
-  function updateNote(data) {
-    console.log("updating note");
+  this.updateNote = function(content, hint, noteId) {
+    var updateDeferred = $.Deferred();
+    API.updateNote(content, hint, noteId, function(resp) {
+      createNotesAndFireEvents([resp.note], self.Filter.all);
+      updateDeferred.resolve(resp.note);
+    })
+
+    return updateDeferred.promise();
+  }
+
+  this.deleteNote = function(noteId) {
+    var updateDeferred = $.Deferred();
+    API.deleteNote(noteId, function(resp) {
+      Fire.event("note.delete", {note: {id: noteId}});
+      updateDeferred.resolve();
+    })
+
+    return updateDeferred.promise();
   }
 
   this.getNotes = function() {
@@ -92,8 +135,10 @@ NoteManager = new function() {
   this.createNote = function(content, hint) {
     var createDeferred = $.Deferred();
     API.createNote(content,hint, function(resp) {
-      var notes = createNotesAndFireEvents([resp.note], self.Filter.all);
-      createDeferred.resolve(note);
-    })
+      createNotesAndFireEvents([resp.note], self.Filter.all);
+      createDeferred.resolve(resp.note);
+    });
+
+    return createDeferred.promise()
   }
 }();

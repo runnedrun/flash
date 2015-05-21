@@ -35,7 +35,7 @@ block javascripts
   script(src='/js/IndexMain.js')
 
 mixin learn-mode-note-card
-  #learn-mode-note-card-model.learn-mode-note-card.row.note-card
+  #learn-mode-note-card-model.learn-mode.row.note-card
     .col-md-11.note-content
       .note-text
         span.pre-underline
@@ -44,10 +44,14 @@ mixin learn-mode-note-card
       .hint
 
 mixin view-mode-note-card
-  #view-mode-note-card-model.view-mode-note-card.row.note-card
+  #view-mode-note-card-model.view-mode.row.note-card
       .col-md-11.note-content
-        .note-text              
-        .hint
+        textarea.update.note-text(type='text')
+        .static.note-text              
+        .static.hint
+        input.update.hint(placeholder='create a new hint')
+      .col-md-1.delete-button
+        span.glyphicon.glyphicon-trash.pull-right.delete-button
 
 mixin info-card
   #info-card-model.info-card.note-card
@@ -61,8 +65,8 @@ mixin result-card
 mixin new-note
   #new-note-model.new-note.note-card.row
     .col-md-11.note-content
-      textarea.note-text(type='text')
-      input.hint
+      textarea.note-text(type='text', placeholder='create a new note')
+      input.hint(placeholder='create a new hint')
 
 
 block content

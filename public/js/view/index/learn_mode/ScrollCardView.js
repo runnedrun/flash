@@ -144,14 +144,14 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
       var cardEl = cardData.cardEl;
       var cursor = card && card.getCursor();
       var newCardBelow = fillCardBelow(cardEl, cursor);
-      var newCardBelowCursor = newCardBelow && newCardBelow.cursor;
+      var newCardBelowCursor = newCardBelow && newCardBelow.getCursor();
       newCardCursors.push(newCardBelowCursor);
     })
 
     var cardDatasToCheck = cardDatas.slice(1, cardDatas.length);
-    var cardCursorsToCheck = cardDatasToCheck.map(function(cardData) { cardData.card && cardData.card.getCursor() });
+    var cardCursorsToCheck = cardDatasToCheck.map(function(cardData) { return cardData.card && cardData.card.getCursor() });
 
-    if (cardCursorsToCheck !== newCardCursors) {
+    if (!Util.arraysEqual(cardCursorsToCheck, newCardCursors)) {
       // destroy all the cards except for the first cards, which we're using as an "anchor", based off which we
       // will render all new cards
       $.each(cardDatasToCheck, function(i, cardData) {
@@ -194,23 +194,31 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
 
     if (lessThanOneOffscreenTop) {
       if (offScreenBottomCardToMove) {
-        cardToAddToTop = offScreenBottomCardToMove;
+        newCardTop = addCardToTop(offScreenBottomCardToMove);
       } else {
-        cardToAddToTop = generateCardData();
+        newCardTop = addCardToTop(generateCardData());
       }
-      newCardTop = addCardToTop(cardToAddToTop)
     }
 
     if (lessThanOneOffscreenBottom) {
       if (offScreenTopCardToMove) {
-        cardToAddToBottom = offScreenTopCardToMove;
+        var currentScroll = parentContainer.scrollTop();
+        var newScrollOffset = getCardOffsetPx(offScreenTopCardToMove.card);
+
+        newCardBottom = addCardToBottom(offScreenTopCardToMove);
+
+        transposeDownPx += newScrollOffset;
+        var newScrollPos = currentScroll - newScrollOffset;
+
+        // scroll to compensate for the change in scroll which occurred when the old top card was removed.
+
+        newCardBottom && parentContainer.scrollTop(newScrollPos);
       } else {
-        cardToAddToBottom = generateCardData();
+        newCardBottom = addCardToBottom(generateCardData());
       }
-      newCardBottom = addCardToBottom(cardToAddToBottom);
     }
 
-    // if we had to new cards, now we should check again to see if we should add new cards again.
+    // if we had add to new cards, now we should check again to see if we should add new cards again.
     if (newCardTop || newCardBottom) {
       addNewCardsIfNecessary(noCardsToStart);
     } else {
@@ -224,16 +232,12 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
   }
 
   function addCardToBottom(cardDataToMoveDown) {
-    var currentScroll = parentContainer.scrollTop();
     var currentBottomCardData = cardDatas[cardDatas.length - 1];
     var currentBottomCardCursor = currentBottomCardData && currentBottomCardData.card && currentBottomCardData.card.getCursor();
 
     var newCard = fillCardBelow(cardDataToMoveDown.cardEl, currentBottomCardCursor);
 
     if (newCard) {
-      var newScrollOffset = getCardOffsetPx(newCard)
-      var newScrollPos = currentScroll - newScrollOffset;
-
       cardDataToMoveDown.card && cardDataToMoveDown.card.hide();
       cardDataToMoveDown.card && enqueueCardDestroy(cardDataToMoveDown.card);
 
@@ -252,11 +256,6 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
 
       // render the new note
       newCard.render();
-
-      transposeDownPx += newScrollOffset;
-
-      // scroll to compensate for the element changes, and focus change from rendering.
-      parentContainer.scrollTop(newScrollPos);
     } else if(currentBottomCardData) {
       bottomBumper.css({"height": getMarginHeightToCenterCard(currentBottomCardData.card)})
     }
@@ -440,6 +439,10 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
   }
 
   self.refreshCards = function() {
+    $.each(cardDatas, function(i, cardData) {
+      cardData.card.updateContent && cardData.card.updateContent();
+    })
+
     destroyOutOfDateCards();
     addNewCardsIfNecessary();
   }

@@ -33,13 +33,15 @@ exports.index = function(req, res) {
 
   if (filter == 1) {
     // return only the notes for today
-    db.Note.findAll({where: {UserId: req.user.id, nextShow: {lte: new Date()}}, limit: limit, order: ['createdAt']}).then(function(notes) {
-      res.send({notes: notes.concat(fakeNotes)}, 200);
+    db.Note.findAll({where: {UserId: req.user.id, deleted: false, nextShow: {lte: new Date()}}, limit: limit, order: ['createdAt']}).then(function(notes) {
+      res.send({notes: fakeNotes}, 200);
+//      res.send({notes: notes.concat(fakeNotes)}, 200);
 //      res.send({notes: notes}, 200);
     })
   } else {
     // return all the notes
-    db.Note.findAll({where: {UserId: req.user.id}, limit: limit, order: ['createdAt']}).then(function(notes) {
+    db.Note.findAll({where: {UserId: req.user.id}, deleted: false, limit: limit, order: ['createdAt']}).then(function(notes) {
+//        res.send({notes: fakeNotes}, 200);
 //        res.send({notes: notes.concat(fakeNotes)}, 200);
       res.send({notes: notes}, 200);
     })
@@ -48,37 +50,37 @@ exports.index = function(req, res) {
 }
 
 exports.new = function(req, res) {
-    console.log("body is ", req.body)
     var d = new Date();
     var currentTime = d.getTime();
     db.Note.create(_.extend(req.body.note, { nextShow: currentTime, UserId: req.user.id })).then(function(note) {
-        res.send({ id: note.id }, 200)
+        res.send({ note: note, id: note.id }, 200)
     })
 }
 
+function NoteMissingException() {}
 exports.update = function(req, res) {
-    console.log("body is ", req.body);
     db.Note.find({where: {id: req.body.id}})
     .then(function(note) {
         if(note) {
             return note.updateAttributes(req.body)
         } else {
             res.send(404)
+            throw NoteMissingException
         }
     })
     .then(function(note) {
-        res.send(200)
+        res.send({note: note}, 200);
     })
 }
 
 exports.delete = function(req, res) {
-    console.log("body is ", req.body);
     db.Note.find({where: {id: req.body.id}})
     .then(function(note) {
         if(note) {
-            return note.destroy()
+            return note.updateAttributes({deleted: true})
         } else {
             res.send(404)
+          throw NoteMissingException
         }
     })
     .then(function(note) {

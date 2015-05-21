@@ -5,17 +5,63 @@ ViewModeNoteCardView = function(noteCardController, cardEl) {
   var self = this;
 
   var noteCard = $("#view-mode-note-card-model").clone().removeAttr("id");
-  var noteCardText = noteCard.find(".note-text");
-  var hint = noteCard.find(".hint");
+  var text = noteCard.find(".static.note-text");
+  var hint = noteCard.find(".static.hint");
+  var updateText = noteCard.find(".update.note-text");
+  var updateHint = noteCard.find(".update.hint");
+  var deleteButton = noteCard.find(".delete-button");
 
-  var submitBinding;
+  var textFieldSubmitBinding;
+  var hintFieldSubmitBinding;
+
+  function updateNote() {
+    noteCardController.update(updateText.val(), updateHint.val());
+  }
+
+  function renderContent() {
+    var textContent = noteCardController.getText();
+    var hintContent = noteCardController.getHint();
+
+    text.html(textContent);
+    updateText.val(textContent);
+
+    text.show();
+    updateText.hide();
+
+    if (hintContent) {
+      hint.html(hintContent);
+      updateHint.val(hintContent);
+      updateHint.hide();
+      hint.show();
+    } else {
+      hint.hide();
+      updateHint.show();
+    }
+
+    text.click(function() {
+      text.hide();
+      updateText.show();
+      updateText.focus();
+    });
+
+    hint.click(function() {
+      hint.hide();
+      updateHint.show();
+      updateHint.focus();
+    });
+
+    deleteButton.click(function() {
+      console.log("deleteing");
+      noteCardController.delete();
+    })
+  }
 
   self.render = function () {
     cardEl.append(noteCard);
-    noteCardText.html(noteCardController.getText());
-    hint.html(noteCardController.getHint());
+    renderContent();
+    textFieldSubmitBinding = KeyBinding.keydown(KeyCode.enter, updateText, updateNote);
+    hintFieldSubmitBinding = KeyBinding.keydown(KeyCode.enter, updateHint, updateNote);
   }
-
 
   self.shouldSwitchFocus = function(container) { return false };
 
@@ -33,5 +79,9 @@ ViewModeNoteCardView = function(noteCardController, cardEl) {
     return noteCardController.getCursor()
   };
 
-  self.height = 20;
+  self.height = 30;
+
+  self.updateContent = function () {
+    renderContent();
+  }
 }

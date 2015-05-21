@@ -4,15 +4,30 @@
   displayed. Then they return the controller for the next or previous note.
  */
 
-var notes
-
 ViewModeNoteCardsController = function(updateViewModeStatus) {
   var self = this;
-  notes = [];
+  var noteMap = {};
+  var notes = [];
+
+  Respond.toEvent("note.delete", function(data) {
+    delete noteMap[data.note.id];
+    var unsortedNotes = Util.objectValues(noteMap);
+    notes = unsortedNotes.sort(function(note1, note2) {
+      return (note1.id - note2.id)
+    })
+    updateViewModeStatus();
+  })
+
 
   self.addNote = function(note) {
-    notes.push(note);
-    notes.sort(function(note1, note2) {
+    var noteExists = noteMap[note.id];
+    if (noteExists) {
+      Fire.command("note.update", { fields: { note: note }});
+    }
+
+    noteMap[note.id] = note;
+    var unsortedNotes = Util.objectValues(noteMap);
+    notes = unsortedNotes.sort(function(note1, note2) {
       return (note1.id - note2.id)
     })
     updateViewModeStatus();

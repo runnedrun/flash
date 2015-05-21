@@ -10,7 +10,10 @@ NewNoteView = function(newNoteController, cardEl, onCreate) {
     var hintContent = hintEntry.val();
     if (noteContent) {
       console.log("creating new note", noteContent, hintContent);
-      newNoteController.create(noteContent, hintContent);
+      newNoteController.create(noteContent, hintContent).then(function() {
+        noteEntry.val("");
+        hintEntry.val("");
+      })
     }
   }
 
