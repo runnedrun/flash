@@ -56,7 +56,7 @@ html {
   left: 0;
 
   /* Safari 5.1, Chrome 10+ */
-  background: -webkit-linear-gradient(bottom, #1857af 10%, #5279AE 20%, #5279AE 30%, #7392BD 40%, #819DC4 50%, #9DB3D1 60%, #ABBED7 70%, #FAFAFA 79%, #FAFAFA);
+  background: -webkit-linear-gradient(bottom, #1857af 10%, #5279AE 20%, #5279AE 30%, #7392BD 40%, #819DC4 50%, #9DB3D1 60%, #ABBED7 70%, #B6CAE6 79%, #B6CAE6);
 }
 
 .result-card {

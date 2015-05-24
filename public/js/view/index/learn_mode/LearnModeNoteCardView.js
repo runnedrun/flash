@@ -9,14 +9,14 @@
 
   postfix _________ prefix.
 
-  When the user hits enter to submit the challenge the submitted word is passed to the noteCardController, which will
+  When the user hits enter to submit the challenge the submitted word is passed to the challengeController, which will
   evaluate the answer for correctness.
  */
 
-LearnModeNoteCardView = function(noteCardController, cardEl, onComplete) {
+ChallengeCardView = function(challengeController, cardEl, onComplete) {
   var self = this;
 
-  var noteChallenge = noteCardController.generateChallenge()
+  var noteChallenge = challengeController.generateChallenge()
   var noteCard = $("#learn-mode-note-card-model").clone().removeAttr("id");
   cardEl.html(noteCard);
 
@@ -30,7 +30,7 @@ LearnModeNoteCardView = function(noteCardController, cardEl, onComplete) {
   function submitNote() {
     var missingWord = underline.val();
     if(missingWord) {
-      noteCardController.submitNote(missingWord);
+      challengeController.submitNote(missingWord);
       onComplete();
     }
 
@@ -45,7 +45,7 @@ LearnModeNoteCardView = function(noteCardController, cardEl, onComplete) {
     postUnderline.html(noteChallenge.postfix);
     preUnderline.html(noteChallenge.prefix);
 
-    hint.html(noteCardController.hint);
+    hint.html(challengeController.hint);
   }
 
   self.shouldSwitchFocus = function(container) {

@@ -51,7 +51,6 @@ ViewModeNoteCardView = function(noteCardController, cardEl) {
     });
 
     deleteButton.click(function() {
-      console.log("deleteing");
       noteCardController.delete();
     })
   }

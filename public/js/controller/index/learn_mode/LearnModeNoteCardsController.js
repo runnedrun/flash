@@ -8,7 +8,7 @@
   successful and failed notes.
  */
 
-LearnModeNoteCardsController = function(refreshStatus) {
+ChallengesController = function(refreshStatus) {
   var self = this;
   var uniqueNotes = {};
   var allFailedNotes = {};
@@ -19,10 +19,9 @@ LearnModeNoteCardsController = function(refreshStatus) {
   var attemptedNotes = [];
   var resultsShown = false;
 
-  self.addNote = function(note) {
+  self.addChallenge = function(note) {
     notes.push(note);
     uniqueNotes[note.id] = note;
-
     refreshExternalStatus();
   }
 
@@ -43,7 +42,7 @@ LearnModeNoteCardsController = function(refreshStatus) {
     notes.splice(notes.indexOf(note), 1);
     if (note) {
       notesDisplayed += 1;
-      return new LearnModeNoteCardController(note, submitNoteScore);
+      return new ChallengeController(note, submitNoteScore);
     }
   }
 
@@ -59,7 +58,7 @@ LearnModeNoteCardsController = function(refreshStatus) {
   function submitNoteScore(note, score) {
     if (attemptedNotes.indexOf(note) < 0) {
       attemptedNotes.push(note);
-      NoteManager.solveNote(note, score);
+      NoteManager.solveChallenge(note, score);
     }
 
     notesAttempted += 1;

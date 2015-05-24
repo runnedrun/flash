@@ -9,7 +9,7 @@ ScrollCardController = function(nextNoteCardController, getResultsController) {
       return new ResultsView(resultsController, cardEl);
     } else {
       var noteCardController = nextNoteCardController();
-      return noteCardController && new LearnModeNoteCardView(noteCardController, cardEl, scrollForwardOneNote)
+      return noteCardController && new ChallengeCardView(noteCardController, cardEl, scrollForwardOneNote)
     }
   }
 

@@ -26,3 +26,7 @@ context.getUser= function(conditions) {
 context.getNote = function(conditions) {
     context.db.Note.find({where: conditions, include: [ context.db.User ]}).then(function(note) { context.note = note; })
 }
+
+context.getChallenge = function(conditions) {
+  context.db.Challenge.find({where: conditions, include: [ context.db.User, context.db.Note ]}).then(function(note) { context.challenge = note; })
+}

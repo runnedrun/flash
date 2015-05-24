@@ -1,5 +1,5 @@
 /*
- This controller keeps state for the note card view. It tracks the missing
+ This controller keeps state for the challenge view. It tracks the missing
  word, then evaluates a score based on the result submitted. The generateChallenge method
  returns a challenge object, which contains a postfix, prefix and missing work property. This is used by the view
  to render the challenge.
@@ -10,23 +10,23 @@
  the note whose challenge was solved.
  */
 
-LearnModeNoteCardController = function(note, submitNoteScore) {
+ChallengeController = function(challenge, submitNoteScore) {
   var missingWord;
   var self = this;
 
   self.submitNote = function(word){
     var q = evaluate(word);
-    submitNoteScore(note, q);
+    submitNoteScore(challenge, q);
   };
 
   self.generateChallenge = function() {
-    var highlight = (note && note.highlight) || "";
-    var challenge = removeWord(highlight);
+    var challengeText = (challenge && challenge.text) || "";
+    var challengePrompt = removeWord(challengeText);
 
-    return challenge;
+    return challengePrompt;
   };
 
-  self.hint = note.hint;
+  self.hint = challenge.hint;
 
   function evaluate(answer){
     var punctuation = new RegExp('[\.,-\/#!$%\^&\*;:{}=\-_`~()]', 'g');

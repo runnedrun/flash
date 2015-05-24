@@ -5,6 +5,7 @@
 var express = require('express')
     , user = require('./routes/user')
     , notes = require('./routes/notes')
+    , challenges = require('./routes/challenges')
     , resourceDownloader = require('./routes/resourceDownloader')
     , flash = require('./routes/flash')
     , http = require('http')
@@ -111,7 +112,10 @@ app.get('/notes', notes.index);
 app.post('/note', notes.new);
 app.post('/note/delete', notes.delete);
 app.post('/note/update', notes.update);
-app.post('/note/solve', notes.solve);
+app.get('/challenges', challenges.index);
+app.post('/challenges', challenges.new);
+app.post('/challenge/solve', challenges.solve);
+app.post('/challenges/delete', challenges.delete);
 app.get('/user/sign_in', user.signInPage);
 app.post('/user/sign_in', user.signInAction);
 app.post('/user/sign_up', user.signUpAction);

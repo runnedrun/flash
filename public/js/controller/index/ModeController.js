@@ -9,7 +9,7 @@
 
 ModeController = function() {
   var self = this;
-  var mode = "view";
+  var mode = "learn";
 
   var learnModeNotesLoaded = false;
   var viewModeNotesLoaded = false;
@@ -18,13 +18,13 @@ ModeController = function() {
 
   // passing 2 indicates that the scroll view should start centered on the last card;
   var scrollCardView = new ScrollCardView(renderCardAbove, renderCardBelow, 1);
-  var learnModeNoteCardsController = new LearnModeNoteCardsController(updateLearnModeStatus);
+  var learnModeNoteCardsController = new ChallengesController(updateLearnModeStatus);
   var viewModeNoteCardsController = new ViewModeNoteCardsController(updateViewModeStatus);
   var backgroundView = new BackgroundView();
   var statusView = new StatusView();
   var notesLoadingView = new NotesLoadingView(switchToViewMode);
 
-  function updateViewModeStatus(numberComplete, total) {
+  function updateViewModeStatus() {
     if (mode == "view"){
       scrollCardView.refreshCards();
     }
@@ -47,13 +47,12 @@ ModeController = function() {
 
   function addNote(e) {
     var newNote = e.note;
-    var filter = e.filter;
+    viewModeNoteCardsController.addNote(newNote);
+  }
 
-    if (filter === NoteManager.Filter.today) {
-      learnModeNoteCardsController.addNote(newNote);
-    } else {
-      viewModeNoteCardsController.addNote(newNote);
-    }
+  function addChallenge(e) {
+    var newChallenge = e.challenge;
+    learnModeNoteCardsController.addChallenge(newChallenge);
   }
 
   function renderCardAbove(cardEl, cursor) {
@@ -65,7 +64,7 @@ ModeController = function() {
         return new ResultsView(resultsController, cardEl, switchToViewMode);
       } else {
         var noteCardController = learnModeNoteCardsController.nextNoteCardController();
-        return noteCardController && new LearnModeNoteCardView(noteCardController, cardEl, scrollCardView.scrollToPrevious)
+        return noteCardController && new ChallengeCardView(noteCardController, cardEl, scrollCardView.scrollToPrevious)
       }
     } else {
       var noteCardController = viewModeNoteCardsController.nextNoteCardController(cursor);
@@ -73,6 +72,7 @@ ModeController = function() {
       if (noteCardController) {
         return new ViewModeNoteCardView(noteCardController, cardEl);
       } else if(cursor !== Number.MAX_VALUE) {
+        // if we are not already showing the new note card (cursor == max value) then show it
         return new NewNoteView(new NewNoteController(), cardEl, function(){
           console.log("createComplete!");
         });
@@ -94,19 +94,23 @@ ModeController = function() {
     backgroundView.viewMode();
     scrollCardView.refreshCards();
     // we need to add 1 to account for the new-note card
-    scrollCardView.scrollNCards(-1 * viewModeNoteCardsController.noteCount() + 1);
+//    scrollCardView.scrollNCards(-1 * viewModeNoteCardsController.noteCount() + 1);
   }
 
   Respond.toEvent("note.new", addNote);
+  Respond.toEvent("challenge.new", addChallenge);
   notesView.render(scrollCardView);
 
-  setTimeout(function() {
-    if (!learnModeNotesLoaded && viewModeNotesLoaded) {
-      notesLoadingView.displayNoLearnModeNotesLoaded();
-    } else if(!learnModeNotesLoaded && !viewModeNotesLoaded) {
-      notesLoadingView.displayNoNotesLoaded();
-    }
-  }, 2000);
+//  switchToViewMode();
+
+//  setTimeout(function() {
+//    if (!learnModeNotesLoaded && viewModeNotesLoaded) {
+//      notesLoadingView.displayNoLearnModeNotesLoaded();
+//    } else if(!learnModeNotesLoaded && !viewModeNotesLoaded) {
+//      notesLoadingView.displayNoNotesLoaded();
+//    }
+//  }, 2000);
 
   NoteManager.getNotes();
+  NoteManager.getChallenges();
 }

@@ -1,7 +1,6 @@
 module.exports = function(sequelize, DataTypes) {
     var Note = sequelize.define('Note', {
-        highlight: DataTypes.STRING,
-        hint: DataTypes.STRING,
+        text: DataTypes.STRING,
         scrollX: DataTypes.INTEGER,
         scrollY: DataTypes.INTEGER,
         clientSideId: DataTypes.STRING,
@@ -10,21 +9,11 @@ module.exports = function(sequelize, DataTypes) {
         archiveUrl: DataTypes.STRING,
         originalUrl: DataTypes.STRING,
         title: DataTypes.STRING,
-
-        EF: DataTypes.INTEGER,
-        nextShow: DataTypes.DATE,
-        lastShow: DataTypes.DATE,
-        interval: DataTypes.INTEGER,
-        numberShows: DataTypes.INTEGER
-
+        deleted: DataTypes.BOOLEAN
     }, {
         classMethods: {
             associate: function(models) {
                 Note.belongsTo(models.User);
-            },
-            setEasinessFactorFromQ: function(q) {
-                this.easinessFactor = q + 1 + 2;
-                this.save();
             }
         }
     })

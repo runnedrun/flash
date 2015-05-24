@@ -11,35 +11,20 @@ NoteManager = new function() {
   }
 
   var API = {
-    getNotes: function(filter, callback) {
+    getNotes: function(callback) {
       return $.get(
         '/notes',
-        { filter: filter },
         function(data) {
           callback(data)
         }
       );
     },
 
-    solveNote: function(note, q, callback) {
-      return $.post(
-        '/note/solve',
-        {
-          q: q,
-          id: note.id
-        },
-        function(data) {
-          callback(data)
-        }
-      );
-    },
-
-    createNote: function(content, hint, callback) {
+    createNote: function(content, callback) {
       return $.post(
         '/note',
         { note: {
-            highlight: content,
-            hint: hint
+            text: content
           }
         },
         function(data) {
@@ -48,12 +33,11 @@ NoteManager = new function() {
       );
     },
 
-    updateNote: function(content, hint, id, callback) {
+    updateNote: function(content, id, callback) {
       return $.post(
         '/note/update',
         {
-          highlight: content,
-          hint: hint,
+          text: content,
           id: id
         },
         function(data) {
@@ -72,18 +56,66 @@ NoteManager = new function() {
           callback(data)
         }
       );
+    },
+
+    // challenge calls
+
+    createChallenge: function(content, hint, callback) {
+      return $.post(
+        '/challenge',
+        { challenge: {
+          challenge: content,
+          hint: hint
+        }
+        },
+        function(data) {
+          callback(data)
+        }
+      );
+    },
+
+    getChallenges: function(callback) {
+      return $.get(
+        '/challenges',
+        function(data) {
+          callback(data)
+        }
+      );
+    },
+
+    deleteChallenge: function(id, callback) {
+      return $.post(
+        '/challenge/delete',
+        {
+          id: id
+        },
+        function(data) {
+          callback(data)
+        }
+      );
+    },
+
+
+    solveChallenge: function(note, q, callback) {
+      return $.post(
+        '/note/solve',
+        {
+          q: q,
+          id: note.id
+        },
+        function(data) {
+          callback(data)
+        }
+      );
     }
+
   };
 
-  function formatNoteFields(note) {
-    note.id = Number(note.id)
-    return note
-  }
 
-  function createNotesAndFireEvents(notes, filter) {
+  function createNotesAndFireEvents(notes) {
     var events = $.map(notes, function(note, i) {
       var newNote = new Note(note);
-      var eventData = { note: formatNoteFields(newNote), filter: filter };
+      var eventData = { note: newNote };
       Fire.event("note.new", eventData);
       return eventData;
     });
@@ -91,10 +123,31 @@ NoteManager = new function() {
     return { "note.new": events };
   }
 
-  this.updateNote = function(content, hint, noteId) {
+  function createChallengesAndFireEvents(challenges) {
+    var events = $.map(challenges, function(challenge) {
+      var newChallenge = new Challenge(challenge);
+      var eventData = { challenge: newChallenge };
+      Fire.event("challenge.new", eventData);
+      return eventData;
+    });
+
+    return { "challenge.new": events };
+  }
+
+  this.createNote = function(content, hint) {
+    var createDeferred = $.Deferred();
+    API.createNote(content, function(resp) {
+      createNotesAndFireEvents([resp.note]);
+      createDeferred.resolve(resp.note);
+    });
+
+    return createDeferred.promise()
+  }
+
+  this.updateNote = function(content, noteId) {
     var updateDeferred = $.Deferred();
-    API.updateNote(content, hint, noteId, function(resp) {
-      createNotesAndFireEvents([resp.note], self.Filter.all);
+    API.updateNote(content, noteId, function(resp) {
+      createNotesAndFireEvents([resp.note]);
       updateDeferred.resolve(resp.note);
     })
 
@@ -102,43 +155,56 @@ NoteManager = new function() {
   }
 
   this.deleteNote = function(noteId) {
-    var updateDeferred = $.Deferred();
+    var deferred = $.Deferred();
     API.deleteNote(noteId, function(resp) {
       Fire.event("note.delete", {note: {id: noteId}});
-      updateDeferred.resolve();
+      deferred.resolve();
     })
 
-    return updateDeferred.promise();
+    return deferred.promise();
   }
 
   this.getNotes = function() {
-    var todayDeferred = $.Deferred();
-    var allDeferred = $.Deferred();
-
-    API.getNotes(self.Filter.today, function(resp) {
-      var events = createNotesAndFireEvents(resp.notes, self.Filter.today);
-      todayDeferred.resolve(events);
+    var deferred = $.Deferred();
+    API.getNotes(function(resp) {
+      var events = createNotesAndFireEvents(resp.notes);
+      deferred.resolve(events);
     });
 
-    API.getNotes(self.Filter.all, function(resp) {
-      var events = createNotesAndFireEvents(resp.notes, self.Filter.all);
-      allDeferred.resolve(events);
-    });
-
-    return $.when(todayDeferred.promise(), allDeferred.promise());
+    return deferred.promise();
   }
 
-  this.solveNote = function(note, q) {
-    API.solveNote(note, q, updateNote);
+  this.solveChallenge = function(note, q) {
+    API.solveChallenge(note, q);
   }
 
-  this.createNote = function(content, hint) {
-    var createDeferred = $.Deferred();
-    API.createNote(content,hint, function(resp) {
-      createNotesAndFireEvents([resp.note], self.Filter.all);
-      createDeferred.resolve(resp.note);
+  this.createChallenge = function(content, hint) {
+    var createChallenge = $.Deferred();
+    API.createChallenge(content, hint, function(resp) {
+      createChallengesAndFireEvents([resp.challenge]);
+      createChallenge.resolve(resp.challenge);
     });
 
-    return createDeferred.promise()
+    return createChallenge.promise()
+  }
+
+  this.deleteChallenge = function(noteId) {
+    var deferred = $.Deferred();
+    API.deleteChallenge(noteId, function(resp) {
+      Fire.event("challenge.delete", {challenge: {id: noteId}});
+      deferred.resolve();
+    })
+
+    return deferred.promise();
+  }
+
+  this.getChallenges = function() {
+    var deferred = $.Deferred();
+    API.getChallenges(function(resp) {
+      var events = createChallengesAndFireEvents(resp.challenges);
+      deferred.resolve(events);
+    });
+
+    return deferred.promise();
   }
 }();

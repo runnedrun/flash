@@ -15,7 +15,6 @@ function NotesLoadingView(switchToViewMode) {
   }
 
   this.hide = function() {
-
     messageDisplay.hide();
   }
 

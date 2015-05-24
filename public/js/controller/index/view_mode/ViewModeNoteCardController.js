@@ -6,7 +6,7 @@ ViewModeNoteCardController = function(note) {
   }
 
   self.getText = function() {
-    return note.highlight
+    return note.text
   }
 
   self.getId = function() {
