@@ -10,7 +10,7 @@
  the note whose challenge was solved.
  */
 
-ChallengeController = function(challenge, submitNoteScore) {
+ChallengeController = function(challenge, submitNoteScore, noLongerDisplayed) {
   var missingWord;
   var self = this;
 
@@ -25,6 +25,10 @@ ChallengeController = function(challenge, submitNoteScore) {
 
     return challengePrompt;
   };
+
+  self.noLongerDisplayed = function() {
+    noLongerDisplayed(challenge)
+  }
 
   self.hint = challenge.hint;
 

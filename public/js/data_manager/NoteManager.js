@@ -123,15 +123,15 @@ NoteManager = new function() {
     return { "note.new": events };
   }
 
-  function createChallengesAndFireEvents(challenges) {
+  function createChallengesAndFireEvents(challenges, dontFireEvents) {
     var events = $.map(challenges, function(challenge) {
       var newChallenge = new Challenge(challenge);
       var eventData = { challenge: newChallenge };
-      Fire.event("challenge.new", eventData);
+      dontFireEvents && Fire.event("challenge.new", eventData);
       return eventData;
     });
 
-    return { "challenge.new": events };
+    return { challenges: events };
   }
 
   this.createNote = function(content, hint) {
@@ -198,10 +198,10 @@ NoteManager = new function() {
     return deferred.promise();
   }
 
-  this.getChallenges = function() {
+  this.getChallenges = function(dontFireEvents) {
     var deferred = $.Deferred();
     API.getChallenges(function(resp) {
-      var events = createChallengesAndFireEvents(resp.challenges);
+      var events = createChallengesAndFireEvents(resp.challenges, dontFireEvents);
       deferred.resolve(events);
     });
 

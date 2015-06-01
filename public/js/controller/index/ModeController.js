@@ -19,9 +19,9 @@ ModeController = function() {
   // passing 2 indicates that the scroll view should start centered on the last card;
   var scrollCardView = new ScrollCardView(renderCardAbove, renderCardBelow, 1);
   var learnModeNoteCardsController = new ChallengesController(updateLearnModeStatus);
-  var viewModeNoteCardsController = new ViewModeNoteCardsController(updateViewModeStatus);
+  var viewModeNoteCardsController = new NotesController(updateViewModeStatus);
   var backgroundView = new BackgroundView();
-  var statusView = new StatusView();
+  var statusView = new StatusView(switchToLearnMode, switchToViewMode);
   var notesLoadingView = new NotesLoadingView(switchToViewMode);
 
   function updateViewModeStatus() {
@@ -70,7 +70,7 @@ ModeController = function() {
       var noteCardController = viewModeNoteCardsController.nextNoteCardController(cursor);
 
       if (noteCardController) {
-        return new ViewModeNoteCardView(noteCardController, cardEl);
+        return new NoteCardView(noteCardController, cardEl);
       } else if(cursor !== Number.MAX_VALUE) {
         // if we are not already showing the new note card (cursor == max value) then show it
         return new NewNoteView(new NewNoteController(), cardEl, function(){
@@ -83,16 +83,26 @@ ModeController = function() {
   function renderCardBelow(cardEl, cursor) {
     if (mode == "view") {
       var noteCardController = viewModeNoteCardsController.previousNoteCardController(cursor);
-      return noteCardController && new ViewModeNoteCardView(noteCardController, cardEl);
+      return noteCardController && new NoteCardView(noteCardController, cardEl);
     }
   }
 
 
   function switchToViewMode() {
     mode = "view";
-    statusView.hide();
+    statusView.hideChallengeCount();
     backgroundView.viewMode();
     scrollCardView.refreshCards();
+    // we need to add 1 to account for the new-note card
+//    scrollCardView.scrollNCards(-1 * viewModeNoteCardsController.noteCount() + 1);
+  }
+
+  function switchToLearnMode() {
+    mode = "learn";
+    statusView.showChallengeCount();
+    backgroundView.learnMode();
+    scrollCardView.refreshCards();
+
     // we need to add 1 to account for the new-note card
 //    scrollCardView.scrollNCards(-1 * viewModeNoteCardsController.noteCount() + 1);
   }
@@ -111,6 +121,15 @@ ModeController = function() {
 //    }
 //  }, 2000);
 
+  function handleFirstLoadingOfChallenges(challengeEvents) {
+    $.each(challengeEvents, function(i, challenge) {
+      addChallenge(challenge)
+    })
+    scrollCardView.scrollNCards(challengeEvents.length);
+  }
+
   NoteManager.getNotes();
-  NoteManager.getChallenges();
+  NoteManager.getChallenges().then(function(e) {
+    handleFirstLoadingOfChallenges(e.challenges)
+  })
 }

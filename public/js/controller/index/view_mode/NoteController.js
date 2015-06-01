@@ -1,4 +1,4 @@
-ViewModeNoteCardController = function(note) {
+NoteController = function(note) {
   var self = this;
 
   self.getCursor = function() {

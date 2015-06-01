@@ -1,7 +1,7 @@
 // All note cards must implement hide as well as destroy. Hide is used while the page is scrolling,
 // as remove during a scroll stops momentum. Once scrolling is complete, destroy is called.
 
-ViewModeNoteCardView = function(noteCardController, cardEl) {
+NoteCardView = function(noteCardController, cardEl) {
   var self = this;
 
   var noteCard = $("#view-mode-note-card-model").clone().removeAttr("id");

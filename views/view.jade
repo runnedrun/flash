@@ -1,7 +1,7 @@
 extends layout
 
 block stylesheets
-  link(rel='stylesheet', href='//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css')
+  link(rel='stylesheet', href='//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css')
   link(rel='stylesheet', href='/stylesheets/flashcard.css')
 
 block javascripts
@@ -15,18 +15,13 @@ block javascripts
   script(src='/js/view/index/learn_mode/ScrollCardView.js')
   script(src='/js/view/index/learn_mode/ChallengeCardView.js')
   script(src='/js/view/index/learn_mode/ResultsView.js')
+  script(src='/js/view/index/learn_mode/StatusView.js')
   script(src='/js/view/index/view_mode/NoteCardView.js')
   script(src='/js/view/index/view_mode/NewNoteView.js')
   script(src='/js/view/index/NotesView.js')
-  script(src='/js/view/index/BackgroundView.js')
-  script(src='/js/view/index/NotesLoadingView.js')
-  script(src='/js/view/index/StatusView.js')
-  script(src='/js/controller/index/learn_mode/BackgroundController.js')
-  script(src='/js/controller/index/learn_mode/ChallengesController.js')
-  script(src='/js/controller/index/learn_mode/ChallengeController.js')
   script(src='/js/controller/index/view_mode/NoteController.js')
   script(src='/js/controller/index/view_mode/NotesController.js')
-  script(src='/js/controller/index/view_mode/NewNoteController.js')
+  script(src='/js/controller/index/view_mode/NewNoteController.js')  
 
   script(src='/js/controller/index/ModeController.js')
   script(src='/js/IndexMain.js')
@@ -73,9 +68,9 @@ block content
     .row
       .col-md-2
         .status-display
-          span.challenge-count
-          span.mode-toggle.toggle-view-mode.glyphicon.glyphicon-list
-          span.mode-toggle.toggle-learn-mode.glyphicon.glyphicon-education
+            span.challenge-count
+            span.toggle-view-mode.glyphicon.glyphicon-list
+            span.toggle-learn-mode.glyphicon.glyphicon-education
 
       .col-md-8.col-md-offset-1.card-container
           .notes-loading-display Loading notes...

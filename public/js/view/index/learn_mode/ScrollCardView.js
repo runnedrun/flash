@@ -33,6 +33,7 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
   // we need to wait until after scrolling is complete to completely destroy old card content, otherwise, we kill
   // scroll momentum.
   function enqueueCardDestroy(card) {
+    card.hide && card.hide();
     cardsToDestroy.push(card);
     triggerCardDestroyCheck();
   }
@@ -127,6 +128,7 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
   }
 
   function destroyCardData(cardData) {
+    cardData.card && enqueueCardDestroy(cardData.card);
     var cardIndex = cardDatas.indexOf(cardData);
     (cardIndex > -1) && cardDatas.splice(cardIndex, 1);
     cardData.cardEl.remove();
@@ -148,21 +150,24 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
       newCardCursors.push(newCardBelowCursor);
     })
 
-    var cardDatasToCheck = cardDatas.slice(1, cardDatas.length);
-    var cardCursorsToCheck = cardDatasToCheck.map(function(cardData) { return cardData.card && cardData.card.getCursor() });
+    var cardCursorsToCheck = cardDatas.slice(0, cardDatas.length - 1).map(function(cardData) { return cardData.card && cardData.card.getCursor() });
 
+    var firstCardCursor;
     if (!Util.arraysEqual(cardCursorsToCheck, newCardCursors)) {
-      // destroy all the cards except for the first cards, which we're using as an "anchor", based off which we
-      // will render all new cards
-      $.each(cardDatasToCheck, function(i, cardData) {
-        destroyCardData(cardData);
+
+      // destroy all the cards, then pass back the cursor for the first card. We'll use that cursor + 1
+      // as the anchor for the new card list.
+      firstCardCursor = cardDatas[0].card.getCursor();
+      var cardDatasCopy = cardDatas.slice(0, cardDatas.length);
+      $.each(cardDatas, function(i) {
+        destroyCardData(cardDatasCopy[i]);
       })
     }
+
+    return firstCardCursor
   }
 
-  function addNewCardsIfNecessary(noCardsToStart) {
-    var noCardsToStart = noCardsToStart || (cardDatas.length == 0);
-
+  function addNewCardsIfNecessary(startingCursor, onlyFillCardsBelow) {
     var viewPortHeight = parentContainer.height();
 
     var offscreenCardsTop = [];
@@ -187,12 +192,10 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
     var offScreenTopCardToMove = offscreenCardsTop[0];
     var offScreenBottomCardToMove = offscreenCardsBottom[offscreenCardsBottom.length - 1];
 
-    var cardToAddToTop;
-    var cardToAddToBottom;
     var newCardTop;
     var newCardBottom;
 
-    if (lessThanOneOffscreenTop) {
+    if (lessThanOneOffscreenTop && !onlyFillCardsBelow) {
       if (offScreenBottomCardToMove) {
         newCardTop = addCardToTop(offScreenBottomCardToMove);
       } else {
@@ -205,7 +208,7 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
         var currentScroll = parentContainer.scrollTop();
         var newScrollOffset = getCardOffsetPx(offScreenTopCardToMove.card);
 
-        newCardBottom = addCardToBottom(offScreenTopCardToMove);
+        newCardBottom = addCardToBottom(offScreenTopCardToMove, startingCursor);
 
         transposeDownPx += newScrollOffset;
         var newScrollPos = currentScroll - newScrollOffset;
@@ -214,31 +217,25 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
 
         newCardBottom && parentContainer.scrollTop(newScrollPos);
       } else {
-        newCardBottom = addCardToBottom(generateCardData());
+        newCardBottom = addCardToBottom(generateCardData(), startingCursor);
       }
     }
 
     // if we had add to new cards, now we should check again to see if we should add new cards again.
     if (newCardTop || newCardBottom) {
-      addNewCardsIfNecessary(noCardsToStart);
+      addNewCardsIfNecessary();
     } else {
-      if (noCardsToStart) {
-        (centerOn > 0) && centerCard(cardDatas[0], switchFocusIfNecessary);
-        (centerOn < 0) && centerCard(cardDatas[cardDatas.length - 1], switchFocusIfNecessary);
-      } else {
-        switchFocusIfNecessary();
-      }
+      switchFocusIfNecessary();
     }
   }
 
-  function addCardToBottom(cardDataToMoveDown) {
+  function addCardToBottom(cardDataToMoveDown, startingCursor) {
     var currentBottomCardData = cardDatas[cardDatas.length - 1];
     var currentBottomCardCursor = currentBottomCardData && currentBottomCardData.card && currentBottomCardData.card.getCursor();
 
-    var newCard = fillCardBelow(cardDataToMoveDown.cardEl, currentBottomCardCursor);
+    var newCard = fillCardBelow(cardDataToMoveDown.cardEl, startingCursor || currentBottomCardCursor);
 
     if (newCard) {
-      cardDataToMoveDown.card && cardDataToMoveDown.card.hide();
       cardDataToMoveDown.card && enqueueCardDestroy(cardDataToMoveDown.card);
 
       cardDataToMoveDown.card = newCard;
@@ -263,18 +260,16 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
     return newCard;
   }
 
-  function addCardToTop(cardDataToMoveUp) {
+  function addCardToTop(cardDataToMoveUp, startingCursor) {
     var currentScroll = parentContainer.scrollTop();
     var currentTopCardData = cardDatas[0];
     var currentTopCardCursor = cardDatas[0] && cardDatas[0].card && cardDatas[0].card.getCursor();
 
-    var newCard = fillCardAbove(cardDataToMoveUp.cardEl, currentTopCardCursor);
+    var newCard = fillCardAbove(cardDataToMoveUp.cardEl, startingCursor || currentTopCardCursor);
 
     if (newCard) {
       var newScrollOffset = getCardOffsetPx(newCard);
       var newScrollPos = currentScroll + newScrollOffset;
-
-      cardDataToMoveUp.card && cardDataToMoveUp.card.hide();
       cardDataToMoveUp.card && enqueueCardDestroy(cardDataToMoveUp.card);
       cardDataToMoveUp.card = newCard;
 
@@ -443,8 +438,12 @@ ScrollCardView = function(fillCardAbove, fillCardBelow, centerOn) {
       cardData.card.updateContent && cardData.card.updateContent();
     })
 
-    destroyOutOfDateCards();
-    addNewCardsIfNecessary();
+    var firstCardCursor = destroyOutOfDateCards();
+    // firstCardCursor will only be defined we destroyed all the cards. Passing this + 1 into the
+    // addNewCardsIfNecessary function will force that cursor to be used as the anchor for the notes list
+    // meaning that the list will stay in the current location after refresh.
+    var onlyFillCardsBelow = firstCardCursor
+    addNewCardsIfNecessary(firstCardCursor + 1, onlyFillCardsBelow);
   }
 
   function animateScroll(scrollTo, timeToTake, onScrollComplete) {

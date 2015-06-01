@@ -34,7 +34,6 @@ exports.index = function(req, res) {
 
   db.Challenge.findAll({where: {UserId: req.user.id, deleted: false, nextShow: {lte: new Date()}}, limit: limit, order: ['createdAt']}).then(function(challenges) {
 //    res.send({notes: fakeChallenges}, 200);
-    console.log(challenges);
     res.send({challenges: challenges.concat(fakeChallenges)}, 200);
 //      res.send({notes: notes}, 200);
   })

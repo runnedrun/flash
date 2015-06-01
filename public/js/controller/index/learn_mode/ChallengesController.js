@@ -11,22 +11,22 @@
 ChallengesController = function(refreshStatus) {
   var self = this;
   var uniqueNotes = {};
-  var allFailedNotes = {};
-  var allSuccessfulNotes = [];
-  var notesDisplayed = 0;
-  var notesAttempted = 0;
-  var notes = [];
-  var attemptedNotes = [];
+  var allFailedChallenges = {};
+  var allSuccessfulChallenges = [];
+  var challengesDisplayed = 0;
+  var challengesAttempted = 0;
+  var challenges = [];
+  var attemptedChallenges = [];
   var resultsShown = false;
 
   self.addChallenge = function(note) {
-    notes.push(note);
+    challenges.push(note);
     uniqueNotes[note.id] = note;
     refreshExternalStatus();
   }
 
   self.getResults = function() {
-    return { successfulNotes: allSuccessfulNotes, failedNotes: Util.objectValues(allFailedNotes) };
+    return { successfulNotes: allSuccessfulChallenges, failedNotes: Util.objectValues(allFailedChallenges) };
   }
 
   self.getResultsController = function() {
@@ -36,38 +36,44 @@ ChallengesController = function(refreshStatus) {
     }
   }
 
+  function noteNoLongerDisplayed(challenge) {
+    if (allSuccessfulChallenges.indexOf(challenge) == -1 && !allFailedChallenges[challenge.id]) {
+      challenges.push(challenge);
+    }
+  }
+
   self.nextNoteCardController = function() {
-    var noteIndex = Util.random(0, notes.length);
-    var note = notes[noteIndex];
-    notes.splice(notes.indexOf(note), 1);
+    var noteIndex = Util.random(0, challenges.length);
+    var note = challenges[noteIndex];
+    challenges.splice(challenges.indexOf(note), 1);
     if (note) {
-      notesDisplayed += 1;
-      return new ChallengeController(note, submitNoteScore);
+      challengesDisplayed += 1;
+      return new ChallengeController(note, submitNoteScore, noteNoLongerDisplayed);
     }
   }
 
   function notesComplete() {
-    return (notes.length == 0) && (notesAttempted > 0) && (notesAttempted == notesDisplayed)
+    return (challenges.length == 0) && (challengesAttempted > 0) && (challengesAttempted == challengesDisplayed)
   }
 
   // this is used to refresh the background, and update the note count
   function refreshExternalStatus() {
-    refreshStatus(allSuccessfulNotes.length, Object.keys(uniqueNotes).length)
+    refreshStatus(allSuccessfulChallenges.length, Object.keys(uniqueNotes).length)
   }
 
   function submitNoteScore(note, score) {
-    if (attemptedNotes.indexOf(note) < 0) {
-      attemptedNotes.push(note);
+    if (attemptedChallenges.indexOf(note) < 0) {
+      attemptedChallenges.push(note);
       NoteManager.solveChallenge(note, score);
     }
 
-    notesAttempted += 1;
+    challengesAttempted += 1;
 
     if (score <= 3) {
-      allFailedNotes[note.id] = note;
-      notes.push(note);
-    } else if (!allFailedNotes[note]) {
-      allSuccessfulNotes.push(note);
+      allFailedChallenges[note.id] = note;
+      challenges.push(note);
+    } else if (!allFailedChallenges[note]) {
+      allSuccessfulChallenges.push(note);
     }
 
     refreshExternalStatus();

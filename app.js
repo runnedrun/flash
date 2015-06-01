@@ -108,6 +108,7 @@ function requireAuthentication(req, res, next) {
 }
 
 app.get('/', flash.index);
+app.get('/view', flash.view);
 app.get('/notes', notes.index);
 app.post('/note', notes.new);
 app.post('/note/delete', notes.delete);

@@ -64,6 +64,7 @@ ChallengeCardView = function(challengeController, cardEl, onComplete) {
 
   self.hide = function()  {
     submitBinding && submitBinding.unbind();
+    challengeController.noLongerDisplayed();
     noteCard.hide();
   }
 

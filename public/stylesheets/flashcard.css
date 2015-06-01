@@ -125,3 +125,19 @@ delete-button {
   cursor: pointer;
 }
 
+.toggle-view-mode {
+  cursor: pointer
+}
+
+/*learn mode starts toggled on*/
+.toggle-learn-mode {
+  display: none;
+  cursor: pointer
+}
+
+.mode-toggle {
+  margin-left: 25px;
+  font-size: 20px;
+  position: relative;
+  top: -15px;
+}

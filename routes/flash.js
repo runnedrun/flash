@@ -1,4 +1,7 @@
 exports.index = function(req, res) {
-  console.log("hehehe")
   res.render('index');
+}
+
+exports.view = function(req, res) {
+  res.render('view');
 }
